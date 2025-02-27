@@ -1,10 +1,12 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
-import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.enums.StatusEnum;
+import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import org.apache.coyote.BadRequestException;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class Course {
     private String courseId;
@@ -27,6 +29,10 @@ public class Course {
 
     public String getCourseId() {
         return courseId;
+    }
+
+    public String getCourseTitle() {
+        return courseTitle;
     }
     
     public StatusEnum getStatus() {

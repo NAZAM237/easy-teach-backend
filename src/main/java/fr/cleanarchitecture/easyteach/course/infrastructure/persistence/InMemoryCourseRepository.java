@@ -18,6 +18,11 @@ public class InMemoryCourseRepository implements CourseRepository {
     }
 
     @Override
+    public Optional<Course> findByTitle(String title) {
+        return courses.stream().filter(course -> course.getCourseTitle().equals(title)).findFirst();
+    }
+
+    @Override
     public List<Course> findAll() {
         return this.courses.stream().toList();
     }

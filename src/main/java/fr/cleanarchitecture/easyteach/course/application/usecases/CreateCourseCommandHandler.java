@@ -5,8 +5,6 @@ import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 
-import java.time.LocalDateTime;
-
 public class CreateCourseCommandHandler implements Command.Handler<CreateCourseCommand, CourseViewModel> {
 
     private final CourseRepository courseRepository;
@@ -17,6 +15,12 @@ public class CreateCourseCommandHandler implements Command.Handler<CreateCourseC
 
     @Override
     public CourseViewModel handle(CreateCourseCommand createCourseCommand) {
+        var existingCourse = this.courseRepository.findByTitle(createCourseCommand.getCourseTitle());
+
+        if (existingCourse.isPresent()) {
+            throw new IllegalArgumentException("Course already exists");
+        }
+
         var course = new Course(
                 createCourseCommand.getCourseTitle(),
                 createCourseCommand.getCourseDescription(),
@@ -28,8 +32,7 @@ public class CreateCourseCommandHandler implements Command.Handler<CreateCourseC
 
         return new CourseViewModel(
                 course.getCourseId(),
-                "Course created successfully",
-                LocalDateTime.now()
+                "A new course was created successfully"
         );
     }
 }
