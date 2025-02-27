@@ -6,6 +6,8 @@ public class Price {
     private BigDecimal amount;
     private String currency;
 
+    public Price() {}
+
     public Price(BigDecimal amount, String currency) {
         this.amount = amount;
         this.currency = currency;

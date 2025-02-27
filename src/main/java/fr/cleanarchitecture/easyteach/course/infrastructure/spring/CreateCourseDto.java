@@ -14,4 +14,5 @@ public class CreateCourseDto {
     private String description;
     private BigDecimal amount;
     private String currency;
+    private String teacherUuid;
 }

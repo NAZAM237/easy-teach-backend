@@ -2,7 +2,6 @@ package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import an.awesome.pipelinr.Pipeline;
 import fr.cleanarchitecture.easyteach.course.application.usecases.CreateCourseCommand;
-import fr.cleanarchitecture.easyteach.course.domain.model.Instructor;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 import org.springframework.http.HttpStatus;
@@ -25,8 +24,8 @@ public class CourseController {
     @PostMapping
     public ResponseEntity<CourseViewModel> createCourse(@RequestBody CreateCourseDto course) {
         var result = this.pipeline.send(
-                new CreateCourseCommand(course.getTitle(), course.getDescription(), new Instructor(), new Price(course.getAmount(), course.getCurrency())));
-        return new ResponseEntity<>(new CourseViewModel(result.getCourseId(), result.getMessage()),
+                new CreateCourseCommand(course.getTitle(), course.getDescription(), course.getTeacherUuid(), new Price(course.getAmount(), course.getCurrency())));
+        return new ResponseEntity<>(new CourseViewModel(result.getMessage(), result.getNewCourse()),
                 HttpStatus.CREATED);
     }
 }

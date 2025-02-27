@@ -12,16 +12,18 @@ public class Course {
     private String courseId;
     private String courseTitle;
     private String courseDescription;
-    private Instructor instructor;
+    private Teacher teacher;
     private Price price;
     private StatusEnum status;
     private Set<Module> modules;
 
-    public Course(String courseTitle, String courseDescription, Instructor instructor, Price price) {
+    public Course() {}
+
+    public Course(String courseTitle, String courseDescription, Teacher teacher, Price price) {
         this.courseId = UUID.randomUUID().toString();
         this.courseTitle = courseTitle;
         this.courseDescription = courseDescription;
-        this.instructor = instructor;
+        this.teacher = teacher;
         this.price = price;
         this.status = StatusEnum.DRAFT;
         this.modules = new HashSet<>();
@@ -33,6 +35,18 @@ public class Course {
 
     public String getCourseTitle() {
         return courseTitle;
+    }
+
+    public String getCourseDescription() {
+        return courseDescription;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public Price getPrice() {
+        return price;
     }
     
     public StatusEnum getStatus() {

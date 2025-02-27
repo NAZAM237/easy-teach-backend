@@ -2,8 +2,8 @@ package fr.cleanarchitecture.easyteach.course.domain;
 
 import fr.cleanarchitecture.easyteach.course.domain.enums.StatusEnum;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
-import fr.cleanarchitecture.easyteach.course.domain.model.Instructor;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
+import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import org.apache.coyote.BadRequestException;
 import org.junit.Assert;
@@ -16,7 +16,7 @@ public class CourseTest {
     Course course = new Course(
             "course title",
             "course description",
-            new Instructor(),
+            new Teacher("teacherId"),
             new Price(BigDecimal.valueOf(1000), "FCFA")
     );
 

@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.course.infrastructure.persistence;
+package fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory;
 
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;

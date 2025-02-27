@@ -1,18 +1,20 @@
 package fr.cleanarchitecture.easyteach.course.domain.viewmodel;
 
+import fr.cleanarchitecture.easyteach.course.domain.model.Course;
+
 public class CourseViewModel {
-    private String courseId;
     private String message;
+    private Course newCourse;
 
     public CourseViewModel() {}
 
-    public CourseViewModel(String courseId, String message) {
-        this.courseId = courseId;
+    public CourseViewModel(String message, Course newCourse) {
         this.message = message;
+        this.newCourse = newCourse;
     }
 
-    public String getCourseId() {
-        return courseId;
+    public Course getNewCourse() {
+        return newCourse;
     }
 
     public String getMessage() {
