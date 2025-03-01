@@ -2,14 +2,13 @@ package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import an.awesome.pipelinr.Pipeline;
 import fr.cleanarchitecture.easyteach.course.application.usecases.CreateCourseCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.DeleteCourseCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.UpdateCourseCommand;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("courses")
@@ -27,5 +26,19 @@ public class CourseController {
                 new CreateCourseCommand(course.getTitle(), course.getDescription(), course.getTeacherUuid(), new Price(course.getAmount(), course.getCurrency())));
         return new ResponseEntity<>(new CourseViewModel(result.getMessage(), result.getCourse()),
                 HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{courseId}")
+    public ResponseEntity<CourseViewModel> updateCourse(@RequestBody UpdateCourseDto course, @PathVariable String courseId) {
+        var result = this.pipeline.send(
+                new UpdateCourseCommand(courseId, course.getCourseTitle(), course.getCourseDescription(), new Price(course.getCoursePrice(), course.getCurrency())));
+        return new ResponseEntity<>(new CourseViewModel(result.getMessage(), result.getCourse()),
+                HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{courseId}")
+    public ResponseEntity<Void> deleteCourse(@PathVariable String courseId) {
+        this.pipeline.send(new DeleteCourseCommand(courseId));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -3,11 +3,13 @@ package fr.cleanarchitecture.easyteach.course.usecase;
 import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
 import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
 import fr.cleanarchitecture.easyteach.authentication.infrastructure.persistence.inmemory.InMemoryUserRepository;
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.application.usecases.UpdateCourseCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.UpdateCourseCommandHandler;
+import fr.cleanarchitecture.easyteach.course.application.usecases.DeleteCourseCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.DeleteCourseCommandHandler;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
+import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
@@ -17,7 +19,7 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
-public class UpdateCourseTest {
+public class DeleteCourseTest {
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
     private final UserRepository userRepository = new InMemoryUserRepository();
@@ -44,34 +46,41 @@ public class UpdateCourseTest {
     }
 
     @Test
-    public void updateExistingCourseTest() {
+    public void deleteExistingCourseTest() {
         courseRepository.save(course);
 
-        var updateCourseCommand = new UpdateCourseCommand(course.getCourseId(), "course title2",
-                "course description",
-                new Price(BigDecimal.valueOf(1500), "FCFA"));
-        var updateCourseCommandHandler = new UpdateCourseCommandHandler(courseRepository);
+        var deleteCourseCommand = new DeleteCourseCommand(course.getCourseId());
+        var deleteCourseCommandHandler = new DeleteCourseCommandHandler(courseRepository);
+        deleteCourseCommandHandler.handle(deleteCourseCommand);
 
-        var result = updateCourseCommandHandler.handle(updateCourseCommand);
-
-        var newCourseUpdated = courseRepository.findByCourseId(course.getCourseId());
-
-        Assert.assertTrue(newCourseUpdated.isPresent());
-        Assert.assertEquals(result.getCourse().getCourseTitle(), newCourseUpdated.get().getCourseTitle());
-        Assert.assertEquals(result.getCourse().getPrice().getAmount(), newCourseUpdated.get().getPrice().getAmount());
+        var courseDeleted = courseRepository.findByCourseId(course.getCourseId());
+        Assert.assertTrue(courseDeleted.isEmpty());
     }
 
     @Test
-    public void updateNonExistingCourseTest_shouldThrowException() {
-        var updateCourseCommand = new UpdateCourseCommand(course.getCourseId(), "course title2",
-                "course description",
-                new Price(BigDecimal.valueOf(1500), "FCFA"));
-        var updateCourseCommandHandler = new UpdateCourseCommandHandler(courseRepository);
+    public void deleteNonExistingCourseTest_shouldThrowException() {
+        var deleteCourseCommand = new DeleteCourseCommand(course.getCourseId());
+        var deleteCourseCommandHandler = new DeleteCourseCommandHandler(courseRepository);
 
-        var throwResult = Assert.assertThrows(
+        Assert.assertThrows(
+                "Course not found",
                 NotFoundException.class,
-                () -> updateCourseCommandHandler.handle(updateCourseCommand)
+                () -> deleteCourseCommandHandler.handle(deleteCourseCommand)
         );
-        Assert.assertEquals("Course not found", throwResult.getMessage());
+    }
+
+    @Test
+    public void deleteCourseWithStatusPublishedTest_shouldThrowException() {
+        course.addModule(new Module(1));
+        course.publish();
+        courseRepository.save(course);
+        var deleteCourseCommand = new DeleteCourseCommand(course.getCourseId());
+        var deleteCourseCommandHandler = new DeleteCourseCommandHandler(courseRepository);
+
+        Assert.assertThrows(
+                "Unable to delete. Course must be draft or archived to be deleted",
+                BadRequestException.class,
+                () -> deleteCourseCommandHandler.handle(deleteCourseCommand)
+        );
     }
 }

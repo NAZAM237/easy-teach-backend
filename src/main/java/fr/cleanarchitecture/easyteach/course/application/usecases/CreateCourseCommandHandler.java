@@ -2,6 +2,8 @@ package fr.cleanarchitecture.easyteach.course.application.usecases;
 
 import an.awesome.pipelinr.Command;
 import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
@@ -23,11 +25,11 @@ public class CreateCourseCommandHandler implements Command.Handler<CreateCourseC
         var user = this.userRepository.findById(createCourseCommand.getTeacherUuid());
 
         if (user.isEmpty()) {
-            throw new IllegalArgumentException("User does not exist");
+            throw new NotFoundException("User not found");
         }
 
         if (existingCourse.isPresent()) {
-            throw new IllegalArgumentException("Course already exists");
+            throw new BadRequestException("Course already exists");
         }
 
         var teacher = new Teacher(

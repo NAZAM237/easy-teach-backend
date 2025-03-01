@@ -1,11 +1,11 @@
 package fr.cleanarchitecture.easyteach.course.domain;
 
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import org.apache.coyote.BadRequestException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -43,7 +43,7 @@ public class CourseTest {
     @Test
     public void archivedCourseWhenStatusIsNotPublished_shouldFailTest() {
         var assertResult = Assert.assertThrows(
-                IllegalStateException.class,
+                BadRequestException.class,
                 course::archive
         );
 
@@ -62,7 +62,7 @@ public class CourseTest {
     @Test
     public void restoreCourseWhenStatusIsNotArchived_shouldFailTest() {
         var assertResult = Assert.assertThrows(
-                IllegalStateException.class,
+                BadRequestException.class,
                 course::restore
         );
 
@@ -104,7 +104,7 @@ public class CourseTest {
                 BadRequestException.class,
                 (() -> course.removeModule("moduleId")
         ));
-        Assert.assertEquals("The module does not exist", assertResult.getMessage());
+        Assert.assertEquals("The module not found", assertResult.getMessage());
     }
 
     @Test
@@ -113,7 +113,7 @@ public class CourseTest {
         course.publish();
         course.archive();
         var assertResult = Assert.assertThrows(
-                IllegalStateException.class,
+                BadRequestException.class,
                 () -> course.addModule(new Module(2))
         );
         Assert.assertEquals("You cannot add module to archived course. Please restore course before!", assertResult.getMessage());
@@ -122,7 +122,7 @@ public class CourseTest {
     @Test
     public void publishCourseWithoutModules_shouldFailTest() {
         var assertResult = Assert.assertThrows(
-                IllegalStateException.class,
+                BadRequestException.class,
                 () -> course.publish()
         );
         Assert.assertEquals("You must provide at least one module", assertResult.getMessage());

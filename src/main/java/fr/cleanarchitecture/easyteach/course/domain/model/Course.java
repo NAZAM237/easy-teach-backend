@@ -1,8 +1,8 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import org.apache.coyote.BadRequestException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -70,21 +70,21 @@ public class Course {
 
     public void publish() {
         if (this.modules.isEmpty()) {
-            throw new IllegalStateException("You must provide at least one module");
+            throw new BadRequestException("You must provide at least one module");
         }
         this.status = CourseStatus.PUBLISHED;
     }
 
     public void archive() {
         if (!CourseStatus.PUBLISHED.equals(status)) {
-            throw new IllegalStateException("The status of the course is not published");
+            throw new BadRequestException("The status of the course is not published");
         }
         this.status = CourseStatus.ARCHIVED;
     }
 
     public void restore() {
         if (!CourseStatus.ARCHIVED.equals(status)) {
-            throw new IllegalStateException("The status of the course is not archived. You cannot restore it");
+            throw new BadRequestException("The status of the course is not archived. You cannot restore it");
         }
         this.status = CourseStatus.DRAFT;
     }
@@ -92,17 +92,17 @@ public class Course {
     public void addModule(Module module) {
         var moduleWithSamePosition = this.modules.stream().anyMatch(m -> m.getOrder() == module.getOrder());
         if (CourseStatus.ARCHIVED.equals(this.status)) {
-            throw new IllegalStateException("You cannot add module to archived course. Please restore course before!");
+            throw new BadRequestException("You cannot add module to archived course. Please restore course before!");
         }
         if (moduleWithSamePosition) {
-            throw new IllegalArgumentException("The module position already in use");
+            throw new BadRequestException("The module position already in use");
         }
         this.modules.add(module);
     }
 
     public void removeModule(String moduleId) throws BadRequestException {
         if (this.modules.stream().noneMatch(module -> module.getModuleId().equals(moduleId))) {
-            throw new BadRequestException("The module does not exist");
+            throw new BadRequestException("The module not found");
         }
         this.modules.removeIf(module -> module.getModuleId().equals(moduleId));
     }
