@@ -67,25 +67,28 @@ public class Course {
         return modules;
     }
 
-    public void publish() {
+    public Course publish() {
         if (this.modules.isEmpty()) {
             throw new BadRequestException("You must provide at least one module");
         }
         this.status = CourseStatus.PUBLISHED;
+        return this;
     }
 
-    public void archive() {
+    public Course archive() {
         if (!CourseStatus.PUBLISHED.equals(status)) {
             throw new BadRequestException("The status of the course is not published");
         }
         this.status = CourseStatus.ARCHIVED;
+        return this;
     }
 
-    public void restore() {
+    public Course restore() {
         if (!CourseStatus.ARCHIVED.equals(status)) {
             throw new BadRequestException("The status of the course is not archived. You cannot restore it");
         }
         this.status = CourseStatus.DRAFT;
+        return this;
     }
 
     public void addModule(Module module) {

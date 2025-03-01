@@ -2,10 +2,7 @@ package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.application.usecases.CreateCourseCommandHandler;
-import fr.cleanarchitecture.easyteach.course.application.usecases.DeleteCourseCommandHandler;
-import fr.cleanarchitecture.easyteach.course.application.usecases.PublishCourseCommandHandler;
-import fr.cleanarchitecture.easyteach.course.application.usecases.UpdateCourseCommandHandler;
+import fr.cleanarchitecture.easyteach.course.application.usecases.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -30,5 +27,10 @@ public class CourseCommandHandlerConfiguration {
     @Bean
     public PublishCourseCommandHandler publishCourseCommandHandler(CourseRepository courseRepository) {
         return new PublishCourseCommandHandler(courseRepository);
+    }
+
+    @Bean
+    public ArchiveCourseCommandHandler archiveCourseCommandHandler(CourseRepository courseRepository) {
+        return new ArchiveCourseCommandHandler(courseRepository);
     }
 }
