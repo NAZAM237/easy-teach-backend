@@ -33,4 +33,9 @@ public class CourseCommandHandlerConfiguration {
     public ArchiveCourseCommandHandler archiveCourseCommandHandler(CourseRepository courseRepository) {
         return new ArchiveCourseCommandHandler(courseRepository);
     }
+
+    @Bean
+    public RestoreCourseCommandHandler restoreCourseCommandHandler(CourseRepository courseRepository) {
+        return new RestoreCourseCommandHandler(courseRepository);
+    }
 }

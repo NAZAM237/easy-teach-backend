@@ -46,6 +46,12 @@ public class CourseController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @PatchMapping("/{courseId}/restore")
+    public ResponseEntity<CourseViewModel> restoreCourse(@PathVariable String courseId) {
+        var result = this.pipeline.send(new RestoreCourseCommand(courseId));
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{courseId}")
     public ResponseEntity<Void> deleteCourse(@PathVariable String courseId) {
         this.pipeline.send(new DeleteCourseCommand(courseId));
