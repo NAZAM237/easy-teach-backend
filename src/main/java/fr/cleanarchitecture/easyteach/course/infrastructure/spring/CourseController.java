@@ -3,6 +3,7 @@ package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 import an.awesome.pipelinr.Pipeline;
 import fr.cleanarchitecture.easyteach.course.application.usecases.CreateCourseCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.DeleteCourseCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.PublishCourseCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.UpdateCourseCommand;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
@@ -34,6 +35,12 @@ public class CourseController {
                 new UpdateCourseCommand(courseId, course.getCourseTitle(), course.getCourseDescription(), new Price(course.getCoursePrice(), course.getCurrency())));
         return new ResponseEntity<>(new CourseViewModel(result.getMessage(), result.getCourse()),
                 HttpStatus.OK);
+    }
+
+    @PatchMapping("/{courseId}/publish")
+    public ResponseEntity<CourseViewModel> publishCourse(@PathVariable String courseId) {
+        var result = this.pipeline.send(new PublishCourseCommand(courseId));
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping("/{courseId}")

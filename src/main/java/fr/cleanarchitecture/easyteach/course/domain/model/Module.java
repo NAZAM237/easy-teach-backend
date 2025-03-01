@@ -18,6 +18,8 @@ public class Module {
         this.order = order;
     }
 
+    public Module() {}
+
     public Module(int order) {
         this.moduleId = UUID.randomUUID().toString();
         this.order = order;

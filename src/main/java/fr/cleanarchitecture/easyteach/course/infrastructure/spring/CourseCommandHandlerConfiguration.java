@@ -4,6 +4,7 @@ import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepos
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.CreateCourseCommandHandler;
 import fr.cleanarchitecture.easyteach.course.application.usecases.DeleteCourseCommandHandler;
+import fr.cleanarchitecture.easyteach.course.application.usecases.PublishCourseCommandHandler;
 import fr.cleanarchitecture.easyteach.course.application.usecases.UpdateCourseCommandHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,5 +25,10 @@ public class CourseCommandHandlerConfiguration {
     @Bean
     public DeleteCourseCommandHandler deleteCourseCommandHandler(CourseRepository courseRepository) {
         return new DeleteCourseCommandHandler(courseRepository);
+    }
+
+    @Bean
+    public PublishCourseCommandHandler publishCourseCommandHandler(CourseRepository courseRepository) {
+        return new PublishCourseCommandHandler(courseRepository);
     }
 }

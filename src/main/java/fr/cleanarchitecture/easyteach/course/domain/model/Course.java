@@ -15,7 +15,7 @@ public class Course {
     private Teacher teacher;
     private Price price;
     private CourseStatus status;
-    private Set<Module> modules;
+    private Set<Module> modules = new HashSet<>();
 
     public Course() {}
 
@@ -26,7 +26,6 @@ public class Course {
         this.teacher = teacher;
         this.price = price;
         this.status = CourseStatus.DRAFT;
-        this.modules = new HashSet<>();
     }
 
     public Course(String courseId, String courseTitle, String courseDescription,
