@@ -13,7 +13,7 @@ public class InMemoryCourseRepository implements CourseRepository {
     private Set<Course> courses = new HashSet<>();
 
     @Override
-    public Optional<Course> findById(String id) {
+    public Optional<Course> findByCourseId(String id) {
         return courses.stream().filter(course -> course.getCourseId().equals(id)).findFirst();
     }
 

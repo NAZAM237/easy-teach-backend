@@ -1,6 +1,6 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
-import fr.cleanarchitecture.easyteach.course.domain.enums.StatusEnum;
+import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import org.apache.coyote.BadRequestException;
 
@@ -14,7 +14,7 @@ public class Course {
     private String courseDescription;
     private Teacher teacher;
     private Price price;
-    private StatusEnum status;
+    private CourseStatus status;
     private Set<Module> modules;
 
     public Course() {}
@@ -25,8 +25,19 @@ public class Course {
         this.courseDescription = courseDescription;
         this.teacher = teacher;
         this.price = price;
-        this.status = StatusEnum.DRAFT;
+        this.status = CourseStatus.DRAFT;
         this.modules = new HashSet<>();
+    }
+
+    public Course(String courseId, String courseTitle, String courseDescription,
+                  Teacher teacher, Price price, String status, Set<Module> modules) {
+        this.courseId = courseId;
+        this.courseTitle = courseTitle;
+        this.courseDescription = courseDescription;
+        this.teacher = teacher;
+        this.price = price;
+        this.status = CourseStatus.fromStringToEnum(status);
+        this.modules = modules;
     }
 
     public String getCourseId() {
@@ -49,7 +60,7 @@ public class Course {
         return price;
     }
     
-    public StatusEnum getStatus() {
+    public CourseStatus getStatus() {
         return status;
     }
 
@@ -58,26 +69,29 @@ public class Course {
     }
 
     public void publish() {
-        this.status = StatusEnum.PUBLISHED;
+        if (this.modules.isEmpty()) {
+            throw new IllegalStateException("You must provide at least one module");
+        }
+        this.status = CourseStatus.PUBLISHED;
     }
 
     public void archive() {
-        if (!StatusEnum.PUBLISHED.equals(status)) {
+        if (!CourseStatus.PUBLISHED.equals(status)) {
             throw new IllegalStateException("The status of the course is not published");
         }
-        this.status = StatusEnum.ARCHIVED;
+        this.status = CourseStatus.ARCHIVED;
     }
 
     public void restore() {
-        if (!StatusEnum.ARCHIVED.equals(status)) {
+        if (!CourseStatus.ARCHIVED.equals(status)) {
             throw new IllegalStateException("The status of the course is not archived. You cannot restore it");
         }
-        this.status = StatusEnum.DRAFT;
+        this.status = CourseStatus.DRAFT;
     }
 
     public void addModule(Module module) {
-        var moduleWithSamePosition = this.modules.stream().anyMatch(m -> m.getPosition() == module.getPosition());
-        if (StatusEnum.ARCHIVED.equals(this.status)) {
+        var moduleWithSamePosition = this.modules.stream().anyMatch(m -> m.getOrder() == module.getOrder());
+        if (CourseStatus.ARCHIVED.equals(this.status)) {
             throw new IllegalStateException("You cannot add module to archived course. Please restore course before!");
         }
         if (moduleWithSamePosition) {
@@ -87,9 +101,24 @@ public class Course {
     }
 
     public void removeModule(String moduleId) throws BadRequestException {
-        if (this.modules.stream().noneMatch(module -> module.getId().equals(moduleId))) {
+        if (this.modules.stream().noneMatch(module -> module.getModuleId().equals(moduleId))) {
             throw new BadRequestException("The module does not exist");
         }
-        this.modules.removeIf(module -> module.getId().equals(moduleId));
+        this.modules.removeIf(module -> module.getModuleId().equals(moduleId));
+    }
+
+    public Course changeTitle(String newTitle) {
+        this.courseTitle = newTitle;
+        return this;
+    }
+
+    public Course changeDescription(String newDescription) {
+        this.courseDescription = newDescription;
+        return this;
+    }
+
+    public Course changePrice(Price newPrice) {
+        this.price = newPrice;
+        return this;
     }
 }

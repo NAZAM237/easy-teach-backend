@@ -30,7 +30,13 @@ public class CreateCourseCommandHandler implements Command.Handler<CreateCourseC
             throw new IllegalArgumentException("Course already exists");
         }
 
-        var teacher = new Teacher(user.get().getUserId());
+        var teacher = new Teacher(
+                user.get().getUserId(),
+                user.get().getUserName(),
+                user.get().getUserBiography(),
+                user.get().getUserEmail(),
+                user.get().getUserPhone(),
+                user.get().getUserPhoto());
 
         var course = new Course(
                 createCourseCommand.getCourseTitle(),

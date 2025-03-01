@@ -1,25 +1,50 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class Module {
-    private String id;
-    private int position;
+    private String moduleId;
+    private String moduleTitle;
+    private String moduleDescription;
+    private int order;
+    private Set<Lesson> lessons = new HashSet<>();
 
-    public Module() {
-        this.id = UUID.randomUUID().toString();
+    public Module(String moduleTitle, String moduleDescription, int order) {
+        this.moduleId = UUID.randomUUID().toString();
+        this.moduleTitle = moduleTitle;
+        this.moduleDescription = moduleDescription;
+        this.order = order;
     }
 
-    public Module(int position) {
-        this.id = UUID.randomUUID().toString();
-        this.position = position;
+    public Module(int order) {
+        this.moduleId = UUID.randomUUID().toString();
+        this.order = order;
     }
 
-    public String getId() {
-        return id;
+    public Module(String moduleId, int order) {
+        this.moduleId = moduleId;
+        this.order = order;
     }
 
-    public int getPosition() {
-        return position;
+    public String getModuleId() {
+        return moduleId;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public String getModuleTitle() {
+        return moduleTitle;
+    }
+
+    public String getModuleDescription() {
+        return moduleDescription;
+    }
+
+    public Set<Lesson> getLessons() {
+        return lessons;
     }
 }

@@ -48,7 +48,7 @@ public class CreateCourseE2ETest extends EasyTeachIntegrationTests {
                 result.getResponse().getContentAsString(),
                 CourseViewModel.class);
 
-        var course = courseRepository.findById(courseViewModel.getNewCourse().getCourseId());
+        var course = courseRepository.findByCourseId(courseViewModel.getCourse().getCourseId());
 
         Assert.assertTrue(course.isPresent());
         Assert.assertEquals(dto.getTitle(), course.get().getCourseTitle());

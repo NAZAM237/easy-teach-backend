@@ -10,7 +10,7 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return users.stream().filter(user -> user.getEmail().equals(email)).findFirst();
+        return users.stream().filter(user -> user.getUserEmail().equals(email)).findFirst();
     }
 
     @Override

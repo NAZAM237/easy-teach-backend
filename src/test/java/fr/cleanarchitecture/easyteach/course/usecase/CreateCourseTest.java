@@ -6,7 +6,7 @@ import fr.cleanarchitecture.easyteach.authentication.infrastructure.persistence.
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.CreateCourseCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.CreateCourseCommandHandler;
-import fr.cleanarchitecture.easyteach.course.domain.enums.StatusEnum;
+import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
 import org.junit.Assert;
@@ -32,11 +32,11 @@ public class CreateCourseTest {
 
         var result = createCourseCommandHandler.handle(createCourseCommand);
 
-        var newCourseCreated = courseRepository.findById(result.getNewCourse().getCourseId());
+        var newCourseCreated = courseRepository.findByCourseId(result.getCourse().getCourseId());
 
         Assert.assertTrue(newCourseCreated.isPresent());
-        Assert.assertEquals(result.getNewCourse().getCourseId(), newCourseCreated.get().getCourseId());
-        Assert.assertEquals(StatusEnum.DRAFT, newCourseCreated.get().getStatus());
+        Assert.assertEquals(result.getCourse().getCourseId(), newCourseCreated.get().getCourseId());
+        Assert.assertEquals(CourseStatus.DRAFT, newCourseCreated.get().getStatus());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class CreateCourseTest {
                 new Price(BigDecimal.valueOf(1000), "FCFA"));
         var createCourseCommandHandler = new CreateCourseCommandHandler(courseRepository, userRepository);
 
-        var result = createCourseCommandHandler.handle(createCourseCommand);
+        createCourseCommandHandler.handle(createCourseCommand);
 
         var throwValue = Assert.assertThrows(
                 IllegalArgumentException.class,

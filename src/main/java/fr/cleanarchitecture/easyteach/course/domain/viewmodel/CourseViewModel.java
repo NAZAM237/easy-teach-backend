@@ -4,17 +4,17 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 
 public class CourseViewModel {
     private String message;
-    private Course newCourse;
+    private Course course;
 
     public CourseViewModel() {}
 
-    public CourseViewModel(String message, Course newCourse) {
+    public CourseViewModel(String message, Course course) {
         this.message = message;
-        this.newCourse = newCourse;
+        this.course = course;
     }
 
-    public Course getNewCourse() {
-        return newCourse;
+    public Course getCourse() {
+        return course;
     }
 
     public String getMessage() {
