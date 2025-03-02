@@ -49,4 +49,9 @@ public class CourseCommandHandlerConfiguration {
     public RemoveModuleFromCourseCommandHandler removeModuleFromCourseCommandHandler(CourseRepository courseRepository) {
         return new RemoveModuleFromCourseCommandHandler(courseRepository);
     }
+
+    @Bean
+    public GetCourseByIdCommandHandler getCourseByIdCommandHandler(CourseRepository courseRepository) {
+        return new GetCourseByIdCommandHandler(courseRepository);
+    }
 }

@@ -4,6 +4,7 @@ import an.awesome.pipelinr.Pipeline;
 import fr.cleanarchitecture.easyteach.course.application.usecases.*;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
+import fr.cleanarchitecture.easyteach.course.domain.viewmodel.GetCourseViewModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,14 @@ public class CourseController {
 
     public CourseController(Pipeline pipeline) {
         this.pipeline = pipeline;
+    }
+
+    @GetMapping("/{courseId}")
+    public ResponseEntity<GetCourseViewModel> getCourseById(@PathVariable String courseId) {
+        var result = this.pipeline.send(
+                new GetCourseByIdCommand(courseId)
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PostMapping
