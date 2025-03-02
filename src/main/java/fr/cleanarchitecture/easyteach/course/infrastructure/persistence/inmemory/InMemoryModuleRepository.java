@@ -3,36 +3,37 @@ package fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemor
 import fr.cleanarchitecture.easyteach.course.application.ports.ModuleRepository;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class InMemoryModuleRepository implements ModuleRepository {
 
-    List<Module> modules = new ArrayList<>();
+    Set<Module> modules = new HashSet<>();
 
     @Override
     public Optional<Module> findByModuleId(String moduleId) {
-        return modules.stream().filter(module -> module.getModuleId().equals(moduleId)).findFirst();
+        return this.modules.stream().filter(module -> module.getModuleId().equals(moduleId)).findFirst();
     }
 
     @Override
     public Optional<Module> findByTitle(String title) {
-        return modules.stream().filter(module -> module.getModuleTitle().equals(title)).findFirst();
+        return this.modules.stream().filter(module -> module.getModuleTitle().equals(title)).findFirst();
     }
 
     @Override
     public List<Module> findAll() {
-        return modules;
+        return this.modules.stream().toList();
     }
 
     @Override
     public void save(Module module) {
-        modules.add(module);
+        this.modules.add(module);
     }
 
     @Override
     public void delete(Module module) {
-        modules.remove(module);
+        this.modules.remove(module);
     }
 }

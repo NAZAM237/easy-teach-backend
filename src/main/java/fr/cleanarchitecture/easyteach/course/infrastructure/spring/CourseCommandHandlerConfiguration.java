@@ -44,4 +44,9 @@ public class CourseCommandHandlerConfiguration {
     public AddModuleToCourseCommandHandler addModuleToCourseCommandHandler(CourseRepository courseRepository, ModuleRepository moduleRepository) {
         return new AddModuleToCourseCommandHandler(courseRepository, moduleRepository);
     }
+
+    @Bean
+    public RemoveModuleFromCourseCommandHandler removeModuleFromCourseCommandHandler(CourseRepository courseRepository) {
+        return new RemoveModuleFromCourseCommandHandler(courseRepository);
+    }
 }
