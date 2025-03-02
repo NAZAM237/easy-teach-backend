@@ -1,6 +1,7 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 
@@ -104,7 +105,7 @@ public class Course {
 
     public void removeModule(String moduleId) throws BadRequestException {
         if (this.modules.stream().noneMatch(module -> module.getModuleId().equals(moduleId))) {
-            throw new BadRequestException("The module not found");
+            throw new NotFoundException("The module not found");
         }
         this.modules.removeIf(module -> module.getModuleId().equals(moduleId));
     }

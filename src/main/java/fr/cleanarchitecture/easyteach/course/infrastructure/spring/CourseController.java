@@ -52,6 +52,17 @@ public class CourseController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @PatchMapping("/{courseId}/add-module-to-course")
+    public ResponseEntity<Void> addModuleToCourse(@PathVariable String courseId, @RequestBody AddModuleToCourseDto module) {
+        this.pipeline.send(
+                new AddModuleToCourseCommand(
+                        courseId,
+                        module.getModuleTitle(),
+                        module.getModuleDescription(),
+                        module.getModuleOrder()));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @DeleteMapping("/{courseId}")
     public ResponseEntity<Void> deleteCourse(@PathVariable String courseId) {
         this.pipeline.send(new DeleteCourseCommand(courseId));

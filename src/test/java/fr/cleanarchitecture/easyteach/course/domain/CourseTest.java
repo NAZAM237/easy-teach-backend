@@ -1,6 +1,7 @@
 package fr.cleanarchitecture.easyteach.course.domain;
 
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
@@ -101,7 +102,7 @@ public class CourseTest {
     @Test
     public void removeNotExistingModuleFromCourse_shouldFailTest() {
         var assertResult = Assert.assertThrows(
-                BadRequestException.class,
+                NotFoundException.class,
                 (() -> course.removeModule("moduleId")
         ));
         Assert.assertEquals("The module not found", assertResult.getMessage());

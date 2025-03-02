@@ -10,6 +10,7 @@ public class Module {
     private String moduleDescription;
     private int order;
     private Set<Lesson> lessons = new HashSet<>();
+    private boolean linkToCourse;
 
     public Module(String moduleTitle, String moduleDescription, int order) {
         this.moduleId = UUID.randomUUID().toString();
@@ -48,5 +49,9 @@ public class Module {
 
     public Set<Lesson> getLessons() {
         return lessons;
+    }
+
+    public boolean isLinkToCourse() {
+        return linkToCourse;
     }
 }
