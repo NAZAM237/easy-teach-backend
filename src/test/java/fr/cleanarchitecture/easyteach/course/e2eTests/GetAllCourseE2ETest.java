@@ -6,6 +6,7 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,11 @@ public class GetAllCourseE2ETest extends EasyTeachIntegrationTests {
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Before
+    public void setUp() {
+        courseRepository.clear();
+    }
 
     @Test
     public void shouldGetAllCourseE2ETest() throws Exception {

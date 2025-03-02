@@ -59,4 +59,9 @@ public class CourseCommandHandlerConfiguration {
     public GetAllCoursesCommandHandler getAllCoursesCommandHandler(CourseRepository courseRepository) {
         return new GetAllCoursesCommandHandler(courseRepository);
     }
+
+    @Bean
+    public GetAllModulesFromCourseCommandHandler getAllModulesFromCourseCommandHandler(CourseRepository courseRepository) {
+        return new GetAllModulesFromCourseCommandHandler(courseRepository);
+    }
 }

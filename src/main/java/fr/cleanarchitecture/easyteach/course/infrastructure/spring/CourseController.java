@@ -5,6 +5,7 @@ import fr.cleanarchitecture.easyteach.course.application.usecases.*;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.GetCourseViewModel;
+import fr.cleanarchitecture.easyteach.course.domain.viewmodel.ModuleFromCourseViewModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,14 @@ public class CourseController {
         this.pipeline = pipeline;
     }
 
+
+
+    @GetMapping("/")
+    public ResponseEntity<List<GetCourseViewModel>> getAllCourses() {
+        var result = this.pipeline.send(new GetAllCoursesCommand());
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     @GetMapping("/{courseId}")
     public ResponseEntity<GetCourseViewModel> getCourseById(@PathVariable String courseId) {
         var result = this.pipeline.send(
@@ -29,9 +38,9 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<GetCourseViewModel>> getAllCourses() {
-        var result = this.pipeline.send(new GetAllCoursesCommand());
+    @GetMapping("/{courseId}/modules")
+    public ResponseEntity<ModuleFromCourseViewModel> getAllModulesFromCourse(@PathVariable String courseId) {
+        var result = this.pipeline.send(new GetAllModulesFromCourseCommand(courseId));
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

@@ -36,4 +36,9 @@ public class InMemoryCourseRepository implements CourseRepository {
     public void delete(Course course) {
         this.courses.remove(course);
     }
+
+    @Override
+    public void clear() {
+        this.courses.clear();
+    }
 }
