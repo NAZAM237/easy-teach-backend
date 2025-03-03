@@ -1,5 +1,7 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -53,5 +55,12 @@ public class Module {
 
     public boolean isLinkToCourse() {
         return linkToCourse;
+    }
+
+    public void linkToCourse() {
+        if (this.linkToCourse) {
+            throw new BadRequestException("Module is always linked in a course");
+        }
+        this.linkToCourse = true;
     }
 }

@@ -1,8 +1,8 @@
 package fr.cleanarchitecture.easyteach.course.usecase;
 
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.application.usecases.GetAllCoursesCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.GetAllCoursesCommandHandler;
+import fr.cleanarchitecture.easyteach.course.application.usecases.course.GetAllCoursesCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.course.GetAllCoursesCommandHandler;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;

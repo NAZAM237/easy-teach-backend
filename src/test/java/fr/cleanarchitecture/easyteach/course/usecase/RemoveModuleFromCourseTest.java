@@ -4,8 +4,8 @@ import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.ModuleRepository;
-import fr.cleanarchitecture.easyteach.course.application.usecases.RemoveModuleFromCourseCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.RemoveModuleFromCourseCommandHandler;
+import fr.cleanarchitecture.easyteach.course.application.usecases.course.RemoveModuleFromCourseCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.course.RemoveModuleFromCourseCommandHandler;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;

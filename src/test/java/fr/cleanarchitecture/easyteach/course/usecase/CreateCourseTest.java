@@ -4,8 +4,8 @@ import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepos
 import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
 import fr.cleanarchitecture.easyteach.authentication.infrastructure.persistence.inmemory.InMemoryUserRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.application.usecases.CreateCourseCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.CreateCourseCommandHandler;
+import fr.cleanarchitecture.easyteach.course.application.usecases.course.CreateCourseCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.course.CreateCourseCommandHandler;
 import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;

@@ -6,8 +6,8 @@ import fr.cleanarchitecture.easyteach.authentication.infrastructure.persistence.
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.ModuleRepository;
-import fr.cleanarchitecture.easyteach.course.application.usecases.AddModuleToCourseCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.AddModuleToCourseCommandHandler;
+import fr.cleanarchitecture.easyteach.course.application.usecases.course.AddModuleToCourseCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.course.AddModuleToCourseCommandHandler;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;

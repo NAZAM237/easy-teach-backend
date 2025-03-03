@@ -2,8 +2,8 @@ package fr.cleanarchitecture.easyteach.course.usecase;
 
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.application.usecases.GetCourseByIdCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.GetCourseByIdCommandHandler;
+import fr.cleanarchitecture.easyteach.course.application.usecases.course.GetCourseByIdCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.course.GetCourseByIdCommandHandler;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;

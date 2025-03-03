@@ -100,6 +100,7 @@ public class Course {
         if (moduleWithSamePosition) {
             throw new BadRequestException("The module position already in use");
         }
+        module.linkToCourse();
         this.modules.add(module);
     }
 

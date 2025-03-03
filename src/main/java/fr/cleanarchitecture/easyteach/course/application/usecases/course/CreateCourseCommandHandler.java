@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.course.application.usecases;
+package fr.cleanarchitecture.easyteach.course.application.usecases.course;
 
 import an.awesome.pipelinr.Command;
 import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;

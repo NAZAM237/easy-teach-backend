@@ -1,7 +1,7 @@
 package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import an.awesome.pipelinr.Pipeline;
-import fr.cleanarchitecture.easyteach.course.application.usecases.*;
+import fr.cleanarchitecture.easyteach.course.application.usecases.course.*;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.GetCourseViewModel;
