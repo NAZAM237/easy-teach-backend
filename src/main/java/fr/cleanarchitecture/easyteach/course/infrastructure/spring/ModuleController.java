@@ -2,6 +2,7 @@ package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import an.awesome.pipelinr.Pipeline;
 import fr.cleanarchitecture.easyteach.course.application.usecases.module.LinkModuleToCourseCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.UnLinkModuleToCourseCommand;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.ModuleViewModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,6 +25,15 @@ public class ModuleController {
             @PathVariable("modulesId") String modulesId, @PathVariable("courseId") String courseId) {
         var result = this.pipeline.send(
                 new LinkModuleToCourseCommand(courseId, modulesId)
+        );
+        return ResponseEntity.ok(result);
+    }
+
+    @PatchMapping("/{modulesId}/courses/{courseId}/unlink")
+    public ResponseEntity<ModuleViewModel> unLinkModuleToCourse(
+            @PathVariable("modulesId") String modulesId, @PathVariable("courseId") String courseId) {
+        var result = this.pipeline.send(
+                new UnLinkModuleToCourseCommand(courseId, modulesId)
         );
         return ResponseEntity.ok(result);
     }

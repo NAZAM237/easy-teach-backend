@@ -105,10 +105,12 @@ public class Course {
     }
 
     public void removeModule(String moduleId) throws BadRequestException {
-        if (this.modules.stream().noneMatch(module -> module.getModuleId().equals(moduleId))) {
+        var module = this.modules.stream().filter(module1 -> module1.getModuleId().equals(moduleId)).findFirst();
+        if (module.isEmpty()) {
             throw new NotFoundException("The module not found");
         }
-        this.modules.removeIf(module -> module.getModuleId().equals(moduleId));
+        this.modules.remove(module.get());
+        module.get().unLinkToCourse();
     }
 
     public Course changeTitle(String newTitle) {

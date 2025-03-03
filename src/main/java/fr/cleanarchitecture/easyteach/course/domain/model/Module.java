@@ -63,4 +63,11 @@ public class Module {
         }
         this.linkToCourse = true;
     }
+
+    public void unLinkToCourse() {
+        if (!this.linkToCourse) {
+            throw new BadRequestException("Module is not linked to any course");
+        }
+        this.linkToCourse = false;
+    }
 }

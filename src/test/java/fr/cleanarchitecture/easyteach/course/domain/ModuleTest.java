@@ -24,4 +24,22 @@ public class ModuleTest {
                 module::linkToCourse
         );
     }
+
+    @Test
+    public void unLinkModuleToCourseTest() {
+        var module = new Module("title", "description", 1);
+        module.linkToCourse();
+        module.unLinkToCourse();
+        Assert.assertFalse(module.isLinkToCourse());
+    }
+
+    @Test
+    public void unLinkAlwaysUnLinkedModuleToCourseTest_shouldThrowException() {
+        var module = new Module("title", "description", 1);
+        Assert.assertThrows(
+                "Module is not linked to any course",
+                BadRequestException.class,
+                module::unLinkToCourse
+        );
+    }
 }
