@@ -27,4 +27,40 @@ public class Lesson {
         this.order = order;
         Quiz quiz = new Quiz();
     }
+
+    public String getLessonId() {
+        return lessonId;
+    }
+
+    public String getLessonTitle() {
+        return lessonTitle;
+    }
+
+    public LessonType getContentType() {
+        return contentType;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public String getTextContent() {
+        return textContent;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public List<Resource> getResources() {
+        return resources;
+    }
+
+    public Quiz getQuiz() {
+        return quiz;
+    }
+
+    public void changeOrder(int newOrder) {
+        this.order = newOrder;
+    }
 }
