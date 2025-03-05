@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.course.usecase;
+package fr.cleanarchitecture.easyteach.course.usecase.courses;
 
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;

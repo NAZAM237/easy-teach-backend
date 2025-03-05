@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.course.e2eTests;
+package fr.cleanarchitecture.easyteach.course.e2eTests.modules;
 
 import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.math.BigDecimal;
 
 @RunWith(SpringRunner.class)
-public class LinkModuleToCourseE2ETest extends EasyTeachIntegrationTests {
+public class UnLinkModuleToCourseE2ETest extends EasyTeachIntegrationTests {
 
     @Autowired
     private CourseRepository courseRepository;
@@ -34,62 +34,7 @@ public class LinkModuleToCourseE2ETest extends EasyTeachIntegrationTests {
     }
 
     @Test
-    public void shouldLinkModuleToCourseE2ETest() throws Exception {
-        var course = new Course(
-                "title",
-                "description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
-        var module = new Module(
-                "title",
-                "description",
-                1
-        );
-        moduleRepository.save(module);
-        courseRepository.save(course);
-
-        var result = mockMvc
-                .perform(MockMvcRequestBuilders.patch(
-                        "/modules/{moduleId}/courses/{courseId}/link", module.getModuleId(), course.getCourseId())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
-
-        var moduleViewModel = objectMapper.readValue(
-                result.getResponse().getContentAsString(),
-                ModuleViewModel.class
-        );
-
-        Assert.assertNotNull(moduleViewModel);
-        Assert.assertEquals(module.getModuleId(), moduleViewModel.getModuleId());
-        Assert.assertTrue(moduleViewModel.isLinkToCourse());
-    }
-
-    @Test
-    public void linkModuleToUnExistingCourseE2ETest_shouldThrowException() throws Exception {
-        var course = new Course(
-                "title",
-                "description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
-        var module = new Module(
-                "title",
-                "description",
-                1
-        );
-        moduleRepository.save(module);
-
-        mockMvc
-            .perform(MockMvcRequestBuilders.patch(
-                            "/modules/{moduleId}/courses/{courseId}/link", module.getModuleId(), course.getCourseId())
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isNotFound());
-    }
-
-    @Test
-    public void linkAlwaysLinkedModuleToCourseE2ETest_shouldThrowException() throws Exception {
+    public void shouldUnLinkModuleToCourseE2ETest() throws Exception {
         var course = new Course(
                 "title",
                 "description",
@@ -105,9 +50,58 @@ public class LinkModuleToCourseE2ETest extends EasyTeachIntegrationTests {
         moduleRepository.save(module);
         courseRepository.save(course);
 
+        var result = mockMvc
+                .perform(MockMvcRequestBuilders.patch(
+                        "/modules/{moduleId}/courses/{courseId}/unlink", module.getModuleId(), course.getCourseId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        var moduleViewModel = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                ModuleViewModel.class
+        );
+
+        Assert.assertNotNull(moduleViewModel);
+        Assert.assertEquals(module.getModuleId(), moduleViewModel.getModuleId());
+        Assert.assertFalse(moduleViewModel.isLinkToCourse());
+    }
+
+    @Test
+    public void unLinkModuleToUnExistingCourseE2ETest_shouldThrowException() throws Exception {
+        var module = new Module(
+                "title",
+                "description",
+                1
+        );
+        moduleRepository.save(module);
+
+        mockMvc
+            .perform(MockMvcRequestBuilders.patch(
+                            "/modules/{moduleId}/courses/{courseId}/unlink", module.getModuleId(), "Garbage")
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void UnLinkAlwaysNotLinkedModuleToCourseE2ETest_shouldThrowException() throws Exception {
+        var course = new Course(
+                "title",
+                "description",
+                new Teacher(),
+                new Price(BigDecimal.ZERO, "FCFA")
+        );
+        var module = new Module(
+                "title",
+                "description",
+                1
+        );
+        moduleRepository.save(module);
+        courseRepository.save(course);
+
         mockMvc
                 .perform(MockMvcRequestBuilders.patch(
-                                "/modules/{moduleId}/courses/{courseId}/link", module.getModuleId(), course.getCourseId())
+                                "/modules/{moduleId}/courses/{courseId}/unlink", module.getModuleId(), course.getCourseId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }

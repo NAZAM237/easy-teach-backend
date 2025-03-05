@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.course.usecase;
+package fr.cleanarchitecture.easyteach.course.usecase.courses;
 
 import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
 import fr.cleanarchitecture.easyteach.authentication.domain.model.User;

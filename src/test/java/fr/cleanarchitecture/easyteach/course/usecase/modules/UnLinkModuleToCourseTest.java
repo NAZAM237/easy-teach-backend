@@ -1,11 +1,11 @@
-package fr.cleanarchitecture.easyteach.course.usecase;
+package fr.cleanarchitecture.easyteach.course.usecase.modules;
 
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.ModuleRepository;
-import fr.cleanarchitecture.easyteach.course.application.usecases.module.LinkModuleToCourseCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.module.LinkModuleToCourseCommandHandler;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.UnLinkModuleToCourseCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.UnLinkModuleToCourseCommandHandler;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
@@ -17,38 +17,13 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
-public class LinkModuleToCourseTest {
+public class UnLinkModuleToCourseTest {
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
     private final ModuleRepository moduleRepository = new InMemoryModuleRepository();
 
     @Test
-    public void linkModuleToCourseTest() {
-        var course = new Course(
-                "title",
-                "description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
-        courseRepository.save(course);
-        var module = new Module(
-                "title",
-                "description",
-                1
-        );
-        moduleRepository.save(module);
-
-        var linkModuleToCourseCommand = new LinkModuleToCourseCommand(course.getCourseId(), module.getModuleId());
-        var linkModuleToCourseCommandHandler = new LinkModuleToCourseCommandHandler(courseRepository, moduleRepository);
-        var result = linkModuleToCourseCommandHandler.handle(linkModuleToCourseCommand);
-
-        Assert.assertNotNull(result);
-        Assert.assertEquals(result.getModuleId(), module.getModuleId());
-        Assert.assertTrue(result.isLinkToCourse());
-    }
-
-    @Test
-    public void linkModuleAlwaysLinkedToCourseTest_shouldThrowException() {
+    public void unLinkModuleToCourseTest() {
         var course = new Course(
                 "title",
                 "description",
@@ -64,18 +39,36 @@ public class LinkModuleToCourseTest {
         moduleRepository.save(module);
         courseRepository.save(course);
 
-        var linkModuleToCourseCommand = new LinkModuleToCourseCommand(course.getCourseId(), module.getModuleId());
-        var linkModuleToCourseCommandHandler = new LinkModuleToCourseCommandHandler(courseRepository, moduleRepository);
+        var unLinkModuleToCourseCommand = new UnLinkModuleToCourseCommand(course.getCourseId(), module.getModuleId());
+        var unLinkModuleToCourseCommandHandler = new UnLinkModuleToCourseCommandHandler(courseRepository, moduleRepository);
+
+        var result = unLinkModuleToCourseCommandHandler.handle(unLinkModuleToCourseCommand);
+
+        Assert.assertNotNull(result);
+        Assert.assertFalse(result.isLinkToCourse());
+    }
+
+    @Test
+    public void unLinkModuleToNotExistCourseTest_shouldThrowException() {
+        var module = new Module(
+                "title",
+                "description",
+                1
+        );
+        moduleRepository.save(module);
+
+        var unLinkModuleToCourseCommand = new UnLinkModuleToCourseCommand("Garbage", module.getModuleId());
+        var unLinkModuleToCourseCommandHandler = new UnLinkModuleToCourseCommandHandler(courseRepository, moduleRepository);
 
         Assert.assertThrows(
-                "Module is always linked in a course",
-                BadRequestException.class,
-                () -> linkModuleToCourseCommandHandler.handle(linkModuleToCourseCommand)
+                "Course not found",
+                NotFoundException.class,
+                () -> unLinkModuleToCourseCommandHandler.handle(unLinkModuleToCourseCommand)
         );
     }
 
     @Test
-    public void linkModuleToNotExistCourseTest_shouldThrowException() {
+    public void unLinkNotLinkedModuleToCourseTest_shouldThrowException() {
         var course = new Course(
                 "title",
                 "description",
@@ -87,15 +80,16 @@ public class LinkModuleToCourseTest {
                 "description",
                 1
         );
+        courseRepository.save(course);
         moduleRepository.save(module);
 
-        var linkModuleToCourseCommand = new LinkModuleToCourseCommand(course.getCourseId(), module.getModuleId());
-        var linkModuleToCourseCommandHandler = new LinkModuleToCourseCommandHandler(courseRepository, moduleRepository);
+        var unLinkModuleToCourseCommand = new UnLinkModuleToCourseCommand(course.getCourseId(), module.getModuleId());
+        var unLinkModuleToCourseCommandHandler = new UnLinkModuleToCourseCommandHandler(courseRepository, moduleRepository);
 
         Assert.assertThrows(
-                "Course not found",
-                NotFoundException.class,
-                () -> linkModuleToCourseCommandHandler.handle(linkModuleToCourseCommand)
+                "Module is not linked to any course",
+                BadRequestException.class,
+                () -> unLinkModuleToCourseCommandHandler.handle(unLinkModuleToCourseCommand)
         );
     }
 }

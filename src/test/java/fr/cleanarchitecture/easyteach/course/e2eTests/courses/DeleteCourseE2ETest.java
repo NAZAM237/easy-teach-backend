@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.course.e2eTests;
+package fr.cleanarchitecture.easyteach.course.e2eTests.courses;
 
 import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
 import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;

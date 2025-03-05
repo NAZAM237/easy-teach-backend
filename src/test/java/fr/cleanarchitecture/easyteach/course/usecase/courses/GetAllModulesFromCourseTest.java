@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.course.usecase;
+package fr.cleanarchitecture.easyteach.course.usecase.courses;
 
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;

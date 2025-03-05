@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.course.e2eTests;
+package fr.cleanarchitecture.easyteach.course.e2eTests.courses;
 
 import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
 import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
@@ -7,6 +7,7 @@ import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.CreateCourseDto;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class CreateCourseE2ETest extends EasyTeachIntegrationTests {
     private CourseRepository courseRepository;
     @Autowired
     private UserRepository userRepository;
+
+    @Before
+    public void setUp() {
+        courseRepository.clear();
+    }
 
     @Test
     public void shouldCreateCourse() throws Exception {
