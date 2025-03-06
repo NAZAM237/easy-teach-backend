@@ -64,4 +64,10 @@ public class ModuleController {
         this.pipeline.send(new RemoveLessonFromModuleCommand(moduleId, removeLessonFromModuleDto.getLessonId()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PatchMapping("/{moduleId}")
+    public ResponseEntity<ModuleViewModel> updateModule(@PathVariable String moduleId, @RequestBody UpdateModuleDto updateModuleDto) {
+        var result = this.pipeline.send(new UpdateModuleCommand(moduleId, updateModuleDto.getModuleTitle(), updateModuleDto.getModuleDescription()));
+        return ResponseEntity.ok(result);
+    }
 }

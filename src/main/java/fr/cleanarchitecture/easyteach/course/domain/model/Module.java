@@ -73,6 +73,14 @@ public class Module {
         this.linkToCourse = false;
     }
 
+    public void changeTitle(String title) {
+        this.moduleTitle = title;
+    }
+
+    public void changeDescription(String description) {
+        this.moduleDescription = description;
+    }
+
     public void changeOrder(int newOrder) {
         this.order = newOrder;
     }

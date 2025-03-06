@@ -46,7 +46,7 @@ public class UpdateCourseE2ETest extends EasyTeachIntegrationTests {
                 "FCFA");
 
         var result = mockMvc
-                .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId(), dto)
+                .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId())
                         //.header("Authorization", createJwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))

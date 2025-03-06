@@ -33,4 +33,9 @@ public class ModuleCommandHandlerConfiguration {
     public RemoveLessonFromModuleCommandHandler removeLessonFromModuleCommandHandler(ModuleRepository moduleRepository) {
         return new RemoveLessonFromModuleCommandHandler(moduleRepository);
     }
+
+    @Bean
+    public UpdateModuleCommandHandler updateModuleCommandHandler(ModuleRepository moduleRepository) {
+        return new UpdateModuleCommandHandler(moduleRepository);
+    }
 }
