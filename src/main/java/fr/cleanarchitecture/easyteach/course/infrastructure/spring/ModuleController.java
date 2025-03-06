@@ -70,4 +70,10 @@ public class ModuleController {
         var result = this.pipeline.send(new UpdateModuleCommand(moduleId, updateModuleDto.getModuleTitle(), updateModuleDto.getModuleDescription()));
         return ResponseEntity.ok(result);
     }
+
+    @DeleteMapping("/{moduleId}")
+    public ResponseEntity<Void> deleteModule(@PathVariable String moduleId) {
+        this.pipeline.send(new DeleteModuleCommand(moduleId));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

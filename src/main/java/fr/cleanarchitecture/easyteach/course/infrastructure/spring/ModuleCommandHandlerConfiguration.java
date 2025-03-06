@@ -38,4 +38,9 @@ public class ModuleCommandHandlerConfiguration {
     public UpdateModuleCommandHandler updateModuleCommandHandler(ModuleRepository moduleRepository) {
         return new UpdateModuleCommandHandler(moduleRepository);
     }
+
+    @Bean
+    public DeleteModuleCommandHandler deleteModuleCommandHandler(ModuleRepository moduleRepository) {
+        return new DeleteModuleCommandHandler(moduleRepository);
+    }
 }
