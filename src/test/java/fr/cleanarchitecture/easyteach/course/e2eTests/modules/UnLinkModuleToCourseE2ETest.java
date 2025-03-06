@@ -84,7 +84,7 @@ public class UnLinkModuleToCourseE2ETest extends EasyTeachIntegrationTests {
     }
 
     @Test
-    public void UnLinkAlwaysNotLinkedModuleToCourseE2ETest_shouldThrowException() throws Exception {
+    public void UnLinkAlreadyNotLinkedModuleToCourseE2ETest_shouldThrowException() throws Exception {
         var course = new Course(
                 "title",
                 "description",

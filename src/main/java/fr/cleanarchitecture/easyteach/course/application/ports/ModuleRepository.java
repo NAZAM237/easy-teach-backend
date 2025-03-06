@@ -11,4 +11,5 @@ public interface ModuleRepository {
     List<Module> findAll();
     void save(Module module);
     void delete(Module module);
+    void clear();
 }

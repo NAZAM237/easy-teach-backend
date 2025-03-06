@@ -89,7 +89,7 @@ public class LinkModuleToCourseE2ETest extends EasyTeachIntegrationTests {
     }
 
     @Test
-    public void linkAlwaysLinkedModuleToCourseE2ETest_shouldThrowException() throws Exception {
+    public void linkAlreadyLinkedModuleToCourseE2ETest_shouldThrowException() throws Exception {
         var course = new Course(
                 "title",
                 "description",

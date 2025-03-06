@@ -68,7 +68,7 @@ public class UnLinkModuleToCourseTest {
     }
 
     @Test
-    public void unLinkNotLinkedModuleToCourseTest_shouldThrowException() {
+    public void unLinkAlreadyLinkedModuleToCourseTest_shouldThrowException() {
         var course = new Course(
                 "title",
                 "description",

@@ -36,4 +36,9 @@ public class InMemoryModuleRepository implements ModuleRepository {
     public void delete(Module module) {
         this.modules.remove(module);
     }
+
+    @Override
+    public void clear() {
+        this.modules.clear();
+    }
 }

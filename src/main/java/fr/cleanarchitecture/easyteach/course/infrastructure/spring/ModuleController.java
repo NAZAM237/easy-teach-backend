@@ -2,13 +2,11 @@ package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import an.awesome.pipelinr.Pipeline;
 import fr.cleanarchitecture.easyteach.course.application.usecases.module.LinkModuleToCourseCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.ReorderLessonCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.module.UnLinkModuleToCourseCommand;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.ModuleViewModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("modules")
@@ -34,6 +32,14 @@ public class ModuleController {
             @PathVariable("modulesId") String modulesId, @PathVariable("courseId") String courseId) {
         var result = this.pipeline.send(
                 new UnLinkModuleToCourseCommand(courseId, modulesId)
+        );
+        return ResponseEntity.ok(result);
+    }
+
+    @PatchMapping("/{moduleId}/lessons")
+    public ResponseEntity<ModuleViewModel> reorderLessons(@PathVariable String moduleId, @RequestBody ReorderLessonToModuleDto reOrderLessonToModuleDto) {
+        var result = this.pipeline.send(
+                new ReorderLessonCommand(moduleId, reOrderLessonToModuleDto.getLessons())
         );
         return ResponseEntity.ok(result);
     }

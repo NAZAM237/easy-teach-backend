@@ -48,7 +48,7 @@ public class LinkModuleToCourseTest {
     }
 
     @Test
-    public void linkModuleAlwaysLinkedToCourseTest_shouldThrowException() {
+    public void linkModuleAlreadyLinkedToCourseTest_shouldThrowException() {
         var course = new Course(
                 "title",
                 "description",

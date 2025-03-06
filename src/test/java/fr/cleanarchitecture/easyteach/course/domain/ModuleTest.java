@@ -40,7 +40,7 @@ public class ModuleTest {
     }
 
     @Test
-    public void linkAlwaysLinkedToCourseTest_shouldThrowException() {
+    public void linkAlreadyLinkedModuleToCourseTest_shouldThrowException() {
         var module = new Module("title", "description", 1);
         module.linkToCourse();
         Assert.assertThrows(
@@ -59,7 +59,7 @@ public class ModuleTest {
     }
 
     @Test
-    public void unLinkAlwaysUnLinkedModuleToCourseTest_shouldThrowException() {
+    public void unLinkAlreadyUnLinkedModuleToCourseTest_shouldThrowException() {
         var module = new Module("title", "description", 1);
         Assert.assertThrows(
                 "Module is not linked to any course",
