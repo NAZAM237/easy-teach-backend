@@ -1,12 +1,10 @@
 package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import an.awesome.pipelinr.Pipeline;
-import fr.cleanarchitecture.easyteach.course.application.usecases.module.AddLessonToModuleCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.module.LinkModuleToCourseCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.module.ReorderLessonCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.module.UnLinkModuleToCourseCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.*;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.ModuleViewModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,5 +57,11 @@ public class ModuleController {
                                 addLessonToModuleDto.getOrder()))
         );
         return ResponseEntity.ok(result);
+    }
+
+    @PatchMapping("/{moduleId}/remove-lesson-from-module")
+    public ResponseEntity<Void> removeLessonFromModule(@PathVariable String moduleId, @RequestBody RemoveLessonFromModuleDto removeLessonFromModuleDto) {
+        this.pipeline.send(new RemoveLessonFromModuleCommand(moduleId, removeLessonFromModuleDto.getLessonId()));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
