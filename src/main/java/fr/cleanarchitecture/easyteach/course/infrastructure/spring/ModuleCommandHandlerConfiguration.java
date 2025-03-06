@@ -2,6 +2,7 @@ package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.ModuleRepository;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.AddLessonToModuleCommandHandler;
 import fr.cleanarchitecture.easyteach.course.application.usecases.module.LinkModuleToCourseCommandHandler;
 import fr.cleanarchitecture.easyteach.course.application.usecases.module.ReorderLessonCommandHandler;
 import fr.cleanarchitecture.easyteach.course.application.usecases.module.UnLinkModuleToCourseCommandHandler;
@@ -24,5 +25,10 @@ public class ModuleCommandHandlerConfiguration {
     @Bean
     public ReorderLessonCommandHandler reorderLessonCommandHandler(ModuleRepository moduleRepository) {
         return new ReorderLessonCommandHandler(moduleRepository);
+    }
+
+    @Bean
+    public AddLessonToModuleCommandHandler addLessonToModuleCommandHandler(ModuleRepository moduleRepository) {
+        return new AddLessonToModuleCommandHandler(moduleRepository);
     }
 }

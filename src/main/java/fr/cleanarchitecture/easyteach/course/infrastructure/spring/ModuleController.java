@@ -1,9 +1,11 @@
 package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import an.awesome.pipelinr.Pipeline;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.AddLessonToModuleCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.module.LinkModuleToCourseCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.module.ReorderLessonCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.module.UnLinkModuleToCourseCommand;
+import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.ModuleViewModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +42,21 @@ public class ModuleController {
     public ResponseEntity<ModuleViewModel> reorderLessons(@PathVariable String moduleId, @RequestBody ReorderLessonToModuleDto reOrderLessonToModuleDto) {
         var result = this.pipeline.send(
                 new ReorderLessonCommand(moduleId, reOrderLessonToModuleDto.getLessons())
+        );
+        return ResponseEntity.ok(result);
+    }
+
+    @PatchMapping("/{moduleId}/add-lesson-to-module")
+    public ResponseEntity<ModuleViewModel> addLessonToModule(@PathVariable String moduleId, @RequestBody AddLessonToModuleDto addLessonToModuleDto) {
+        var result = this.pipeline.send(
+                new AddLessonToModuleCommand(
+                        moduleId,
+                        new InputLesson(
+                                addLessonToModuleDto.getTitle(),
+                                addLessonToModuleDto.getLessonType(),
+                                addLessonToModuleDto.getVideoUrl(),
+                                addLessonToModuleDto.getTextContent(),
+                                addLessonToModuleDto.getOrder()))
         );
         return ResponseEntity.ok(result);
     }
