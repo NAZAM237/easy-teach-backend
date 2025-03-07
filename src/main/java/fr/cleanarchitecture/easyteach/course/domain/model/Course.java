@@ -100,7 +100,6 @@ public class Course {
         if (moduleWithSamePosition) {
             throw new BadRequestException("The module position already in use");
         }
-        module.linkToCourse();
         this.modules.add(module);
     }
 
@@ -110,7 +109,6 @@ public class Course {
             throw new NotFoundException("The module not found");
         }
         this.modules.remove(module.get());
-        module.get().unLinkToCourse();
     }
 
     public Course changeTitle(String newTitle) {

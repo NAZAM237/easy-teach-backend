@@ -10,7 +10,6 @@ public class ModuleViewModel {
     private String moduleTitle;
     private String moduleDescription;
     private int moduleOrder;
-    private boolean linkToCourse;
     private Set<Lesson> lessons;
 
     public ModuleViewModel() {}
@@ -20,7 +19,6 @@ public class ModuleViewModel {
         this.moduleTitle = module.getModuleTitle();
         this.moduleDescription = module.getModuleDescription();
         this.moduleOrder = module.getOrder();
-        this.linkToCourse = module.isLinkToCourse();
         this.lessons = module.getLessons();
     }
 
@@ -38,10 +36,6 @@ public class ModuleViewModel {
 
     public int getModuleOrder() {
         return moduleOrder;
-    }
-
-    public boolean isLinkToCourse() {
-        return linkToCourse;
     }
 
     public Set<Lesson> getLessons() {

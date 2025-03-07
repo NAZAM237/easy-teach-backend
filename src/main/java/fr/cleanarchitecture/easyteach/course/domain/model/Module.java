@@ -14,7 +14,6 @@ public class Module {
     private String moduleDescription;
     private int order;
     private Set<Lesson> lessons = new HashSet<>();
-    private boolean linkToCourse;
 
     public Module(String moduleTitle, String moduleDescription, int order) {
         this.moduleId = UUID.randomUUID().toString();
@@ -55,34 +54,12 @@ public class Module {
         return lessons;
     }
 
-    public boolean isLinkToCourse() {
-        return linkToCourse;
-    }
-
-    public void linkToCourse() {
-        if (this.linkToCourse) {
-            throw new BadRequestException("Module is always linked in a course");
-        }
-        this.linkToCourse = true;
-    }
-
-    public void unLinkToCourse() {
-        if (!this.linkToCourse) {
-            throw new BadRequestException("Module is not linked to any course");
-        }
-        this.linkToCourse = false;
-    }
-
     public void changeTitle(String title) {
         this.moduleTitle = title;
     }
 
     public void changeDescription(String description) {
         this.moduleDescription = description;
-    }
-
-    public void changeOrder(int newOrder) {
-        this.order = newOrder;
     }
 
     public void addLesson(Lesson lesson) {
