@@ -3,7 +3,9 @@ package fr.cleanarchitecture.easyteach.course.domain;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
+import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
+import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
@@ -28,14 +30,41 @@ public class CourseTest {
 
     @Test
     public void publishCourseTest() {
-        course.getModules().add(new Module(1));
+        var module = new Module("moduleTitle", "moduleDescription", 1);
+        course.addModule(module);
+        var lesson = new Lesson("lessonTitle", LessonType.TEXT, null, "textContext", 1);
+        course.addLessonToModule(module.getModuleId(), lesson);
         course.publish();
         Assert.assertEquals(course.getStatus().name(), CourseStatus.PUBLISHED.name());
     }
 
     @Test
+    public void publishCourseWithoutModules_shouldFailTest() {
+        var assertResult = Assert.assertThrows(
+                BadRequestException.class,
+                () -> course.publish()
+        );
+        Assert.assertEquals("You must provide at least one module", assertResult.getMessage());
+    }
+
+    @Test
+    public void publishCourseWithoutLessons_shouldFailTest() {
+        course.addModule(new Module("moduleTitle", "moduleDescription", 1));
+        var assertResult = Assert.assertThrows(
+                BadRequestException.class,
+                () -> course.publish()
+        );
+        Assert.assertEquals("You must provide at least one lesson", assertResult.getMessage());
+    }
+
+    @Test
     public void archivedCourseWhenStatusIsPublishedTest() {
-        course.getModules().add(new Module(1));
+        var module = new Module("moduleTitle", "moduleDescription",1);
+        course.addModule(module);
+        course.addLessonToModule(
+                module.getModuleId(),
+                new Lesson("lessonTitle", LessonType.TEXT, null, "textContext", 1)
+        );
         course.publish();
         course.archive();
         Assert.assertEquals(course.getStatus().name(), CourseStatus.ARCHIVED.name());
@@ -53,7 +82,12 @@ public class CourseTest {
 
     @Test
     public void restoreArchivedCourseTest() {
-        course.getModules().add(new Module(1));
+        var module = new Module("moduleTitle", "moduleDescription",1);
+        course.addModule(module);
+        course.addLessonToModule(
+                module.getModuleId(),
+                new Lesson("lessonTitle", LessonType.TEXT, null, "textContext", 1)
+        );
         course.publish();
         course.archive();
         course.restore();
@@ -72,7 +106,7 @@ public class CourseTest {
 
     @Test
     public void addModuleToCourseTest() {
-        Module module = new Module(1);
+        Module module = new Module("moduleTitle", "moduleDescription",1);
         course.addModule(module);
         Assert.assertFalse(course.getModules().isEmpty());
         Assert.assertEquals(1, course.getModules().size());
@@ -80,7 +114,7 @@ public class CourseTest {
 
     @Test
     public void removeModuleFromCourseTest() throws org.apache.coyote.BadRequestException {
-        Module module = new Module(1);
+        Module module = new Module("moduleTitle", "moduleDescription",1);
         course.addModule(module);
         Assert.assertFalse(course.getModules().isEmpty());
         course.removeModule(module.getModuleId());
@@ -89,7 +123,7 @@ public class CourseTest {
 
     @Test
     public void addModuleToCourseWhenModulePositionIsAlreadyInUse_shouldFailTest() {
-        Module module = new Module(1);
+        Module module = new Module("moduleTitle", "moduleDescription",1);
         course.addModule(module);
 
         var assertResult = Assert.assertThrows(
@@ -105,35 +139,31 @@ public class CourseTest {
                 NotFoundException.class,
                 (() -> course.removeModule("moduleId")
         ));
-        Assert.assertEquals("The module not found", assertResult.getMessage());
+        Assert.assertEquals("Module not found", assertResult.getMessage());
     }
 
     @Test
     public void addModuleToArchivedCourse_shouldFailTest() {
-        course.getModules().add(new Module(1));
+        var module = new Module("moduleTitle", "moduleDescription",1);
+        course.addModule(module);
+        course.addLessonToModule(
+                module.getModuleId(),
+                new Lesson("lessonTitle", LessonType.TEXT, null, "textContext", 1)
+        );
         course.publish();
         course.archive();
         var assertResult = Assert.assertThrows(
                 BadRequestException.class,
-                () -> course.addModule(new Module(2))
+                () -> course.addModule(new Module("moduleTitle", "moduleDescription",2))
         );
         Assert.assertEquals("You cannot add module to archived course. Please restore course before!", assertResult.getMessage());
     }
 
     @Test
-    public void publishCourseWithoutModules_shouldFailTest() {
-        var assertResult = Assert.assertThrows(
-                BadRequestException.class,
-                () -> course.publish()
-        );
-        Assert.assertEquals("You must provide at least one module", assertResult.getMessage());
-    }
-
-    @Test
     public void showAllModulesTest() {
-        Module module1 = new Module(1);
-        Module module2 = new Module(2);
-        Module module3 = new Module(3);
+        Module module1 = new Module("moduleTitle", "moduleDescription",1);
+        Module module2 = new Module("moduleTitle", "moduleDescription",2);
+        Module module3 = new Module("moduleTitle", "moduleDescription",3);
         course.addModule(module1);
         course.addModule(module2);
         course.addModule(module3);
@@ -141,20 +171,71 @@ public class CourseTest {
     }
 
     @Test
-    public void changeCourseTitleTest() {
-        course.changeTitle("title2");
-        Assert.assertEquals("title2", course.getCourseTitle());
-    }
-
-    @Test
-    public void changeCourseDescriptionTest() {
-        course.changeDescription("Description2");
+    public void changeDataCourseTest() {
+        course.updateCourseData(
+                "Title2",
+                "Description2",
+                new Price(BigDecimal.valueOf(500), "FCFA"));
+        Assert.assertEquals("Title2", course.getCourseTitle());
         Assert.assertEquals("Description2", course.getCourseDescription());
+        Assert.assertEquals(BigDecimal.valueOf(500), course.getPrice().getAmount());
     }
 
     @Test
-    public void changeCoursePriceTest() {
-        course.changePrice(new Price(BigDecimal.valueOf(500), "FCFA"));
-        Assert.assertEquals(BigDecimal.valueOf(500), course.getPrice().getAmount());
+    public void addLessonToModuleTest() {
+        var module = new Module("moduleTitle", "moduleDescription", 1);
+        var lesson = new Lesson("lessonTitle", LessonType.TEXT, null, "textContent", 1);
+        course.addModule(module);
+        course.addLessonToModule(module.getModuleId(), lesson);
+        var updatedModule = course.getModules().stream()
+                .filter(module1 -> module1.getModuleId().equals(module.getModuleId()))
+                .findFirst()
+                .orElseThrow();
+        Assert.assertEquals(1, updatedModule.getLessons().size());
+    }
+
+    @Test
+    public void addLessonToNotExistModule_shouldFailTest() {
+        var lesson = new Lesson("lessonTitle", LessonType.TEXT, null, "textContent", 1);
+        Assert.assertThrows(
+                "Module not found",
+                NotFoundException.class,
+                () -> course.addLessonToModule("FakeModuleId", lesson)
+        );
+    }
+
+    @Test
+    public void removeLessonFromCourseTest() {
+        var module = new Module("moduleTitle", "moduleDescription", 1);
+        var lesson = new Lesson("lessonTitle", LessonType.TEXT, null, "textContent", 1);
+        course.addModule(module);
+        course.addLessonToModule(module.getModuleId(), lesson);
+        course.removeLessonToModule(module.getModuleId(), lesson.getLessonId());
+        var updatedModule = course.getModules().stream()
+                .filter(module1 -> module1.getModuleId().equals(module.getModuleId()))
+                .findFirst()
+                .orElseThrow();
+        Assert.assertTrue(updatedModule.getLessons().isEmpty());
+    }
+
+    @Test
+    public void removeLessonToNotExistModule_shouldFailTest() {
+        var lesson = new Lesson("lessonTitle", LessonType.TEXT, null, "textContent", 1);
+        Assert.assertThrows(
+                "Module not found",
+                NotFoundException.class,
+                () -> course.removeLessonToModule("FakeModuleId", lesson.getLessonId())
+        );
+    }
+
+    @Test
+    public void removeNotExistLessonToModule_shouldFailTest() {
+        var module = new Module("moduleTitle", "moduleDescription", 1);
+        course.addModule(module);
+        Assert.assertThrows(
+                "The lesson not found",
+                NotFoundException.class,
+                () -> course.removeLessonToModule(module.getModuleId(), "FakeLessonId")
+        );
     }
 }

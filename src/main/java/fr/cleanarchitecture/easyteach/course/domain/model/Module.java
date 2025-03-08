@@ -24,16 +24,6 @@ public class Module {
 
     public Module() {}
 
-    public Module(int order) {
-        this.moduleId = UUID.randomUUID().toString();
-        this.order = order;
-    }
-
-    public Module(String moduleId, int order) {
-        this.moduleId = moduleId;
-        this.order = order;
-    }
-
     public String getModuleId() {
         return moduleId;
     }

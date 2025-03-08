@@ -72,6 +72,13 @@ public class Course {
         if (this.modules.isEmpty()) {
             throw new BadRequestException("You must provide at least one module");
         }
+
+        var aLeastOnLesson = this.modules.stream().noneMatch(module -> module.getLessons().isEmpty());
+
+        if (!aLeastOnLesson) {
+            throw new BadRequestException("You must provide at least one lesson");
+        }
+
         this.status = CourseStatus.PUBLISHED;
         return this;
     }
@@ -104,25 +111,32 @@ public class Course {
     }
 
     public void removeModule(String moduleId) throws BadRequestException {
-        var module = this.modules.stream().filter(module1 -> module1.getModuleId().equals(moduleId)).findFirst();
-        if (module.isEmpty()) {
-            throw new NotFoundException("The module not found");
-        }
-        this.modules.remove(module.get());
+        var module = this.modules.stream()
+                .filter(module1 -> module1.getModuleId().equals(moduleId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Module not found"));
+        this.modules.remove(module);
     }
 
-    public Course changeTitle(String newTitle) {
+    public void updateCourseData(String newTitle, String newDescription, Price newPrice) {
         this.courseTitle = newTitle;
-        return this;
-    }
-
-    public Course changeDescription(String newDescription) {
         this.courseDescription = newDescription;
-        return this;
+        this.price = newPrice;
     }
 
-    public Course changePrice(Price newPrice) {
-        this.price = newPrice;
-        return this;
+    public void addLessonToModule(String moduleId, Lesson lesson) {
+        var module = this.modules.stream()
+                .filter(module1 -> module1.getModuleId().equals(moduleId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Module not found"));
+        module.addLesson(lesson);
+    }
+
+    public void removeLessonToModule(String moduleId, String lessonId) {
+        var module = this.modules.stream()
+                .filter(module1 -> module1.getModuleId().equals(moduleId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Module not found"));
+        module.removeLesson(lessonId);
     }
 }

@@ -8,7 +8,9 @@ import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.course.ArchiveCourseCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.course.ArchiveCourseCommandHandler;
+import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
+import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
@@ -25,6 +27,7 @@ public class ArchiveCourseTest {
     private final UserRepository userRepository = new InMemoryUserRepository();
     private Course course;
     private User user;
+    private Lesson lesson;
 
     @Before
     public void setUp() throws Exception {
@@ -36,11 +39,14 @@ public class ArchiveCourseTest {
                 new Teacher(),
                 new Price(BigDecimal.ZERO, "FCFA")
         );
+        lesson = new Lesson("lessonTitle", LessonType.TEXT, null, "textContent", 1);
     }
 
     @Test
     public void archiveCourseTest() {
-        course.addModule(new Module(1));
+        var module = new Module("moduleTitle", "moduleDescriptio", 1);
+        course.addModule(module);
+        course.addLessonToModule(module.getModuleId(), lesson);
         course.publish();
         courseRepository.save(course);
 

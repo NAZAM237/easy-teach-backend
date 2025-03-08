@@ -4,7 +4,9 @@ import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
 import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
 import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
+import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
+import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
@@ -70,7 +72,11 @@ public class DeleteCourseE2ETest extends EasyTeachIntegrationTests {
                 new Teacher(),
                 new Price(BigDecimal.ZERO, "FCFA")
         );
-        course.addModule(new Module(1));
+        var module = new Module("moduleTitle", "moduleDescription",1);
+        course.addModule(module);
+        course.addLessonToModule(
+                module.getModuleId(),
+                new Lesson("lessonTitle", LessonType.TEXT, null, "textContent", 1));
         course.publish();
         courseRepository.save(course);
         mockMvc

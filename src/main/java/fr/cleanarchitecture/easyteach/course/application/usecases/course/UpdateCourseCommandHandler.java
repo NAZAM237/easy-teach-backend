@@ -15,17 +15,19 @@ public class UpdateCourseCommandHandler implements Command.Handler<UpdateCourseC
 
     @Override
     public CourseViewModel handle(UpdateCourseCommand updateCourseCommand) {
-        var existingCourse = courseRepository.findByCourseId(updateCourseCommand.getCourseId());
-        if (existingCourse.isEmpty()) {
-            throw new NotFoundException("Course not found");
-        }
-        existingCourse.get().changeTitle(updateCourseCommand.getCourseTitle());
-        existingCourse.get().changeDescription(updateCourseCommand.getCourseDescription());
-        var course = existingCourse.get().changePrice(updateCourseCommand.getPrice());
-        this.courseRepository.save(course);
+        var existingCourse = courseRepository.findByCourseId(updateCourseCommand.getCourseId())
+                .orElseThrow(() -> new NotFoundException("Course not found"));
+
+        existingCourse.updateCourseData(
+                updateCourseCommand.getCourseTitle(),
+                updateCourseCommand.getCourseDescription(),
+                updateCourseCommand.getPrice()
+        );
+
+        this.courseRepository.save(existingCourse);
         return new CourseViewModel(
                 "Your course was successfully updated",
-                course
+                existingCourse
         );
     }
 }
