@@ -241,7 +241,7 @@ public class CourseTest {
     }
 
     @Test
-    public void reorderModuleFromCourseTest() {
+    public void reorderLessonsFromModuleTest() {
         var module = new Module("Programmation Java", "Description", 1);
         var lesson1 = new Lesson("Introduction", LessonType.TEXT, null, "Intro", 1);
         var lesson2 = new Lesson("Variables", LessonType.TEXT, null, "Les types", 2);
@@ -267,5 +267,54 @@ public class CourseTest {
                 .findFirst().orElseThrow();
         Assert.assertEquals("Programmation", updatedModule.getModuleTitle());
         Assert.assertEquals("Description2", updatedModule.getModuleDescription());
+    }
+
+    @Test
+    public void reorderModulesFromCourseTest() {
+        var module = new Module("Introduction à Java", "Description", 1);
+        var module2 = new Module("Les conditions", "Description", 2);
+        var module3 = new Module("Les boucles", "Description", 3);
+        course.addModule(module);
+        course.addModule(module2);
+        course.addModule(module3);
+
+        course.reorderModules(List.of(module2, module3, module));
+
+        Assert.assertEquals(1, module2.getOrder());
+        Assert.assertEquals(2, module3.getOrder());
+        Assert.assertEquals(3, module.getOrder());
+    }
+
+    @Test
+    public void reorderWithInvalidModulesList_shouldFailTest() {
+        var module = new Module("Introduction à Java", "Description", 1);
+        var module2 = new Module("Les conditions", "Description", 2);
+        var module3 = new Module("Les boucles", "Description", 3);
+        var module4 = new Module("Les fonctions", "Description", 4);
+        course.addModule(module);
+        course.addModule(module2);
+        course.addModule(module3);
+
+        var exception = Assert.assertThrows(
+                BadRequestException.class,
+                () -> course.reorderModules(List.of(module2, module3, module4))
+        );
+        Assert.assertEquals("Invalid modules list", exception.getMessage());
+    }
+
+    @Test
+    public void reorderWithInCompleteModulesList_shouldFailTest() {
+        var module = new Module("Introduction à Java", "Description", 1);
+        var module2 = new Module("Les conditions", "Description", 2);
+        var module3 = new Module("Les boucles", "Description", 3);
+        course.addModule(module);
+        course.addModule(module2);
+        course.addModule(module3);
+
+        var exception = Assert.assertThrows(
+                BadRequestException.class,
+                () -> course.reorderModules(List.of(module2, module3))
+        );
+        Assert.assertEquals("Invalid modules list", exception.getMessage());
     }
 }

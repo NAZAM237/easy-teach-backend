@@ -80,7 +80,12 @@ public class CourseCommandHandlerConfiguration {
     }
 
     @Bean
-    public UpdateModuleCommandHandler updateModuleCommandHandler(CourseRepository courseRepository) {
-        return new UpdateModuleCommandHandler(courseRepository);
+    public UpdateModuleFromCourseCommandHandler updateModuleCommandHandler(CourseRepository courseRepository) {
+        return new UpdateModuleFromCourseCommandHandler(courseRepository);
+    }
+
+    @Bean
+    public ReorderModuleInCourseCommandHandler reorderModuleInCourseCommandHandler(CourseRepository courseRepository) {
+        return new ReorderModuleInCourseCommandHandler(courseRepository);
     }
 }

@@ -156,4 +156,15 @@ public class Course {
                 .orElseThrow(() -> new NotFoundException("Module not found"));
         module.updateData(moduleTitle, moduleDescription);
     }
+
+    public void reorderModules(List<Module> modules) {
+        if (!this.modules.containsAll(modules) || modules.size() != this.modules.size()) {
+            throw new BadRequestException("Invalid modules list");
+        }
+        for (int i = 0; i < modules.size(); i++) {
+            modules.get(i).changeOrder(i + 1);
+        }
+
+        this.modules = new HashSet<>(modules);
+    }
 }

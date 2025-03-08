@@ -2,8 +2,8 @@ package fr.cleanarchitecture.easyteach.course.usecase;
 
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.application.usecases.commands.UpdateModuleCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.UpdateModuleCommandHandler;
+import fr.cleanarchitecture.easyteach.course.application.usecases.commands.UpdateModuleFromCourseCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.UpdateModuleFromCourseCommandHandler;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
@@ -37,12 +37,12 @@ public class UpdateModuleFromCourseTest {
     public void updateModuleFromCourseTest() {
         courseRepository.save(course);
 
-        var updateModuleCommand = new UpdateModuleCommand(
+        var updateModuleCommand = new UpdateModuleFromCourseCommand(
                 course.getCourseId(),
                 module.getModuleId(),
                 "Introduction",
                 "Desc");
-        var updateModuleCommandHandler = new UpdateModuleCommandHandler(courseRepository);
+        var updateModuleCommandHandler = new UpdateModuleFromCourseCommandHandler(courseRepository);
 
         updateModuleCommandHandler.handle(updateModuleCommand);
 
@@ -59,12 +59,12 @@ public class UpdateModuleFromCourseTest {
 
     @Test
     public void updateNotFoundModuleTest_shouldThrowException() {
-        var updateModuleCommand = new UpdateModuleCommand(
+        var updateModuleCommand = new UpdateModuleFromCourseCommand(
                 course.getCourseId(),
                 "Garbage",
                 "Introduction",
                 "Desc");
-        var updateModuleCommandHandler = new UpdateModuleCommandHandler(courseRepository);
+        var updateModuleCommandHandler = new UpdateModuleFromCourseCommandHandler(courseRepository);
         Assert.assertThrows(
                 "Module not found",
                 NotFoundException.class,

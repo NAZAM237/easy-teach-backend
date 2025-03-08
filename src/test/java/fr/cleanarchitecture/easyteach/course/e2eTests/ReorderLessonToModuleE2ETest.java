@@ -59,18 +59,22 @@ public class ReorderLessonToModuleE2ETest extends EasyTeachIntegrationTests {
         var lessons = Arrays.asList(lesson3, lesson1, lesson2);
         var dto = new ReorderLessonToModuleDto(lessons);
         var result = mockMvc
-                        .perform(MockMvcRequestBuilders.patch("/modules/{moduleId}/lessons", module.getModuleId())
+                        .perform(MockMvcRequestBuilders.patch(
+                                "/courses/{courseId}/modules/{moduleId}/lessons",
+                                        course.getCourseId(),
+                                        module.getModuleId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsBytes(dto)))
                         .andExpect(MockMvcResultMatchers.status().isOk())
                         .andReturn();
 
-        var moduleViewModel = objectMapper.readValue(
+        var courseViewModel = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
-                ModuleViewModel.class
+                CourseViewModel.class
         );
 
-        Assert.assertNotNull(moduleViewModel);
+
+        Assert.assertNotNull(courseViewModel);
         Assert.assertEquals(1, lesson3.getOrder());
         Assert.assertEquals(2, lesson1.getOrder());
         Assert.assertEquals(3, lesson2.getOrder());

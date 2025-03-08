@@ -2,6 +2,7 @@ package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import an.awesome.pipelinr.Pipeline;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.*;
+import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
@@ -152,11 +153,22 @@ public class CourseController {
             @PathVariable String moduleId,
             @RequestBody UpdateModuleDto updateModuleDto) {
         var result = this.pipeline.send(
-                new UpdateModuleCommand(
+                new UpdateModuleFromCourseCommand(
                         courseId,
                         moduleId,
                         updateModuleDto.getModuleTitle(),
                         updateModuleDto.getModuleDescription()));
+        return ResponseEntity.ok(result);
+    }
+
+    @PatchMapping("/{courseId}/modules")
+    public ResponseEntity<CourseViewModel> reorderModulesFromCourse(
+            @PathVariable String courseId,
+            @RequestBody List<Module> newModules) {
+        var result = this.pipeline.send(
+                new ReorderModuleInCourseCommand(
+                        courseId,
+                        newModules));
         return ResponseEntity.ok(result);
     }
 }

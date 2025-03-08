@@ -76,4 +76,8 @@ public class Module {
 
         this.lessons = new HashSet<>(lessons);
     }
+
+    public void changeOrder(int newOrder) {
+        this.order = newOrder;
+    }
 }
