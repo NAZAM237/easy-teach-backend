@@ -2,22 +2,22 @@ package fr.cleanarchitecture.easyteach.course.application.usecases.module;
 
 import an.awesome.pipelinr.Command;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
-import fr.cleanarchitecture.easyteach.course.application.ports.ModuleRepository;
+import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.ModuleViewModel;
+import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 
-public class AddLessonToModuleCommandHandler implements Command.Handler<AddLessonToModuleCommand, ModuleViewModel> {
+public class AddLessonToModuleCommandHandler implements Command.Handler<AddLessonToModuleCommand, CourseViewModel> {
 
-    private final ModuleRepository moduleRepository;
+    private final CourseRepository courseRepository;
 
-    public AddLessonToModuleCommandHandler(ModuleRepository moduleRepository) {
-        this.moduleRepository = moduleRepository;
+    public AddLessonToModuleCommandHandler(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
     }
 
     @Override
-    public ModuleViewModel handle(AddLessonToModuleCommand addLessonToModuleCommand) {
-        var module = moduleRepository.findByModuleId(addLessonToModuleCommand.getModuleId())
-                .orElseThrow(() -> new NotFoundException("Module not found"));
+    public CourseViewModel handle(AddLessonToModuleCommand addLessonToModuleCommand) {
+        var course = courseRepository.findByCourseId(addLessonToModuleCommand.getCourseId())
+                .orElseThrow(() -> new NotFoundException("Course not found"));
         var lesson = new Lesson(
                 addLessonToModuleCommand.getLesson().getTitle(),
                 addLessonToModuleCommand.getLesson().getContentType(),
@@ -25,7 +25,15 @@ public class AddLessonToModuleCommandHandler implements Command.Handler<AddLesso
                 addLessonToModuleCommand.getLesson().getTextContent(),
                 addLessonToModuleCommand.getLesson().getOrder()
         );
-        module.addLesson(lesson);
-        return new ModuleViewModel(module);
+        course.addLessonToModule(
+                addLessonToModuleCommand.getModuleId(),
+                lesson
+        );
+        courseRepository.save(course);
+
+        return new CourseViewModel(
+                "New lesson added successfully in course",
+                course
+        );
     }
 }

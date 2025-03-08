@@ -1,9 +1,7 @@
 package fr.cleanarchitecture.easyteach.course.e2eTests.courses;
 
 import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
-import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.application.ports.ModuleRepository;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
@@ -24,10 +22,6 @@ public class AddModuleToCourseE2ETest extends EasyTeachIntegrationTests {
 
     @Autowired
     private CourseRepository courseRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ModuleRepository moduleRepository;
 
     @Test
     public void addModuleToCourseE2ETest() throws Exception {

@@ -2,21 +2,24 @@ package fr.cleanarchitecture.easyteach.course.application.usecases.module;
 
 import an.awesome.pipelinr.Command;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
-import fr.cleanarchitecture.easyteach.course.application.ports.ModuleRepository;
+import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 
 public class RemoveLessonFromModuleCommandHandler implements Command.Handler<RemoveLessonFromModuleCommand, Void> {
 
-    private final ModuleRepository moduleRepository;
+    private final CourseRepository courseRepository;
 
-    public RemoveLessonFromModuleCommandHandler(ModuleRepository moduleRepository) {
-        this.moduleRepository = moduleRepository;
+    public RemoveLessonFromModuleCommandHandler(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
     }
 
     @Override
     public Void handle(RemoveLessonFromModuleCommand removeLessonFromModuleCommand) {
-        var module = moduleRepository.findByModuleId(removeLessonFromModuleCommand.getModuleId())
-                .orElseThrow(() -> new NotFoundException("Module not found"));
-        module.removeLesson(removeLessonFromModuleCommand.getLessonId());
+        var course = courseRepository.findByCourseId(removeLessonFromModuleCommand.getCourseId())
+                .orElseThrow(() -> new NotFoundException("Course not found"));
+
+        course.removeLessonToModule(
+                removeLessonFromModuleCommand.getModuleId(),
+                removeLessonFromModuleCommand.getLessonId());
         return null;
     }
 }

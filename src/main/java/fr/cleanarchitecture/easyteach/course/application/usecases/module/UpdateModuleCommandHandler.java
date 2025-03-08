@@ -2,24 +2,29 @@ package fr.cleanarchitecture.easyteach.course.application.usecases.module;
 
 import an.awesome.pipelinr.Command;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
-import fr.cleanarchitecture.easyteach.course.application.ports.ModuleRepository;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.ModuleViewModel;
+import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
+import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 
-public class UpdateModuleCommandHandler implements Command.Handler<UpdateModuleCommand, ModuleViewModel> {
+public class UpdateModuleCommandHandler implements Command.Handler<UpdateModuleCommand, CourseViewModel> {
 
-    private ModuleRepository moduleRepository;
+    private CourseRepository courseRepository;
 
-    public UpdateModuleCommandHandler(ModuleRepository moduleRepository) {
-        this.moduleRepository = moduleRepository;
+    public UpdateModuleCommandHandler(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
     }
 
     @Override
-    public ModuleViewModel handle(UpdateModuleCommand updateModuleCommand) {
-        var module = moduleRepository.findByModuleId(updateModuleCommand.getModuleId())
-                .orElseThrow(() -> new NotFoundException("Module not found"));
-        module.changeTitle(updateModuleCommand.getModuleTitle());
-        module.changeDescription(updateModuleCommand.getModuleDescription());
-        moduleRepository.save(module);
-        return new ModuleViewModel(module);
+    public CourseViewModel handle(UpdateModuleCommand updateModuleCommand) {
+        var course = courseRepository.findByCourseId(updateModuleCommand.getCourseId())
+                .orElseThrow(() -> new NotFoundException("Course not found"));
+        course.updateModuleData(
+                updateModuleCommand.getModuleId(),
+                updateModuleCommand.getModuleTitle(),
+                updateModuleCommand.getModuleDescription()
+        );
+        courseRepository.save(course);
+        return new CourseViewModel(
+                "Module " +updateModuleCommand.getModuleId()+ "has been update successfully",
+                course);
     }
 }

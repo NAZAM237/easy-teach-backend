@@ -16,17 +16,14 @@ public class DeleteCourseCommandHandler implements Command.Handler<DeleteCourseC
 
     @Override
     public Void handle(DeleteCourseCommand deleteCourseCommand) {
-        var existingCourse = courseRepository.findByCourseId(deleteCourseCommand.getCourseId());
+        var existingCourse = courseRepository.findByCourseId(deleteCourseCommand.getCourseId())
+                .orElseThrow(() -> new NotFoundException("Course not found"));
 
-        if (existingCourse.isEmpty()) {
-            throw new NotFoundException("Course not found");
-        }
-
-        if (existingCourse.get().getStatus().equals(CourseStatus.PUBLISHED)) {
+        if (existingCourse.getStatus().equals(CourseStatus.PUBLISHED)) {
             throw new BadRequestException("Unable to delete. Course must be draft or archived to be deleted");
         }
 
-        courseRepository.delete(existingCourse.get());
+        courseRepository.delete(existingCourse);
         return null;
     }
 }

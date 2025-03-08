@@ -23,10 +23,11 @@ public class RemoveModuleFromCourseCommandHandler implements Command.Handler<Rem
                 .noneMatch(module -> module.getModuleId().equals(removeModuleFromCourseCommand.getModuleId()));
 
         if (isModuleNotExist) {
-            throw new BadRequestException("Module not linked to course");
+            throw new BadRequestException("Module not found in course");
         }
 
         existingCourse.removeModule(removeModuleFromCourseCommand.getModuleId());
+        courseRepository.save(existingCourse);
         return null;
     }
 }

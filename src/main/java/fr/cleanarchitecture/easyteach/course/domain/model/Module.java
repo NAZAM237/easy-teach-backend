@@ -44,12 +44,9 @@ public class Module {
         return lessons;
     }
 
-    public void changeTitle(String title) {
-        this.moduleTitle = title;
-    }
-
-    public void changeDescription(String description) {
-        this.moduleDescription = description;
+    public void updateData(String moduleTitle, String moduleDescription) {
+        this.moduleTitle = moduleTitle;
+        this.moduleDescription = moduleDescription;
     }
 
     public void addLesson(Lesson lesson) {

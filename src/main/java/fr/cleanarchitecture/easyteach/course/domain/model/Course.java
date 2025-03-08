@@ -6,6 +6,7 @@ import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -138,5 +139,21 @@ public class Course {
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("Module not found"));
         module.removeLesson(lessonId);
+    }
+
+    public void reorderLessonsFromModule(String moduleId, List<Lesson> lessons) {
+        var module = this.modules.stream()
+                .filter(module1 -> module1.getModuleId().equals(moduleId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Module not found"));
+        module.reorderLessons(lessons);
+    }
+
+    public void updateModuleData(String moduleId, String moduleTitle, String moduleDescription) {
+        var module = this.modules.stream()
+                .filter(module1 -> module1.getModuleId().equals(moduleId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Module not found"));
+        module.updateData(moduleTitle, moduleDescription);
     }
 }

@@ -2,6 +2,11 @@ package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import an.awesome.pipelinr.Pipeline;
 import fr.cleanarchitecture.easyteach.course.application.usecases.course.*;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.AddLessonToModuleCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.RemoveLessonFromModuleCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.ReorderLessonFromModuleCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.UpdateModuleCommand;
+import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.GetCourseViewModel;
@@ -21,8 +26,6 @@ public class CourseController {
     public CourseController(Pipeline pipeline) {
         this.pipeline = pipeline;
     }
-
-
 
     @GetMapping("/")
     public ResponseEntity<List<GetCourseViewModel>> getAllCourses() {
@@ -102,5 +105,62 @@ public class CourseController {
     public ResponseEntity<Void> deleteCourse(@PathVariable String courseId) {
         this.pipeline.send(new DeleteCourseCommand(courseId));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("/{courseId}/modules/{moduleId}/lessons")
+    public ResponseEntity<CourseViewModel> reorderLessonsFromModule(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @RequestBody ReorderLessonToModuleDto reOrderLessonToModuleDto) {
+        var result = this.pipeline.send(
+                new ReorderLessonFromModuleCommand(courseId, moduleId, reOrderLessonToModuleDto.getLessons())
+        );
+        return ResponseEntity.ok(result);
+    }
+
+    @PatchMapping("{courseId}/modules/{moduleId}/add-lesson-to-module")
+    public ResponseEntity<CourseViewModel> addLessonToModule(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @RequestBody AddLessonToModuleDto addLessonToModuleDto) {
+        var result = this.pipeline.send(
+                new AddLessonToModuleCommand(
+                        courseId,
+                        moduleId,
+                        new InputLesson(
+                                addLessonToModuleDto.getTitle(),
+                                addLessonToModuleDto.getLessonType(),
+                                addLessonToModuleDto.getVideoUrl(),
+                                addLessonToModuleDto.getTextContent(),
+                                addLessonToModuleDto.getOrder()))
+        );
+        return ResponseEntity.ok(result);
+    }
+
+    @PatchMapping("{courseId}/modules/{moduleId}/remove-lesson-from-module")
+    public ResponseEntity<Void> removeLessonFromModule(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @RequestBody RemoveLessonFromModuleDto removeLessonFromModuleDto) {
+        this.pipeline.send(
+                new RemoveLessonFromModuleCommand(
+                        courseId,
+                        moduleId,
+                        removeLessonFromModuleDto.getLessonId()));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/{courseId}/modules/{moduleId}")
+    public ResponseEntity<CourseViewModel> updateModule(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @RequestBody UpdateModuleDto updateModuleDto) {
+        var result = this.pipeline.send(
+                new UpdateModuleCommand(
+                        courseId,
+                        moduleId,
+                        updateModuleDto.getModuleTitle(),
+                        updateModuleDto.getModuleDescription()));
+        return ResponseEntity.ok(result);
     }
 }

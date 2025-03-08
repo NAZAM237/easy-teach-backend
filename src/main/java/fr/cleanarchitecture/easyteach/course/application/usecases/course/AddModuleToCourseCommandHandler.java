@@ -3,17 +3,14 @@ package fr.cleanarchitecture.easyteach.course.application.usecases.course;
 import an.awesome.pipelinr.Command;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.application.ports.ModuleRepository;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 
 public class AddModuleToCourseCommandHandler implements Command.Handler<AddModuleToCourseCommand, Void> {
 
     private final CourseRepository courseRepository;
-    private final ModuleRepository moduleRepository;
 
-    public AddModuleToCourseCommandHandler(CourseRepository courseRepository, ModuleRepository moduleRepository) {
+    public AddModuleToCourseCommandHandler(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
-        this.moduleRepository = moduleRepository;
     }
 
     @Override
@@ -27,7 +24,6 @@ public class AddModuleToCourseCommandHandler implements Command.Handler<AddModul
                 addModuleToCourseCommand.getModuleOrder()
         );
         course.addModule(module);
-        moduleRepository.save(module);
         courseRepository.save(course);
         return null;
     }

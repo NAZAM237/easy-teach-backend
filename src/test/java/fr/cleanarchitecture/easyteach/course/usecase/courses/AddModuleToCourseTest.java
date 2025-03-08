@@ -5,14 +5,12 @@ import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
 import fr.cleanarchitecture.easyteach.authentication.infrastructure.persistence.inmemory.InMemoryUserRepository;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.application.ports.ModuleRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.course.AddModuleToCourseCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.course.AddModuleToCourseCommandHandler;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
-import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryModuleRepository;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,7 +20,6 @@ public class AddModuleToCourseTest {
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
     private final UserRepository userRepository = new InMemoryUserRepository();
-    private final ModuleRepository moduleRepository = new InMemoryModuleRepository();
 
     @Test
     public void addModuleToCourseTest() {
@@ -38,7 +35,7 @@ public class AddModuleToCourseTest {
 
         var addModuleToCourseCommand = new AddModuleToCourseCommand(
                 course.getCourseId(), "courseTitle", "courseDescription", 1);
-        var addModuleToCourseCommandHandler = new AddModuleToCourseCommandHandler(courseRepository, moduleRepository);
+        var addModuleToCourseCommandHandler = new AddModuleToCourseCommandHandler(courseRepository);
 
         addModuleToCourseCommandHandler.handle(addModuleToCourseCommand);
 
@@ -60,7 +57,7 @@ public class AddModuleToCourseTest {
         );
         var addModuleToCourseCommand = new AddModuleToCourseCommand(
                 course.getCourseId(), "courseTitle", "courseDescription", 1);
-        var addModuleToCourseCommandHandler = new AddModuleToCourseCommandHandler(courseRepository, moduleRepository);
+        var addModuleToCourseCommandHandler = new AddModuleToCourseCommandHandler(courseRepository);
 
         Assert.assertThrows(
                 "Course not found",

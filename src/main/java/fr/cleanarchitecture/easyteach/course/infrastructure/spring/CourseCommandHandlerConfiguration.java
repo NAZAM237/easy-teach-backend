@@ -2,8 +2,11 @@ package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.application.ports.ModuleRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.course.*;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.AddLessonToModuleCommandHandler;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.RemoveLessonFromModuleCommandHandler;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.ReorderLessonFromModuleCommandHandler;
+import fr.cleanarchitecture.easyteach.course.application.usecases.module.UpdateModuleCommandHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -41,8 +44,8 @@ public class CourseCommandHandlerConfiguration {
     }
 
     @Bean
-    public AddModuleToCourseCommandHandler addModuleToCourseCommandHandler(CourseRepository courseRepository, ModuleRepository moduleRepository) {
-        return new AddModuleToCourseCommandHandler(courseRepository, moduleRepository);
+    public AddModuleToCourseCommandHandler addModuleToCourseCommandHandler(CourseRepository courseRepository) {
+        return new AddModuleToCourseCommandHandler(courseRepository);
     }
 
     @Bean
@@ -63,5 +66,25 @@ public class CourseCommandHandlerConfiguration {
     @Bean
     public GetAllModulesFromCourseCommandHandler getAllModulesFromCourseCommandHandler(CourseRepository courseRepository) {
         return new GetAllModulesFromCourseCommandHandler(courseRepository);
+    }
+
+    @Bean
+    public ReorderLessonFromModuleCommandHandler reorderLessonCommandHandler(CourseRepository courseRepository) {
+        return new ReorderLessonFromModuleCommandHandler(courseRepository);
+    }
+
+    @Bean
+    public AddLessonToModuleCommandHandler addLessonToModuleCommandHandler(CourseRepository courseRepository) {
+        return new AddLessonToModuleCommandHandler(courseRepository);
+    }
+
+    @Bean
+    public RemoveLessonFromModuleCommandHandler removeLessonFromModuleCommandHandler(CourseRepository courseRepository) {
+        return new RemoveLessonFromModuleCommandHandler(courseRepository);
+    }
+
+    @Bean
+    public UpdateModuleCommandHandler updateModuleCommandHandler(CourseRepository courseRepository) {
+        return new UpdateModuleCommandHandler(courseRepository);
     }
 }

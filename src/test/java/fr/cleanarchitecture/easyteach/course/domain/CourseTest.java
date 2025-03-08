@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class CourseTest {
 
@@ -237,5 +238,34 @@ public class CourseTest {
                 NotFoundException.class,
                 () -> course.removeLessonToModule(module.getModuleId(), "FakeLessonId")
         );
+    }
+
+    @Test
+    public void reorderModuleFromCourseTest() {
+        var module = new Module("Programmation Java", "Description", 1);
+        var lesson1 = new Lesson("Introduction", LessonType.TEXT, null, "Intro", 1);
+        var lesson2 = new Lesson("Variables", LessonType.TEXT, null, "Les types", 2);
+        var lesson3 = new Lesson("Boucles", LessonType.TEXT, null, "Les boucles", 3);
+        course.addModule(module);
+        course.addLessonToModule(module.getModuleId(), lesson1);
+        course.addLessonToModule(module.getModuleId(), lesson2);
+        course.addLessonToModule(module.getModuleId(), lesson3);
+
+        course.reorderLessonsFromModule(module.getModuleId(), List.of(lesson3, lesson1, lesson2));
+        Assert.assertEquals(1, lesson3.getOrder());
+        Assert.assertEquals(2, lesson1.getOrder());
+        Assert.assertEquals(3, lesson2.getOrder());
+    }
+
+    @Test
+    public void updateModuleDataFromCourseTest() {
+        var module = new Module("Programmation Java", "Description", 1);
+        course.addModule(module);
+        course.updateModuleData(module.getModuleId(), "Programmation", "Description2");
+        var updatedModule = course.getModules().stream()
+                .filter(module1 -> module1.getModuleId().equals(module.getModuleId()))
+                .findFirst().orElseThrow();
+        Assert.assertEquals("Programmation", updatedModule.getModuleTitle());
+        Assert.assertEquals("Description2", updatedModule.getModuleDescription());
     }
 }

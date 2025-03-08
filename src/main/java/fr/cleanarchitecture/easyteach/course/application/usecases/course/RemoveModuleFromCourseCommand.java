@@ -3,7 +3,6 @@ package fr.cleanarchitecture.easyteach.course.application.usecases.course;
 import an.awesome.pipelinr.Command;
 
 public class RemoveModuleFromCourseCommand implements Command<Void> {
-
     private final String courseId;
     private final String moduleId;
 
