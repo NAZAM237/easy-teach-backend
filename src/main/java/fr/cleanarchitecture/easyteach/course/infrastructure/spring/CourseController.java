@@ -171,4 +171,24 @@ public class CourseController {
                         newModules));
         return ResponseEntity.ok(result);
     }
+
+    @PatchMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}")
+    public ResponseEntity<CourseViewModel> updateLessonFromModule(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @PathVariable String lessonId,
+            @RequestBody UpdateLessonFromModuleDto updateLessonFromModuleDto) {
+        var result = this.pipeline.send(
+                new UpdateLessonFromModuleCommand(
+                        courseId,
+                        moduleId,
+                        lessonId,
+                        new InputLesson(
+                                updateLessonFromModuleDto.getLessonTitle(),
+                                updateLessonFromModuleDto.getLessonType(),
+                                updateLessonFromModuleDto.getVideoUrl(),
+                                updateLessonFromModuleDto.getLessonTextContent()
+                        )));
+        return ResponseEntity.ok(result);
+    }
 }

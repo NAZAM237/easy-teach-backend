@@ -1,5 +1,6 @@
 package fr.cleanarchitecture.easyteach.course.domain.valueobject;
 
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
 
 public class InputLesson {
@@ -11,12 +12,19 @@ public class InputLesson {
 
     public InputLesson() {}
 
-    public InputLesson(String title, LessonType contentType, String videoUrl, String textContent, int order) {
+    public InputLesson(String title, String contentType, String videoUrl, String textContent, int order) {
         this.title = title;
-        this.contentType = contentType;
+        this.contentType = convertToLessonType(contentType);
         this.videoUrl = videoUrl;
         this.textContent = textContent;
         this.order = order;
+    }
+
+    public InputLesson(String title, String contentType, String videoUrl, String textContent) {
+        this.title = title;
+        this.contentType = convertToLessonType(contentType);
+        this.videoUrl = videoUrl;
+        this.textContent = textContent;
     }
 
     public String getTitle() {
@@ -37,5 +45,15 @@ public class InputLesson {
 
     public int getOrder() {
         return order;
+    }
+
+    private LessonType convertToLessonType(String lessonType) {
+        return switch (lessonType) {
+            case "TEXT" -> LessonType.TEXT;
+            case "VIDEO" -> LessonType.VIDEO;
+            case "AUDIO" -> LessonType.AUDIO;
+            case "DOCUMENT" -> LessonType.DOCUMENT;
+            default -> throw new BadRequestException("Invalid lessonType " + lessonType);
+        };
     }
 }

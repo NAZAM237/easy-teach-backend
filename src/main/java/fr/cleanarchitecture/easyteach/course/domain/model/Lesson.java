@@ -1,6 +1,7 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
 import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
+import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,6 @@ public class Lesson {
         this.videoUrl = videoUrl;
         this.textContent = textContent;
         this.order = order;
-        Quiz quiz = new Quiz();
     }
 
     public String getLessonId() {
@@ -62,5 +62,12 @@ public class Lesson {
 
     public void changeOrder(int newOrder) {
         this.order = newOrder;
+    }
+
+    public void updateDate(InputLesson lesson) {
+        this.lessonTitle = lesson.getTitle();
+        this.contentType = lesson.getContentType();
+        this.videoUrl = lesson.getVideoUrl();
+        this.textContent = lesson.getTextContent();
     }
 }

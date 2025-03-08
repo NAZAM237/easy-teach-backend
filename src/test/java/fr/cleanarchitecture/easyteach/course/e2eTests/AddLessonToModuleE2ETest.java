@@ -2,7 +2,6 @@ package fr.cleanarchitecture.easyteach.course.e2eTests;
 
 import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
@@ -38,7 +37,7 @@ public class AddLessonToModuleE2ETest extends EasyTeachIntegrationTests {
         course.addModule(module);
         courseRepository.save(course);
 
-        var dto = new AddLessonToModuleDto("title", LessonType.TEXT, "videoUrl", "textContent", 1);
+        var dto = new AddLessonToModuleDto("title", "TEXT", "videoUrl", "textContent", 1);
 
         var result = mockMvc
                 .perform(MockMvcRequestBuilders.patch("/courses/{courseId}/modules/{moduleId}/add-lesson-to-module",

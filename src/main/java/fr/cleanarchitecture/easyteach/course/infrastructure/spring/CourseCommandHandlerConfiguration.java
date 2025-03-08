@@ -88,4 +88,9 @@ public class CourseCommandHandlerConfiguration {
     public ReorderModuleInCourseCommandHandler reorderModuleInCourseCommandHandler(CourseRepository courseRepository) {
         return new ReorderModuleInCourseCommandHandler(courseRepository);
     }
+
+    @Bean
+    public UpdateLessonFromModuleCommandHandler updateLessonFromModuleCommandHandler(CourseRepository courseRepository) {
+        return new UpdateLessonFromModuleCommandHandler(courseRepository);
+    }
 }

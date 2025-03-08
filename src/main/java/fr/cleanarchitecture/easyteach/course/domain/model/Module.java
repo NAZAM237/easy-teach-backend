@@ -2,6 +2,7 @@ package fr.cleanarchitecture.easyteach.course.domain.model;
 
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
+import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
 
 import java.util.HashSet;
 import java.util.List;
@@ -79,5 +80,13 @@ public class Module {
 
     public void changeOrder(int newOrder) {
         this.order = newOrder;
+    }
+
+    public void updateLessonData(String lessonId, InputLesson lesson) {
+        var lessonToUpdate = this.lessons.stream()
+                .filter(lesson1 -> lesson1.getLessonId().equals(lessonId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("The lesson not found"));
+        lessonToUpdate.updateDate(lesson);
     }
 }
