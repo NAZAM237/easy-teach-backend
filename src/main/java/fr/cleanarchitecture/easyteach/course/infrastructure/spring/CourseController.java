@@ -1,11 +1,7 @@
 package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import an.awesome.pipelinr.Pipeline;
-import fr.cleanarchitecture.easyteach.course.application.usecases.course.*;
-import fr.cleanarchitecture.easyteach.course.application.usecases.module.AddLessonToModuleCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.module.RemoveLessonFromModuleCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.module.ReorderLessonFromModuleCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.module.UpdateModuleCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.commands.*;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
