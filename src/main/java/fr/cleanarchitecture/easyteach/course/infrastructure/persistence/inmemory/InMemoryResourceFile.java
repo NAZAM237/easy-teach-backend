@@ -1,7 +1,7 @@
 package fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory;
 
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
-import fr.cleanarchitecture.easyteach.course.application.ports.UploadFunctions;
+import fr.cleanarchitecture.easyteach.course.application.ports.FileFunctions;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.FileUploadResponse;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.FileUploadProperties;
@@ -14,11 +14,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 
-public class InMemoryResourceUpload implements UploadFunctions {
+public class InMemoryResourceFile implements FileFunctions {
 
     private final FileUploadProperties properties;
 
-    public InMemoryResourceUpload(FileUploadProperties properties) {
+    public InMemoryResourceFile(FileUploadProperties properties) {
         this.properties = properties;
     }
 
@@ -42,6 +42,14 @@ public class InMemoryResourceUpload implements UploadFunctions {
             );
         } catch (IOException ex) {
             throw new BadRequestException("Failed to store file: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteFile(String resourceUrl) throws IOException {
+        Path path = Paths.get(resourceUrl);
+        if (!Files.deleteIfExists(path)) {
+            throw new BadRequestException("Unable to delete file " + path);
         }
     }
 

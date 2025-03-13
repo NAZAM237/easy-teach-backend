@@ -204,4 +204,14 @@ public class CourseController {
         this.pipeline.send(new AddResourceToLessonCommand(new IdsCourse(courseId, moduleId, lessonId), file, resourceType));
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/resources/{resourceId}")
+    public ResponseEntity<Void> removeResourceFromLesson(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @PathVariable String lessonId,
+            @PathVariable String resourceId) {
+        this.pipeline.send(new RemoveResourceFromLessonCommand(courseId, moduleId, lessonId, resourceId));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

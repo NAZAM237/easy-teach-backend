@@ -2,7 +2,7 @@ package fr.cleanarchitecture.easyteach.course.usecase;
 
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.application.ports.UploadFunctions;
+import fr.cleanarchitecture.easyteach.course.application.ports.FileFunctions;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AddResourceToLessonCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.AddResourceToLessonCommandHandler;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
@@ -13,7 +13,7 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.IdsCourse;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
-import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryResourceUpload;
+import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryResourceFile;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.FileUploadProperties;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,7 +30,7 @@ public class AddResourceToLessonTest {
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
     private final FileUploadProperties properties = new FileUploadProperties();
-    private final UploadFunctions uploadFunctions = new InMemoryResourceUpload(properties);
+    private final FileFunctions fileFunctions = new InMemoryResourceFile(properties);
     private Course course;
     private Module module;
     private Lesson lesson;
@@ -68,7 +68,7 @@ public class AddResourceToLessonTest {
                 "Video content".getBytes()
         );
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, videoFile, "VIDEOS");
-        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, uploadFunctions);
+        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
 
         addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
 
@@ -100,7 +100,7 @@ public class AddResourceToLessonTest {
                 "Audio content".getBytes()
         );
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, audioFile, "AUDIOS");
-        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, uploadFunctions);
+        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
 
         addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
 
@@ -132,7 +132,7 @@ public class AddResourceToLessonTest {
                 "Text content".getBytes()
         );
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, textFile, "DOCUMENTS");
-        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, uploadFunctions);
+        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
 
         addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
 
@@ -164,7 +164,7 @@ public class AddResourceToLessonTest {
                 "Image content".getBytes()
         );
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, imageFile, "IMAGES");
-        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, uploadFunctions);
+        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
 
         addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
 
@@ -196,7 +196,7 @@ public class AddResourceToLessonTest {
                 "Video content".getBytes()
         );
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, videoFile, "VIEW");
-        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, uploadFunctions);
+        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
 
         var resultThrow = Assert.assertThrows(
                 BadRequestException.class,
@@ -215,7 +215,7 @@ public class AddResourceToLessonTest {
                 "Video content".getBytes()
         );
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, videoFile, "VIDEOS");
-        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, uploadFunctions);
+        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
 
         var resultThrow = Assert.assertThrows(
                 BadRequestException.class,

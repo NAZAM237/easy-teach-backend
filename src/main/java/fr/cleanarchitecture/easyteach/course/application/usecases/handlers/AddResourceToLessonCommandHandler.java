@@ -3,18 +3,18 @@ package fr.cleanarchitecture.easyteach.course.application.usecases.handlers;
 import an.awesome.pipelinr.Command;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.application.ports.UploadFunctions;
+import fr.cleanarchitecture.easyteach.course.application.ports.FileFunctions;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AddResourceToLessonCommand;
 import fr.cleanarchitecture.easyteach.course.domain.model.Resource;
 
 public class AddResourceToLessonCommandHandler implements Command.Handler<AddResourceToLessonCommand, Void> {
 
     private final CourseRepository courseRepository;
-    private final UploadFunctions uploadFunctions;
+    private final FileFunctions fileFunctions;
 
-    public AddResourceToLessonCommandHandler(CourseRepository courseRepository, UploadFunctions uploadFunctions) {
+    public AddResourceToLessonCommandHandler(CourseRepository courseRepository, FileFunctions fileFunctions) {
         this.courseRepository = courseRepository;
-        this.uploadFunctions = uploadFunctions;
+        this.fileFunctions = fileFunctions;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class AddResourceToLessonCommandHandler implements Command.Handler<AddRes
         var lesson = module.getLessons().stream().filter(lesson1 -> lesson1.getLessonId().equals(addResourceToLessonCommand.getIdsCourse().getLessonId()))
                 .findFirst().orElseThrow(() -> new NotFoundException("Lesson not found"));
 
-        var uploadResponse = uploadFunctions.uploadFile(
+        var uploadResponse = fileFunctions.uploadFile(
                 addResourceToLessonCommand.getFile(),
                 addResourceToLessonCommand.getResourceType());
         var resource = new Resource(uploadResponse.getFileName(), uploadResponse.getFilePath());

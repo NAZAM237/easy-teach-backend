@@ -2,7 +2,7 @@ package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.application.ports.UploadFunctions;
+import fr.cleanarchitecture.easyteach.course.application.ports.FileFunctions;
 import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -96,7 +96,12 @@ public class CourseCommandHandlerConfiguration {
     }
 
     @Bean
-    public AddResourceToLessonCommandHandler addResourceToLessonCommandHandler(CourseRepository courseRepository, UploadFunctions uploadFunctions) {
-        return new AddResourceToLessonCommandHandler(courseRepository, uploadFunctions);
+    public AddResourceToLessonCommandHandler addResourceToLessonCommandHandler(CourseRepository courseRepository, FileFunctions fileFunctions) {
+        return new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
+    }
+
+    @Bean
+    public RemoveResourceFromLessonCommandHandler removeResourceFromLessonCommandHandler(CourseRepository courseRepository, FileFunctions fileFunctions) {
+        return new RemoveResourceFromLessonCommandHandler(courseRepository, fileFunctions);
     }
 }
