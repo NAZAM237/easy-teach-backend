@@ -34,7 +34,7 @@ public class AddLessonToModuleTests {
         course.addModule(module);
         courseRepository.save(course);
 
-        var inputLesson = new InputLesson("title", "TEXT", "videoUrl", "textContent", 1);
+        var inputLesson = new InputLesson("title", "IMAGES", "videoUrl", "textContent", 1);
         var addLessonToModuleCommand = new AddLessonToModuleCommand(
                 course.getCourseId(),
                 module.getModuleId(),
@@ -56,7 +56,7 @@ public class AddLessonToModuleTests {
         );
         var module = new Module("Introduction à JAVA", "Cours complet", 1);
         course.addModule(module);
-        var inputLesson = new InputLesson("title", "TEXT", "videoUrl", "textContent", 1);
+        var inputLesson = new InputLesson("title", "IMAGES", "videoUrl", "textContent", 1);
         var addLessonToModuleCommand = new AddLessonToModuleCommand(
                 course.getCourseId(),
                 "Garbage",
@@ -83,7 +83,7 @@ public class AddLessonToModuleTests {
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson);
         courseRepository.save(course);
-        var inputLesson = new InputLesson("title", "TEXT", "videoUrl", "textContent", 1);
+        var inputLesson = new InputLesson("title", "IMAGES", "videoUrl", "textContent", 1);
         var addLessonToModuleCommand = new AddLessonToModuleCommand(
                 course.getCourseId(),
                 module.getModuleId(),

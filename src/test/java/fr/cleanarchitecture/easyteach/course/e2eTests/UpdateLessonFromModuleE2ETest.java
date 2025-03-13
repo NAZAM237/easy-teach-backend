@@ -50,7 +50,7 @@ public class UpdateLessonFromModuleE2ETest extends EasyTeachIntegrationTests {
     public void updateLessonFromModuleE2ETest() throws Exception {
         var updateLessonFromModuleDto = new UpdateLessonFromModuleDto(
                 "lessonTitle",
-                "AUDIO",
+                "AUDIOS",
                 null,
                 null);
         mockMvc

@@ -44,7 +44,7 @@ public class UpdateLessonFromModuleTest {
     public void updateLessonFromModuleTest() {
         var inputLesson = new InputLesson(
                 "lessonTitle2",
-                "DOCUMENT",
+                "DOCUMENTS",
                 null,
                 null
         );
@@ -66,14 +66,14 @@ public class UpdateLessonFromModuleTest {
                 .orElseThrow();
 
         Assert.assertEquals("lessonTitle2", updatedLesson.getLessonTitle());
-        Assert.assertEquals(ResourceType.IMAGES, updatedLesson.getContentType());
+        Assert.assertEquals(ResourceType.DOCUMENTS, updatedLesson.getContentType());
     }
 
     @Test
     public void updateLessonFromNotExistingModuleTest_shouldThrowException() {
         var inputLesson = new InputLesson(
                 "lessonTitle2",
-                "DOCUMENT",
+                "DOCUMENTS",
                 null,
                 null
         );
@@ -93,7 +93,7 @@ public class UpdateLessonFromModuleTest {
     public void updateNotExistLessonFromModuleTest_shouldThrowException() {
         var inputLesson = new InputLesson(
                 "lessonTitle2",
-                "DOCUMENT",
+                "DOCUMENTS",
                 null,
                 null
         );

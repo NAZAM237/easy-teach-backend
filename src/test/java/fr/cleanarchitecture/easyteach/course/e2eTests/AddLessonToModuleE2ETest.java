@@ -37,7 +37,7 @@ public class AddLessonToModuleE2ETest extends EasyTeachIntegrationTests {
         course.addModule(module);
         courseRepository.save(course);
 
-        var dto = new AddLessonToModuleDto("title", "TEXT", "videoUrl", "textContent", 1);
+        var dto = new AddLessonToModuleDto("title", "IMAGES", "videoUrl", "textContent", 1);
 
         var result = mockMvc
                 .perform(MockMvcRequestBuilders.patch("/courses/{courseId}/modules/{moduleId}/add-lesson-to-module",

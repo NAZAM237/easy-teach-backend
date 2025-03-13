@@ -24,7 +24,7 @@ public class LessonTest {
 
     @Test
     public void updateDataTest() {
-        var inputLesson = new InputLesson("lessonTitle2", "AUDIO", null, null);
+        var inputLesson = new InputLesson("lessonTitle2", "AUDIOS", null, null);
         lesson.updateDate(inputLesson);
         Assert.assertEquals(inputLesson.getTitle(), lesson.getLessonTitle());
         Assert.assertEquals(inputLesson.getContentType(), lesson.getContentType());
