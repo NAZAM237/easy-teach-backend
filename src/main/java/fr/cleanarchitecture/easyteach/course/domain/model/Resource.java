@@ -12,4 +12,16 @@ public class Resource {
         this.resourceName = resourceName;
         this.resourceUrl = resourceUrl;
     }
+
+    public String getResourceId() {
+        return resourceId;
+    }
+
+    public String getResourceName() {
+        return resourceName;
+    }
+
+    public String getResourceUrl() {
+        return resourceUrl;
+    }
 }

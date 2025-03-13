@@ -4,7 +4,7 @@ import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.UpdateLessonFromModuleCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.UpdateLessonFromModuleCommandHandler;
-import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
+import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
@@ -34,7 +34,7 @@ public class UpdateLessonFromModuleTest {
                 new Price(BigDecimal.ZERO, "FCFA")
         );
         module = new Module("moduleTitle", "moduleDescription", 1);
-        lesson = new Lesson("lessonTitle", LessonType.TEXT, null, "textContent", 1);
+        lesson = new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContent", 1);
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson);
         courseRepository.save(course);
@@ -66,7 +66,7 @@ public class UpdateLessonFromModuleTest {
                 .orElseThrow();
 
         Assert.assertEquals("lessonTitle2", updatedLesson.getLessonTitle());
-        Assert.assertEquals(LessonType.DOCUMENT, updatedLesson.getContentType());
+        Assert.assertEquals(ResourceType.IMAGES, updatedLesson.getContentType());
     }
 
     @Test

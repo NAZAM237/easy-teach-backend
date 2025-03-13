@@ -2,7 +2,7 @@ package fr.cleanarchitecture.easyteach.course.e2eTests;
 
 import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
+import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
@@ -40,7 +40,7 @@ public class UpdateLessonFromModuleE2ETest extends EasyTeachIntegrationTests {
                 new Price(BigDecimal.ZERO, "FCFA")
         );
         module = new Module("moduleTitle", "moduleDescription", 1);
-        lesson = new Lesson("lessonTitle", LessonType.TEXT, null, "textContent", 1);
+        lesson = new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContent", 1);
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson);
         courseRepository.save(course);

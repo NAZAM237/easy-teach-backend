@@ -8,7 +8,7 @@ import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.ArchiveCourseCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.ArchiveCourseCommandHandler;
-import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
+import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
@@ -39,7 +39,7 @@ public class ArchiveCourseTest {
                 new Teacher(),
                 new Price(BigDecimal.ZERO, "FCFA")
         );
-        lesson = new Lesson("lessonTitle", LessonType.TEXT, null, "textContent", 1);
+        lesson = new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContent", 1);
     }
 
     @Test

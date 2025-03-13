@@ -1,6 +1,6 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
-import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
+import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.UUID;
 public class Lesson {
     private String lessonId;
     private String lessonTitle;
-    private LessonType contentType;
+    private ResourceType contentType;
     private String videoUrl;
     private String textContent;
     private int order;
@@ -19,7 +19,7 @@ public class Lesson {
 
     public Lesson() {}
 
-    public Lesson(String lessonTitle, LessonType contentType, String videoUrl, String textContent, int order) {
+    public Lesson(String lessonTitle, ResourceType contentType, String videoUrl, String textContent, int order) {
         this.lessonId = UUID.randomUUID().toString();
         this.lessonTitle = lessonTitle;
         this.contentType = contentType;
@@ -36,7 +36,7 @@ public class Lesson {
         return lessonTitle;
     }
 
-    public LessonType getContentType() {
+    public ResourceType getContentType() {
         return contentType;
     }
 
@@ -69,5 +69,13 @@ public class Lesson {
         this.contentType = lesson.getContentType();
         this.videoUrl = lesson.getVideoUrl();
         this.textContent = lesson.getTextContent();
+    }
+
+    public void addResource(Resource resource) {
+        this.resources.add(resource);
+    }
+
+    public void removeResource(String resourceId) {
+        this.resources.removeIf(resource -> resource.getResourceId().equals(resourceId));
     }
 }

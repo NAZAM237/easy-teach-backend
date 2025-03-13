@@ -4,7 +4,7 @@ import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.ReorderLessonFromModuleCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.ReorderLessonFromModuleCommandHandler;
-import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
+import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
@@ -36,9 +36,9 @@ public class ReorderLessonInModuleTests {
                 new Price(BigDecimal.ZERO, "FCFA")
         );
         module = new Module("Programmation Java", "Description", 1);
-        lesson1 = new Lesson("Introduction", LessonType.TEXT, null, "Intro", 1);
-        lesson2 = new Lesson("Variables", LessonType.TEXT, null, "Les types", 2);
-        lesson3 = new Lesson("Boucles", LessonType.TEXT, null, "Les boucles", 3);
+        lesson1 = new Lesson("Introduction", ResourceType.IMAGES, null, "Intro", 1);
+        lesson2 = new Lesson("Variables", ResourceType.IMAGES, null, "Les types", 2);
+        lesson3 = new Lesson("Boucles", ResourceType.IMAGES, null, "Les boucles", 3);
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson1);
         course.addLessonToModule(module.getModuleId(), lesson2);

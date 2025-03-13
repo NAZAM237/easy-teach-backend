@@ -2,7 +2,7 @@ package fr.cleanarchitecture.easyteach.course.domain;
 
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
-import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
+import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import org.junit.Assert;
@@ -23,9 +23,9 @@ public class ModuleTest {
     public void setUp() {
         module = new Module("Programmation Java", "Description", 1);
 
-        lesson1 = new Lesson("Introduction", LessonType.TEXT, null, "Intro", 1);
-        lesson2 = new Lesson("Variables", LessonType.TEXT, null, "Les types", 2);
-        lesson3 = new Lesson("Boucles", LessonType.TEXT, null, "Les boucles", 3);
+        lesson1 = new Lesson("Introduction", ResourceType.IMAGES, null, "Intro", 1);
+        lesson2 = new Lesson("Variables", ResourceType.IMAGES, null, "Les types", 2);
+        lesson3 = new Lesson("Boucles", ResourceType.IMAGES, null, "Les boucles", 3);
 
         module.addLesson(lesson1);
         module.addLesson(lesson2);
@@ -44,7 +44,7 @@ public class ModuleTest {
 
     @Test
     public void reOrderLessonIfLessonNotInModule_shouldThrowException() {
-        Lesson lesson4 = new Lesson("Exceptions", LessonType.TEXT, null, "Gestion des erreurs", 4);
+        Lesson lesson4 = new Lesson("Exceptions", ResourceType.IMAGES, null, "Gestion des erreurs", 4);
         List<Lesson> invalidOrder = Arrays.asList(lesson3, lesson1, lesson4);
 
         Assert.assertThrows(
@@ -67,7 +67,7 @@ public class ModuleTest {
 
     @Test
     public void addLessonToModuleTest() {
-        var lesson = new Lesson("title", LessonType.TEXT, "videoUrl", "textContent", 1);
+        var lesson = new Lesson("title", ResourceType.IMAGES, "videoUrl", "textContent", 1);
         var module = new Module("title", "description", 1);
         module.addLesson(lesson);
         Assert.assertFalse(module.getLessons().isEmpty());
@@ -76,7 +76,7 @@ public class ModuleTest {
 
     @Test
     public void removeLessonFromModuleTest() {
-        var lesson = new Lesson("title", LessonType.TEXT, "videoUrl", "textContent", 1);
+        var lesson = new Lesson("title", ResourceType.IMAGES, "videoUrl", "textContent", 1);
         var module = new Module("title", "description", 1);
         module.addLesson(lesson);
         Assert.assertFalse(module.getLessons().isEmpty());
@@ -86,7 +86,7 @@ public class ModuleTest {
 
     @Test
     public void addLessonToModuleWhenLessonPositionIsAlreadyInUse_shouldFailTest() {
-        var lesson = new Lesson("title", LessonType.TEXT, "videoUrl", "textContent", 1);
+        var lesson = new Lesson("title", ResourceType.IMAGES, "videoUrl", "textContent", 1);
         var module = new Module("title", "description", 1);
         module.addLesson(lesson);
 

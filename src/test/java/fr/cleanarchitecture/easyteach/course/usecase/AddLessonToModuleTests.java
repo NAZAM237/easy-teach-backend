@@ -5,7 +5,7 @@ import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AddLessonToModuleCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.AddLessonToModuleCommandHandler;
-import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
+import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
@@ -79,7 +79,7 @@ public class AddLessonToModuleTests {
                 new Price(BigDecimal.ZERO, "FCFA")
         );
         var module = new Module("Introduction à JAVA", "Cours complet", 1);
-        var lesson = new Lesson("title", LessonType.TEXT, "videoUrl", "textContent", 1);
+        var lesson = new Lesson("title", ResourceType.IMAGES, "videoUrl", "textContent", 1);
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson);
         courseRepository.save(course);

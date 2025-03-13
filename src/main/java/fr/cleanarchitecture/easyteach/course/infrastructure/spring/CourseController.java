@@ -7,10 +7,12 @@ import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.GetCourseViewModel;
+import fr.cleanarchitecture.easyteach.course.domain.viewmodel.IdsCourse;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.ModuleFromCourseViewModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -190,5 +192,16 @@ public class CourseController {
                                 updateLessonFromModuleDto.getLessonTextContent()
                         )));
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/resources")
+    public ResponseEntity<Void> addResourceToLesson(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @PathVariable String lessonId,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("type") String resourceType) {
+        this.pipeline.send(new AddResourceToLessonCommand(new IdsCourse(courseId, moduleId, lessonId), file, resourceType));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

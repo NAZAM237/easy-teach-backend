@@ -3,7 +3,7 @@ package fr.cleanarchitecture.easyteach.course.domain;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
-import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
+import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
@@ -33,7 +33,7 @@ public class CourseTest {
     public void publishCourseTest() {
         var module = new Module("moduleTitle", "moduleDescription", 1);
         course.addModule(module);
-        var lesson = new Lesson("lessonTitle", LessonType.TEXT, null, "textContext", 1);
+        var lesson = new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContext", 1);
         course.addLessonToModule(module.getModuleId(), lesson);
         course.publish();
         Assert.assertEquals(course.getStatus().name(), CourseStatus.PUBLISHED.name());
@@ -64,7 +64,7 @@ public class CourseTest {
         course.addModule(module);
         course.addLessonToModule(
                 module.getModuleId(),
-                new Lesson("lessonTitle", LessonType.TEXT, null, "textContext", 1)
+                new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContext", 1)
         );
         course.publish();
         course.archive();
@@ -87,7 +87,7 @@ public class CourseTest {
         course.addModule(module);
         course.addLessonToModule(
                 module.getModuleId(),
-                new Lesson("lessonTitle", LessonType.TEXT, null, "textContext", 1)
+                new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContext", 1)
         );
         course.publish();
         course.archive();
@@ -149,7 +149,7 @@ public class CourseTest {
         course.addModule(module);
         course.addLessonToModule(
                 module.getModuleId(),
-                new Lesson("lessonTitle", LessonType.TEXT, null, "textContext", 1)
+                new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContext", 1)
         );
         course.publish();
         course.archive();
@@ -185,7 +185,7 @@ public class CourseTest {
     @Test
     public void addLessonToModuleTest() {
         var module = new Module("moduleTitle", "moduleDescription", 1);
-        var lesson = new Lesson("lessonTitle", LessonType.TEXT, null, "textContent", 1);
+        var lesson = new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContent", 1);
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson);
         var updatedModule = course.getModules().stream()
@@ -197,7 +197,7 @@ public class CourseTest {
 
     @Test
     public void addLessonToNotExistModule_shouldFailTest() {
-        var lesson = new Lesson("lessonTitle", LessonType.TEXT, null, "textContent", 1);
+        var lesson = new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContent", 1);
         Assert.assertThrows(
                 "Module not found",
                 NotFoundException.class,
@@ -208,7 +208,7 @@ public class CourseTest {
     @Test
     public void removeLessonFromCourseTest() {
         var module = new Module("moduleTitle", "moduleDescription", 1);
-        var lesson = new Lesson("lessonTitle", LessonType.TEXT, null, "textContent", 1);
+        var lesson = new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContent", 1);
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson);
         course.removeLessonToModule(module.getModuleId(), lesson.getLessonId());
@@ -221,7 +221,7 @@ public class CourseTest {
 
     @Test
     public void removeLessonToNotExistModule_shouldFailTest() {
-        var lesson = new Lesson("lessonTitle", LessonType.TEXT, null, "textContent", 1);
+        var lesson = new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContent", 1);
         Assert.assertThrows(
                 "Module not found",
                 NotFoundException.class,
@@ -243,9 +243,9 @@ public class CourseTest {
     @Test
     public void reorderLessonsFromModuleTest() {
         var module = new Module("Programmation Java", "Description", 1);
-        var lesson1 = new Lesson("Introduction", LessonType.TEXT, null, "Intro", 1);
-        var lesson2 = new Lesson("Variables", LessonType.TEXT, null, "Les types", 2);
-        var lesson3 = new Lesson("Boucles", LessonType.TEXT, null, "Les boucles", 3);
+        var lesson1 = new Lesson("Introduction", ResourceType.IMAGES, null, "Intro", 1);
+        var lesson2 = new Lesson("Variables", ResourceType.IMAGES, null, "Les types", 2);
+        var lesson3 = new Lesson("Boucles", ResourceType.IMAGES, null, "Les boucles", 3);
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson1);
         course.addLessonToModule(module.getModuleId(), lesson2);

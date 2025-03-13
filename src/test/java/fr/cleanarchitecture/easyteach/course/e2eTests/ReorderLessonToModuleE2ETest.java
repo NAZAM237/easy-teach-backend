@@ -2,7 +2,7 @@ package fr.cleanarchitecture.easyteach.course.e2eTests;
 
 import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
+import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
@@ -43,9 +43,9 @@ public class ReorderLessonToModuleE2ETest extends EasyTeachIntegrationTests {
                 new Price(BigDecimal.ZERO, "FCFA")
         );
         module = new Module("Programmation Java", "Description", 1);
-        lesson1 = new Lesson("Introduction", LessonType.TEXT, null, "Intro", 1);
-        lesson2 = new Lesson("Variables", LessonType.TEXT, null, "Les types", 2);
-        lesson3 = new Lesson("Boucles", LessonType.TEXT, null, "Les boucles", 3);
+        lesson1 = new Lesson("Introduction", ResourceType.IMAGES, null, "Intro", 1);
+        lesson2 = new Lesson("Variables", ResourceType.IMAGES, null, "Les types", 2);
+        lesson3 = new Lesson("Boucles", ResourceType.IMAGES, null, "Les boucles", 3);
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson1);
         course.addLessonToModule(module.getModuleId(), lesson2);
@@ -82,7 +82,7 @@ public class ReorderLessonToModuleE2ETest extends EasyTeachIntegrationTests {
 
     @Test
     public void reOrderLessonIfLessonNotInModuleE2ETest_shouldThrowException() throws Exception {
-        Lesson lesson4 = new Lesson("Exceptions", LessonType.TEXT, null, "Gestion des erreurs", 4);
+        Lesson lesson4 = new Lesson("Exceptions", ResourceType.IMAGES, null, "Gestion des erreurs", 4);
         List<Lesson> invalidOrder = Arrays.asList(lesson3, lesson1, lesson4);
         var dto = new ReorderLessonToModuleDto(invalidOrder);
         mockMvc

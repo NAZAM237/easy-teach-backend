@@ -4,7 +4,7 @@ import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.RemoveLessonFromModuleCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.RemoveLessonFromModuleCommandHandler;
-import fr.cleanarchitecture.easyteach.course.domain.enums.LessonType;
+import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
@@ -33,7 +33,7 @@ public class RemoveLessonFromModuleTest {
             new Price(BigDecimal.ZERO, "FCFA")
         );
         module = new Module("Introduction à JAVA", "Description", 1);
-        lesson = new Lesson("Introduction", LessonType.TEXT, null, null, 1);
+        lesson = new Lesson("Introduction", ResourceType.IMAGES, null, null, 1);
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson);
         courseRepository.save(course);
