@@ -1,5 +1,6 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
 
@@ -77,5 +78,12 @@ public class Lesson {
 
     public void removeResource(String resourceId) {
         this.resources.removeIf(resource -> resource.getResourceId().equals(resourceId));
+    }
+
+    public void attachQuiz(Quiz quiz) {
+        if (this.quiz != null) {
+            throw new BadRequestException("Quiz is already attached");
+        }
+        this.quiz = quiz;
     }
 }

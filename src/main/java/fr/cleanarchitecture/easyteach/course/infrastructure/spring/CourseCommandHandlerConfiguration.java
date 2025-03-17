@@ -104,4 +104,9 @@ public class CourseCommandHandlerConfiguration {
     public RemoveResourceFromLessonCommandHandler removeResourceFromLessonCommandHandler(CourseRepository courseRepository, FileFunctions fileFunctions) {
         return new RemoveResourceFromLessonCommandHandler(courseRepository, fileFunctions);
     }
+
+    @Bean
+    public AttachQuizToLessonCommandHandler attachQuizToLessonCommandHandler(CourseRepository courseRepository) {
+        return new AttachQuizToLessonCommandHandler(courseRepository);
+    }
 }

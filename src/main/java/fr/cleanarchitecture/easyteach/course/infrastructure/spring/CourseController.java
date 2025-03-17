@@ -214,4 +214,17 @@ public class CourseController {
         this.pipeline.send(new RemoveResourceFromLessonCommand(courseId, moduleId, lessonId, resourceId));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/quiz")
+    public ResponseEntity<Void> attachQuizToLesson(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @PathVariable String lessonId,
+            @RequestBody QuizDto quizDto) {
+        this.pipeline.send(
+                new AttachQuizToLessonCommand(
+                        new IdsCourse(courseId, moduleId, lessonId),
+                        MapQuizDtoToQuiz.execute(quizDto)));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

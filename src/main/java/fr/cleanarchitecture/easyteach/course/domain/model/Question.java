@@ -12,9 +12,26 @@ public class Question {
     private QuestionType questionType;
     private List<Answer> answers = new ArrayList<>();
 
-    public Question(String questionText, QuestionType questionType) {
+    public Question(String questionText, QuestionType questionType, List<Answer> answers) {
         this.questionId = UUID.randomUUID().toString();
         this.questionText = questionText;
         this.questionType = questionType;
+        this.answers = answers;
+    }
+
+    public String getQuestionId() {
+        return questionId;
+    }
+
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    public QuestionType getQuestionType() {
+        return questionType;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
     }
 }
