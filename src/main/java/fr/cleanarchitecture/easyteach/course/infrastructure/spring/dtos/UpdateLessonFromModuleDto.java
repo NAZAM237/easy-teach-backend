@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
+package fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos;
 
 public class UpdateLessonFromModuleDto {
     private String lessonTitle;

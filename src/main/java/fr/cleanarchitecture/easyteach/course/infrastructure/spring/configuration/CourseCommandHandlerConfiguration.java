@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
+package fr.cleanarchitecture.easyteach.course.infrastructure.spring.configuration;
 
 import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;

@@ -14,7 +14,7 @@ import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.IdsCourse;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryResourceFile;
-import fr.cleanarchitecture.easyteach.course.infrastructure.spring.FileUploadProperties;
+import fr.cleanarchitecture.easyteach.course.infrastructure.spring.configuration.FileUploadPropertiesConfiguration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class AddResourceToLessonTest {
     private static final String UPLOAD_DIR = "/Users/nazam/Desktop/Projects/easy-teach/uploaded-resources";
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
-    private final FileUploadProperties properties = new FileUploadProperties();
+    private final FileUploadPropertiesConfiguration properties = new FileUploadPropertiesConfiguration();
     private final FileFunctions fileFunctions = new InMemoryResourceFile(properties);
     private Course course;
     private Module module;

@@ -4,7 +4,7 @@ import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException
 import fr.cleanarchitecture.easyteach.course.application.ports.FileFunctions;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.FileUploadResponse;
-import fr.cleanarchitecture.easyteach.course.infrastructure.spring.FileUploadProperties;
+import fr.cleanarchitecture.easyteach.course.infrastructure.spring.configuration.FileUploadPropertiesConfiguration;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -16,9 +16,9 @@ import java.util.Arrays;
 
 public class InMemoryResourceFile implements FileFunctions {
 
-    private final FileUploadProperties properties;
+    private final FileUploadPropertiesConfiguration properties;
 
-    public InMemoryResourceFile(FileUploadProperties properties) {
+    public InMemoryResourceFile(FileUploadPropertiesConfiguration properties) {
         this.properties = properties;
     }
 

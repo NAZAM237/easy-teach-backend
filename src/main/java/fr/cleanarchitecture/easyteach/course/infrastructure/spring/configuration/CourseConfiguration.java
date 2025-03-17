@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
+package fr.cleanarchitecture.easyteach.course.infrastructure.spring.configuration;
 
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.FileFunctions;
@@ -16,5 +16,5 @@ public class CourseConfiguration {
     }
 
     @Bean
-    public FileFunctions uploadFunctions(FileUploadProperties fileUploadProperties) { return new InMemoryResourceFile(fileUploadProperties);}
+    public FileFunctions uploadFunctions(FileUploadPropertiesConfiguration fileUploadPropertiesConfiguration) { return new InMemoryResourceFile(fileUploadPropertiesConfiguration);}
 }

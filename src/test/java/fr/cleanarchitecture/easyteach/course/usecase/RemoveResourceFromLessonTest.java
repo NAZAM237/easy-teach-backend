@@ -12,7 +12,7 @@ import fr.cleanarchitecture.easyteach.course.domain.model.*;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryResourceFile;
-import fr.cleanarchitecture.easyteach.course.infrastructure.spring.FileUploadProperties;
+import fr.cleanarchitecture.easyteach.course.infrastructure.spring.configuration.FileUploadPropertiesConfiguration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class RemoveResourceFromLessonTest {
     private static final String RESOURCE_URL = UPLOAD_DIR + "/documents/document.txt";
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
-    private final FileUploadProperties properties = new FileUploadProperties();
+    private final FileUploadPropertiesConfiguration properties = new FileUploadPropertiesConfiguration();
     private final FileFunctions fileFunctions = new InMemoryResourceFile(properties);
     private Course course;
     private Module module;

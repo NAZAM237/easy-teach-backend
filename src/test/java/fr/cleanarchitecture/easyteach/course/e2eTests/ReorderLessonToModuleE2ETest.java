@@ -8,7 +8,7 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.infrastructure.spring.ReorderLessonToModuleDto;
+import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.ReorderLessonToModuleDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

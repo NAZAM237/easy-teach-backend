@@ -1,8 +1,9 @@
-package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
+package fr.cleanarchitecture.easyteach.course.infrastructure.spring.mapper;
 
 import fr.cleanarchitecture.easyteach.course.domain.model.Answer;
 import fr.cleanarchitecture.easyteach.course.domain.model.Question;
 import fr.cleanarchitecture.easyteach.course.domain.model.Quiz;
+import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.QuizDto;
 
 import java.util.stream.Collectors;
 

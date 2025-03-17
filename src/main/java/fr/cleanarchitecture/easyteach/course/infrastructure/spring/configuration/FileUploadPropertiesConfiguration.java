@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
+package fr.cleanarchitecture.easyteach.course.infrastructure.spring.configuration;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Configuration
 @Data
-public class FileUploadProperties {
+public class FileUploadPropertiesConfiguration {
     @NotBlank
     @Value("${app.upload.dir}")
     private String dir;

@@ -5,7 +5,7 @@ import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepos
 import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
-import fr.cleanarchitecture.easyteach.course.infrastructure.spring.CreateCourseDto;
+import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.CreateCourseDto;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

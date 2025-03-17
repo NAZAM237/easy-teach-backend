@@ -9,6 +9,8 @@ import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.GetCourseViewModel;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.IdsCourse;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.ModuleFromCourseViewModel;
+import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.*;
+import fr.cleanarchitecture.easyteach.course.infrastructure.spring.mapper.MapQuizDtoToQuiz;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

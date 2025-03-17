@@ -5,7 +5,7 @@ import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.infrastructure.spring.AddModuleToCourseDto;
+import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.AddModuleToCourseDto;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
