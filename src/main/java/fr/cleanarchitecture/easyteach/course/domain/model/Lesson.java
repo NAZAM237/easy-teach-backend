@@ -66,9 +66,6 @@ public class Lesson {
     }
 
     public void updateDate(InputLesson lesson) {
-        if (!ResourceType.TEXT.equals(lesson.getContentType()) && null == lesson.getContentFileUrl()) {
-            throw new BadRequestException("contentFile must not be null for " + lesson.getContentType().name());
-        }
         this.lessonTitle = lesson.getTitle();
         this.contentType = lesson.getContentType();
         this.contentFileUrl = lesson.getContentFileUrl();

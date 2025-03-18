@@ -59,7 +59,7 @@ public class CourseTest {
                 () -> course.publish()
         );
         Assert.assertEquals(
-                "contentFile must not be null for " + lesson.getContentType().name(),
+                "ContentFile must not be null for " + lesson.getContentType().name(),
                 assertResult.getMessage());
     }
 

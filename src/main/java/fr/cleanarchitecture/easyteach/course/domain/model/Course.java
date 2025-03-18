@@ -86,7 +86,7 @@ public class Course {
         lessons.forEach(
             lesson -> {
                 if (!ResourceType.TEXT.equals(lesson.getContentType()) && null == lesson.getContentFileUrl())
-                    throw new BadRequestException("contentFile must not be null for " + lesson.getContentType().name());
+                    throw new BadRequestException("ContentFile must not be null for " + lesson.getContentType().name());
             }
         );
 
