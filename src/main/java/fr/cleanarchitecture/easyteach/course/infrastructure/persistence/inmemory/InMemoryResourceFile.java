@@ -23,15 +23,38 @@ public class InMemoryResourceFile implements FileFunctions {
     }
 
     @Override
-    public FileUploadResponse uploadFile(MultipartFile file, String resourceType) {
+    public FileUploadResponse uploadResourceFile(MultipartFile file, String resourceType) throws IOException {
         validateFile(file, ResourceType.getResourceType(resourceType));
 
         String fileName = generateFileName(file);
-        Path uploadPath = Paths.get(properties.getDir(), resourceType.toLowerCase());
+        Path uploadPath = Paths.get(properties.getResourceFolder(), resourceType.toLowerCase());
 
+        return createDirectoryAndCopyFile(file, uploadPath, fileName);
+    }
+
+    @Override
+    public FileUploadResponse uploadLessonContentFile(MultipartFile file, String lessonType) throws IOException {
+        validateFile(file, ResourceType.getResourceType(lessonType));
+
+        String fileName = generateFileName(file);
+        Path uploadPath = Paths.get(properties.getLessonContentFileFolder(), lessonType.toLowerCase());
+
+        return createDirectoryAndCopyFile(file, uploadPath, fileName);
+    }
+
+
+    @Override
+    public void deleteFile(String resourceUrl) throws IOException {
+        Path path = Paths.get(resourceUrl);
+        if (!Files.deleteIfExists(path)) {
+            throw new BadRequestException("Unable to delete file " + path);
+        }
+    }
+
+    private FileUploadResponse createDirectoryAndCopyFile(MultipartFile file, Path path, String fileName) throws IOException {
         try {
-            Files.createDirectories(uploadPath);
-            Path filePath = uploadPath.resolve(fileName);
+            Files.createDirectories(path);
+            Path filePath = path.resolve(fileName);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
             return new FileUploadResponse(
@@ -42,14 +65,6 @@ public class InMemoryResourceFile implements FileFunctions {
             );
         } catch (IOException ex) {
             throw new BadRequestException("Failed to store file: " + ex.getMessage());
-        }
-    }
-
-    @Override
-    public void deleteFile(String resourceUrl) throws IOException {
-        Path path = Paths.get(resourceUrl);
-        if (!Files.deleteIfExists(path)) {
-            throw new BadRequestException("Unable to delete file " + path);
         }
     }
 

@@ -5,10 +5,7 @@ import fr.cleanarchitecture.easyteach.course.application.usecases.commands.*;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.GetCourseViewModel;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.IdsCourse;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.ModuleFromCourseViewModel;
+import fr.cleanarchitecture.easyteach.course.domain.viewmodel.*;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.*;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.mapper.MapQuizDtoToQuiz;
 import org.springframework.http.HttpStatus;
@@ -206,6 +203,17 @@ public class CourseController {
             @RequestParam("type") String resourceType) {
         this.pipeline.send(new AddResourceToLessonCommand(new IdsCourse(courseId, moduleId, lessonId), file, resourceType));
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/content")
+    public ResponseEntity<FileUploadResponse> addContentFileToLesson(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @PathVariable String lessonId,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("type") String lessonContentType) {
+        var result = this.pipeline.send(new AddContentFileToLessonCommand(new IdsCourse(courseId, moduleId, lessonId), file, lessonContentType));
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/resources/{resourceId}")

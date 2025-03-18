@@ -101,6 +101,11 @@ public class CourseCommandHandlerConfiguration {
     }
 
     @Bean
+    public AddContentFileToLessonCommandHandler addContentFileToLessonCommandHandler(CourseRepository courseRepository, FileFunctions fileFunctions) {
+        return new AddContentFileToLessonCommandHandler(courseRepository, fileFunctions);
+    }
+
+    @Bean
     public RemoveResourceFromLessonCommandHandler removeResourceFromLessonCommandHandler(CourseRepository courseRepository, FileFunctions fileFunctions) {
         return new RemoveResourceFromLessonCommandHandler(courseRepository, fileFunctions);
     }

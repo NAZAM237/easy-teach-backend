@@ -6,6 +6,8 @@ public class FileUploadResponse {
     private long fileSize;
     private String filePath;
 
+    public FileUploadResponse() {}
+
     public FileUploadResponse(String fileName, String fileType, long fileSize, String filePath) {
         this.fileName = fileName;
         this.fileType = fileType;

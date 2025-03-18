@@ -12,8 +12,11 @@ import java.util.Map;
 @Data
 public class FileUploadPropertiesConfiguration {
     @NotBlank
-    @Value("${app.upload.dir}")
-    private String dir;
+    @Value("${app.upload.resource.dir}")
+    private String resourceFolder;
+    @NotBlank
+    @Value("${app.upload.lesson.dir}")
+    private String lessonContentFileFolder;
     @NotNull
     private Map<String, String> allowed = Map.ofEntries(
             Map.entry("documents", "pdf,doc,docx,txt"),

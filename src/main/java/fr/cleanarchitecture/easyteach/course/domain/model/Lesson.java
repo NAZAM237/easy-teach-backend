@@ -86,4 +86,8 @@ public class Lesson {
         }
         this.quiz = quiz;
     }
+
+    public void updateContentFileUrl(String filePath) {
+        this.contentFileUrl = filePath;
+    }
 }

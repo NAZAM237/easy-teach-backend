@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface FileFunctions {
-    FileUploadResponse uploadFile(MultipartFile file, String resourceType);
-
+    FileUploadResponse uploadResourceFile(MultipartFile file, String resourceType) throws IOException;
+    FileUploadResponse uploadLessonContentFile(MultipartFile file, String lessonType) throws IOException;
     void deleteFile(String resourceUrl) throws IOException;
 }

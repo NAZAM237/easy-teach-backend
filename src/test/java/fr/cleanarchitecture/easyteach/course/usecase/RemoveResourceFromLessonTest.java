@@ -38,7 +38,7 @@ public class RemoveResourceFromLessonTest {
     public void init() {
         ReflectionTestUtils.setField(
                 properties,
-                "dir",
+                "resourceFolder",
                 UPLOAD_DIR
         );
     }
