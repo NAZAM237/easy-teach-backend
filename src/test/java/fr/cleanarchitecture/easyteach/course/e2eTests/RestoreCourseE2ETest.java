@@ -52,7 +52,7 @@ public class RestoreCourseE2ETest extends EasyTeachIntegrationTests {
         course.addModule(module);
         course.addLessonToModule(
                 module.getModuleId(),
-                new Lesson("lessonTitle", ResourceType.IMAGES, null, "textConent", 1)
+                new Lesson("lessonTitle", ResourceType.IMAGES, "Images", "textConent", 1)
         );
         course.publish();
         course.archive();

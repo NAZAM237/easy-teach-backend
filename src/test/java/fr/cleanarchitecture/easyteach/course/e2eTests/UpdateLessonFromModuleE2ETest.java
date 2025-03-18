@@ -51,7 +51,7 @@ public class UpdateLessonFromModuleE2ETest extends EasyTeachIntegrationTests {
         var updateLessonFromModuleDto = new UpdateLessonFromModuleDto(
                 "lessonTitle",
                 "AUDIOS",
-                null,
+                "Audios",
                 null);
         mockMvc
             .perform(

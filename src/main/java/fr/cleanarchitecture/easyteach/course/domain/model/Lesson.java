@@ -12,7 +12,7 @@ public class Lesson {
     private String lessonId;
     private String lessonTitle;
     private ResourceType contentType;
-    private String videoUrl;
+    private String contentFileUrl;
     private String textContent;
     private int order;
     private List<Resource> resources = new ArrayList<>();
@@ -20,11 +20,11 @@ public class Lesson {
 
     public Lesson() {}
 
-    public Lesson(String lessonTitle, ResourceType contentType, String videoUrl, String textContent, int order) {
+    public Lesson(String lessonTitle, ResourceType contentType, String contentFileUrl, String textContent, int order) {
         this.lessonId = UUID.randomUUID().toString();
         this.lessonTitle = lessonTitle;
         this.contentType = contentType;
-        this.videoUrl = videoUrl;
+        this.contentFileUrl = contentFileUrl;
         this.textContent = textContent;
         this.order = order;
     }
@@ -41,8 +41,8 @@ public class Lesson {
         return contentType;
     }
 
-    public String getVideoUrl() {
-        return videoUrl;
+    public String getContentFileUrl() {
+        return contentFileUrl;
     }
 
     public String getTextContent() {
@@ -66,9 +66,12 @@ public class Lesson {
     }
 
     public void updateDate(InputLesson lesson) {
+        if (!ResourceType.TEXT.equals(lesson.getContentType()) && null == lesson.getContentFileUrl()) {
+            throw new BadRequestException("contentFile must not be null for " + lesson.getContentType().name());
+        }
         this.lessonTitle = lesson.getTitle();
         this.contentType = lesson.getContentType();
-        this.videoUrl = lesson.getVideoUrl();
+        this.contentFileUrl = lesson.getContentFileUrl();
         this.textContent = lesson.getTextContent();
     }
 

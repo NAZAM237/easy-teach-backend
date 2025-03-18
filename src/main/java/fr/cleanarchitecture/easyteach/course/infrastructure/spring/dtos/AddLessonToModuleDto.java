@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class AddLessonToModuleDto {
     private String title;
     private String lessonType;
-    private String videoUrl;
+    private String contentFileUrl;
     private String textContent;
     private int order;
 }

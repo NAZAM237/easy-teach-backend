@@ -1,5 +1,6 @@
 package fr.cleanarchitecture.easyteach.course.domain;
 
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Resource;
@@ -24,11 +25,20 @@ public class LessonTest {
 
     @Test
     public void updateDataTest() {
-        var inputLesson = new InputLesson("lessonTitle2", "AUDIOS", null, null);
+        var inputLesson = new InputLesson("lessonTitle2", "AUDIOS", "Audios", null);
         lesson.updateDate(inputLesson);
         Assert.assertEquals(inputLesson.getTitle(), lesson.getLessonTitle());
         Assert.assertEquals(inputLesson.getContentType(), lesson.getContentType());
         Assert.assertNull(lesson.getTextContent());
+    }
+
+    @Test
+    public void updateDataIfTypeDifferentTextAndContentUrlNull_shouldFailTest() {
+        var inputLesson = new InputLesson("lessonTitle2", "AUDIOS", null, null);
+        Assert.assertThrows(
+                BadRequestException.class,
+                () -> lesson.updateDate(inputLesson)
+        );
     }
 
     @Test

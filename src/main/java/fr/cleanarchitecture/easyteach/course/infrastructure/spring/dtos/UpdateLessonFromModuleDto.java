@@ -3,15 +3,15 @@ package fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos;
 public class UpdateLessonFromModuleDto {
     private String lessonTitle;
     private String lessonType;
-    private String videoUrl;
+    private String contentFileUrl;
     private String lessonTextContent;
 
     public UpdateLessonFromModuleDto() {}
 
-    public UpdateLessonFromModuleDto(String lessonTitle, String lessonType, String videoUrl, String lessonTextContent) {
+    public UpdateLessonFromModuleDto(String lessonTitle, String lessonType, String contentFileUrl, String lessonTextContent) {
         this.lessonTitle = lessonTitle;
         this.lessonType = lessonType;
-        this.videoUrl = videoUrl;
+        this.contentFileUrl = contentFileUrl;
         this.lessonTextContent = lessonTextContent;
     }
 
@@ -23,8 +23,8 @@ public class UpdateLessonFromModuleDto {
         return lessonType;
     }
 
-    public String getVideoUrl() {
-        return videoUrl;
+    public String getContentFileUrl() {
+        return contentFileUrl;
     }
 
     public String getLessonTextContent() {

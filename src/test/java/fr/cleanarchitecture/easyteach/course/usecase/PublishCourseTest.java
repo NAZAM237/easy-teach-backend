@@ -53,7 +53,7 @@ public class PublishCourseTest {
         course.addModule(module);
         course.addLessonToModule(
                 module.getModuleId(),
-                new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContent", 1)
+                new Lesson("lessonTitle", ResourceType.IMAGES, "Images", "textContent", 1)
         );
         courseRepository.save(course);
 

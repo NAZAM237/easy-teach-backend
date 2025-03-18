@@ -22,7 +22,7 @@ public class AddLessonToModuleCommandHandler implements Command.Handler<AddLesso
         var lesson = new Lesson(
                 addLessonToModuleCommand.getLesson().getTitle(),
                 addLessonToModuleCommand.getLesson().getContentType(),
-                addLessonToModuleCommand.getLesson().getVideoUrl(),
+                addLessonToModuleCommand.getLesson().getContentFileUrl(),
                 addLessonToModuleCommand.getLesson().getTextContent(),
                 addLessonToModuleCommand.getLesson().getOrder()
         );

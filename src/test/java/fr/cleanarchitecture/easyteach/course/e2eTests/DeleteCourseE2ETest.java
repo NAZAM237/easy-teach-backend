@@ -76,7 +76,7 @@ public class DeleteCourseE2ETest extends EasyTeachIntegrationTests {
         course.addModule(module);
         course.addLessonToModule(
                 module.getModuleId(),
-                new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContent", 1));
+                new Lesson("lessonTitle", ResourceType.IMAGES, "Images", "textContent", 1));
         course.publish();
         courseRepository.save(course);
         mockMvc

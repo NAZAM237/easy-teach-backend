@@ -5,24 +5,24 @@ import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 public class InputLesson {
     private String title;
     private ResourceType contentType;
-    private String videoUrl;
+    private String contentFileUrl;
     private String textContent;
     private int order;
 
     public InputLesson() {}
 
-    public InputLesson(String title, String contentType, String videoUrl, String textContent, int order) {
+    public InputLesson(String title, String contentType, String contentFileUrl, String textContent, int order) {
         this.title = title;
         this.contentType = ResourceType.getResourceType(contentType);
-        this.videoUrl = videoUrl;
+        this.contentFileUrl = contentFileUrl;
         this.textContent = textContent;
         this.order = order;
     }
 
-    public InputLesson(String title, String contentType, String videoUrl, String textContent) {
+    public InputLesson(String title, String contentType, String contentFileUrl, String textContent) {
         this.title = title;
         this.contentType = ResourceType.getResourceType(contentType);
-        this.videoUrl = videoUrl;
+        this.contentFileUrl = contentFileUrl;
         this.textContent = textContent;
     }
 
@@ -34,8 +34,8 @@ public class InputLesson {
         return contentType;
     }
 
-    public String getVideoUrl() {
-        return videoUrl;
+    public String getContentFileUrl() {
+        return contentFileUrl;
     }
 
     public String getTextContent() {

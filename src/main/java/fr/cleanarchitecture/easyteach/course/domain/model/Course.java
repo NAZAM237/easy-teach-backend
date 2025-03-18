@@ -3,12 +3,14 @@ package fr.cleanarchitecture.easyteach.course.domain.model;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
+import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Course {
     private String courseId;
@@ -79,6 +81,14 @@ public class Course {
         if (!aLeastOnLesson) {
             throw new BadRequestException("You must provide at least one lesson");
         }
+
+        var lessons = this.modules.stream().flatMap(module -> module.getLessons().stream()).collect(Collectors.toSet());
+        lessons.forEach(
+            lesson -> {
+                if (!ResourceType.TEXT.equals(lesson.getContentType()) && null == lesson.getContentFileUrl())
+                    throw new BadRequestException("contentFile must not be null for " + lesson.getContentType().name());
+            }
+        );
 
         this.status = CourseStatus.PUBLISHED;
         return this;

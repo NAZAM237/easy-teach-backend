@@ -123,7 +123,8 @@ public class CourseController {
     public ResponseEntity<CourseViewModel> addLessonToModule(
             @PathVariable String courseId,
             @PathVariable String moduleId,
-            @RequestBody AddLessonToModuleDto addLessonToModuleDto) {
+            @RequestBody AddLessonToModuleDto addLessonToModuleDto,
+            @RequestParam(required = false) List<MultipartFile> files) {
         var result = this.pipeline.send(
                 new AddLessonToModuleCommand(
                         courseId,
@@ -131,7 +132,7 @@ public class CourseController {
                         new InputLesson(
                                 addLessonToModuleDto.getTitle(),
                                 addLessonToModuleDto.getLessonType(),
-                                addLessonToModuleDto.getVideoUrl(),
+                                addLessonToModuleDto.getContentFileUrl(),
                                 addLessonToModuleDto.getTextContent(),
                                 addLessonToModuleDto.getOrder()))
         );
@@ -190,7 +191,7 @@ public class CourseController {
                         new InputLesson(
                                 updateLessonFromModuleDto.getLessonTitle(),
                                 updateLessonFromModuleDto.getLessonType(),
-                                updateLessonFromModuleDto.getVideoUrl(),
+                                updateLessonFromModuleDto.getContentFileUrl(),
                                 updateLessonFromModuleDto.getLessonTextContent()
                         )));
         return ResponseEntity.ok(result);

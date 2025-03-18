@@ -39,7 +39,7 @@ public class RestoreCourseTest {
                 new Teacher(),
                 new Price(BigDecimal.ZERO, "FCFA")
         );
-        lesson = new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContent", 1);
+        lesson = new Lesson("lessonTitle", ResourceType.IMAGES, "Images", "textContent", 1);
     }
 
     @Test

@@ -45,7 +45,7 @@ public class UpdateLessonFromModuleTest {
         var inputLesson = new InputLesson(
                 "lessonTitle2",
                 "DOCUMENTS",
-                null,
+                "Documents",
                 null
         );
         var updateLessonFromModuleCommand = new UpdateLessonFromModuleCommand(

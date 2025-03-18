@@ -77,7 +77,7 @@ public class DeleteCourseTest {
         course.addModule(module);
         course.addLessonToModule(
                 module.getModuleId(),
-                new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContent", 1));
+                new Lesson("lessonTitle", ResourceType.IMAGES, "images", "textContent", 1));
         course.publish();
         courseRepository.save(course);
         var deleteCourseCommand = new DeleteCourseCommand(course.getCourseId());

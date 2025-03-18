@@ -33,7 +33,7 @@ public class CourseTest {
     public void publishCourseTest() {
         var module = new Module("moduleTitle", "moduleDescription", 1);
         course.addModule(module);
-        var lesson = new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContext", 1);
+        var lesson = new Lesson("lessonTitle", ResourceType.IMAGES, "Images", "textContext", 1);
         course.addLessonToModule(module.getModuleId(), lesson);
         course.publish();
         Assert.assertEquals(course.getStatus().name(), CourseStatus.PUBLISHED.name());
@@ -49,7 +49,22 @@ public class CourseTest {
     }
 
     @Test
-    public void publishCourseWithoutLessons_shouldFailTest() {
+    public void publishCourseWithoutLessonContent_shouldFailTest() {
+        var module = new Module("moduleTitle", "moduleDescription", 1);
+        course.addModule(module);
+        var lesson = new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContent", 1);
+        course.addLessonToModule(module.getModuleId(), lesson);
+        var assertResult = Assert.assertThrows(
+                BadRequestException.class,
+                () -> course.publish()
+        );
+        Assert.assertEquals(
+                "contentFile must not be null for " + lesson.getContentType().name(),
+                assertResult.getMessage());
+    }
+
+    @Test
+    public void publishCourseWithoutContentLessons_shouldFailTest() {
         course.addModule(new Module("moduleTitle", "moduleDescription", 1));
         var assertResult = Assert.assertThrows(
                 BadRequestException.class,
@@ -64,7 +79,7 @@ public class CourseTest {
         course.addModule(module);
         course.addLessonToModule(
                 module.getModuleId(),
-                new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContext", 1)
+                new Lesson("lessonTitle", ResourceType.IMAGES, "Images", "textContext", 1)
         );
         course.publish();
         course.archive();
@@ -87,7 +102,7 @@ public class CourseTest {
         course.addModule(module);
         course.addLessonToModule(
                 module.getModuleId(),
-                new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContext", 1)
+                new Lesson("lessonTitle", ResourceType.IMAGES, "Images", "textContext", 1)
         );
         course.publish();
         course.archive();
@@ -149,7 +164,7 @@ public class CourseTest {
         course.addModule(module);
         course.addLessonToModule(
                 module.getModuleId(),
-                new Lesson("lessonTitle", ResourceType.IMAGES, null, "textContext", 1)
+                new Lesson("lessonTitle", ResourceType.IMAGES, "Images", "textContext", 1)
         );
         course.publish();
         course.archive();
