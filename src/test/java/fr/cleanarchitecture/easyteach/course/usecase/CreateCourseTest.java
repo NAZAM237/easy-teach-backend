@@ -1,8 +1,5 @@
 package fr.cleanarchitecture.easyteach.course.usecase;
 
-import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
-import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
-import fr.cleanarchitecture.easyteach.authentication.infrastructure.persistence.inmemory.InMemoryUserRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.CreateCourseCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.CreateCourseCommandHandler;
@@ -10,7 +7,6 @@ import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -18,15 +14,6 @@ import java.math.BigDecimal;
 public class CreateCourseTest {
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
-    private final UserRepository userRepository = new InMemoryUserRepository();
-
-    private User user;
-
-    @Before
-    public void setUp() {
-        user = new User();
-        userRepository.save(user);
-    }
 
     @Test
     public void shouldCreateCourse() {
@@ -60,11 +47,10 @@ public class CreateCourseTest {
         return new CreateCourseCommand(
                 "course name",
                 "course description",
-                user.getUserId(),
                 new Price(BigDecimal.valueOf(1000), "FCFA"));
     }
 
     private CreateCourseCommandHandler createHandler() {
-        return new CreateCourseCommandHandler(courseRepository, userRepository);
+        return new CreateCourseCommandHandler(courseRepository);
     }
 }

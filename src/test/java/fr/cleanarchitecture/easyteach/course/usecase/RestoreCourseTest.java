@@ -1,8 +1,5 @@
 package fr.cleanarchitecture.easyteach.course.usecase;
 
-import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
-import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
-import fr.cleanarchitecture.easyteach.authentication.infrastructure.persistence.inmemory.InMemoryUserRepository;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
@@ -24,15 +21,11 @@ import java.math.BigDecimal;
 public class RestoreCourseTest {
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
-    private final UserRepository userRepository = new InMemoryUserRepository();
     private Course course;
-    private User user;
     private Lesson lesson;
 
     @Before
     public void setUp() throws Exception {
-        user = new User();
-        userRepository.save(user);
         course = new Course(
                 "Course title",
                 "Course description",

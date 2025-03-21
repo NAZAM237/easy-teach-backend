@@ -1,8 +1,6 @@
 package fr.cleanarchitecture.easyteach.course.e2eTests;
 
 import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
-import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
-import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
@@ -29,15 +27,10 @@ public class RestoreCourseE2ETest extends EasyTeachIntegrationTests {
 
     @Autowired
     private CourseRepository courseRepository;
-    @Autowired
-    private UserRepository userRepository;
-    private User user;
     private Course course;
 
     @Before
     public void setUp() {
-        user = new User();
-        this.userRepository.save(user);
         course = new Course(
                 "course title",
                 "course description",
@@ -60,7 +53,6 @@ public class RestoreCourseE2ETest extends EasyTeachIntegrationTests {
 
         var result = mockMvc
                 .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId() + "/restore"))
-                //.header("Authorization", createJwt()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
 
@@ -78,7 +70,6 @@ public class RestoreCourseE2ETest extends EasyTeachIntegrationTests {
     public void archiveUnExistingCourseTest_shouldThrowException() throws Exception {
         mockMvc
                 .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId() + "/restore")
-                        //.header("Authorization", createJwt())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andReturn();

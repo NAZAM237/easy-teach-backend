@@ -1,8 +1,5 @@
 package fr.cleanarchitecture.easyteach.course.usecase;
 
-import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
-import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
-import fr.cleanarchitecture.easyteach.authentication.infrastructure.persistence.inmemory.InMemoryUserRepository;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.UpdateCourseCommand;
@@ -20,25 +17,14 @@ import java.math.BigDecimal;
 public class UpdateCourseTest {
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
-    private final UserRepository userRepository = new InMemoryUserRepository();
     private Course course;
-    private User user;
 
     @Before
     public void setUp() {
-        user = new User();
-        userRepository.save(user);
         course = new Course(
                 "course title",
                 "course description",
-                new Teacher(
-                        user.getUserId(),
-                        user.getUserName(),
-                        user.getUserBiography(),
-                        user.getUserEmail(),
-                        user.getUserPhone(),
-                        user.getUserPhoto()
-                ),
+                new Teacher(),
                 new Price(BigDecimal.valueOf(1000), "FCFA")
         );
     }

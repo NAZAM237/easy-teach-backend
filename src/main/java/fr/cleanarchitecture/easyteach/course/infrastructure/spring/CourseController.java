@@ -48,7 +48,7 @@ public class CourseController {
     @PostMapping
     public ResponseEntity<CourseViewModel> createCourse(@RequestBody CreateCourseDto course) {
         var result = this.pipeline.send(
-                new CreateCourseCommand(course.getTitle(), course.getDescription(), course.getTeacherUuid(), new Price(course.getAmount(), course.getCurrency())));
+                new CreateCourseCommand(course.getTitle(), course.getDescription(), new Price(course.getAmount(), course.getCurrency())));
         return new ResponseEntity<>(new CourseViewModel(result.getMessage(), result.getCourse()),
                 HttpStatus.CREATED);
     }

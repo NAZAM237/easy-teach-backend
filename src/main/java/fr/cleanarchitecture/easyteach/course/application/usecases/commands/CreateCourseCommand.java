@@ -7,13 +7,11 @@ import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 public class CreateCourseCommand implements Command<CourseViewModel> {
     private String courseTitle;
     private String courseDescription;
-    private String teacherUuid;
     private Price price;
 
-    public CreateCourseCommand(String courseName, String courseDescription, String teacherUuid, Price price) {
+    public CreateCourseCommand(String courseName, String courseDescription, Price price) {
         this.courseTitle = courseName;
         this.courseDescription = courseDescription;
-        this.teacherUuid = teacherUuid;
         this.price = price;
     }
 
@@ -23,10 +21,6 @@ public class CreateCourseCommand implements Command<CourseViewModel> {
 
     public String getCourseDescription() {
         return courseDescription;
-    }
-
-    public String getTeacherUuid() {
-        return teacherUuid;
     }
 
     public Price getPrice() {

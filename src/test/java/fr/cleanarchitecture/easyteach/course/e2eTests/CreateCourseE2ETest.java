@@ -1,8 +1,6 @@
 package fr.cleanarchitecture.easyteach.course.e2eTests;
 
 import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
-import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
-import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.CreateCourseDto;
 import org.junit.Before;
@@ -23,8 +21,6 @@ public class CreateCourseE2ETest extends EasyTeachIntegrationTests {
 
     @Autowired
     private CourseRepository courseRepository;
-    @Autowired
-    private UserRepository userRepository;
 
     @Before
     public void setUp() {
@@ -33,18 +29,14 @@ public class CreateCourseE2ETest extends EasyTeachIntegrationTests {
 
     @Test
     public void shouldCreateCourse() throws Exception {
-        var user = new User();
-        userRepository.save(user);
         var dto = new CreateCourseDto(
                 "title",
                 "description",
                 BigDecimal.valueOf(1000),
-                "FCFA",
-                user.getUserId());
+                "FCFA");
 
         mockMvc
             .perform(MockMvcRequestBuilders.post("/courses")
-                    //.header("Authorization", createJwt())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
             .andExpect(MockMvcResultMatchers.status().isCreated())

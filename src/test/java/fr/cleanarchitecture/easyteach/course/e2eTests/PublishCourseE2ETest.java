@@ -1,8 +1,6 @@
 package fr.cleanarchitecture.easyteach.course.e2eTests;
 
 import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
-import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
-import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
@@ -26,16 +24,11 @@ import java.math.BigDecimal;
 public class PublishCourseE2ETest extends EasyTeachIntegrationTests {
     @Autowired
     private CourseRepository courseRepository;
-    @Autowired
-    private UserRepository userRepository;
 
     private Course course;
-    private User user;
 
     @Before
     public void setUp() {
-        user = new User();
-        userRepository.save(user);
         course = new Course(
             "course title",
             "course description",

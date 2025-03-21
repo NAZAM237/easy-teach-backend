@@ -1,8 +1,6 @@
 package fr.cleanarchitecture.easyteach.course.e2eTests;
 
 import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
-import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
-import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
@@ -25,13 +23,9 @@ public class UpdateCourseE2ETest extends EasyTeachIntegrationTests {
 
     @Autowired
     private CourseRepository courseRepository;
-    @Autowired
-    private UserRepository userRepository;
 
     @Test
     public void shouldUpdateCourse() throws Exception {
-        var user = new User();
-        userRepository.save(user);
         var course = new Course(
                 "course title",
                 "course description",
@@ -66,8 +60,6 @@ public class UpdateCourseE2ETest extends EasyTeachIntegrationTests {
 
     @Test
     public void updateUnExistingCourseTest_shouldThrow() throws Exception {
-        var user = new User();
-        userRepository.save(user);
         var course = new Course(
                 "course title",
                 "course description",
@@ -82,7 +74,6 @@ public class UpdateCourseE2ETest extends EasyTeachIntegrationTests {
 
         mockMvc
             .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId(), dto)
-                    //.header("Authorization", createJwt())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
             .andExpect(MockMvcResultMatchers.status().isNotFound())

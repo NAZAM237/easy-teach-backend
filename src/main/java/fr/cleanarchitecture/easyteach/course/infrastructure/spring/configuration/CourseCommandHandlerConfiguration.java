@@ -1,6 +1,5 @@
 package fr.cleanarchitecture.easyteach.course.infrastructure.spring.configuration;
 
-import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.FileFunctions;
 import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.*;
@@ -11,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 public class CourseCommandHandlerConfiguration {
 
     @Bean
-    public CreateCourseCommandHandler createCourseCommandHandler(CourseRepository courseRepository, UserRepository userRepository) {
-        return new CreateCourseCommandHandler(courseRepository, userRepository);
+    public CreateCourseCommandHandler createCourseCommandHandler(CourseRepository courseRepository) {
+        return new CreateCourseCommandHandler(courseRepository);
     }
 
     @Bean
