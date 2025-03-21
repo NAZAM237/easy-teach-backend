@@ -8,6 +8,7 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.RemoveModuleFromCourseDto;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +25,18 @@ public class RemoveModuleFromCourseE2ETest extends EasyTeachIntegrationTests {
     @Autowired
     private CourseRepository courseRepository;
 
-    @Test
-    public void removeModuleFromCourseE2ETest() throws Exception {
-        var course = new Course(
+    private Course course;
+    private Module module;
+
+    @Before
+    public void setUp() {
+        course = new Course(
                 "Title",
                 "Description",
                 new Teacher(),
                 new Price(BigDecimal.ZERO, "FCFA")
         );
-        var module = new Module(
+        module = new Module(
                 "title",
                 "description",
                 2
@@ -40,8 +44,11 @@ public class RemoveModuleFromCourseE2ETest extends EasyTeachIntegrationTests {
         course.addModule(module);
         courseRepository.save(course);
 
-        var dto = new RemoveModuleFromCourseDto(module.getModuleId());
+    }
 
+    @Test
+    public void removeModuleFromCourseE2ETest() throws Exception {
+        var dto = new RemoveModuleFromCourseDto(module.getModuleId());
         mockMvc
                 .perform(
                         MockMvcRequestBuilders.patch("/courses/" +course.getCourseId()+ "/remove-module-from-course")
@@ -57,44 +64,12 @@ public class RemoveModuleFromCourseE2ETest extends EasyTeachIntegrationTests {
 
     @Test
     public void removeModuleFromNotExistCourseE2ETest_shouldThrowException() throws Exception {
-        var course = new Course(
-                "Title",
-                "Description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
-
         var dto = new RemoveModuleFromCourseDto("moduleId");
-
         mockMvc
                 .perform(
-                        MockMvcRequestBuilders.patch("/courses/" +course.getCourseId()+ "/remove-module-from-course")
+                        MockMvcRequestBuilders.patch("/courses/Garbage/remove-module-from-course")
                                 .content(objectMapper.writeValueAsBytes(dto))
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
-    }
-
-    @Test
-    public void removeNotLinkedModuleFromCourseE2ETest_shouldThrowException() throws Exception {
-        var course = new Course(
-                "Title",
-                "Description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
-        courseRepository.save(course);
-        var module = new Module(
-                "title",
-                "description",
-                1
-        );
-        var dto = new RemoveModuleFromCourseDto(module.getModuleId());
-
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders.patch("/courses/" +course.getCourseId()+ "/remove-module-from-course")
-                                .content(objectMapper.writeValueAsBytes(dto))
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }

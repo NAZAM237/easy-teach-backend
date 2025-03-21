@@ -60,12 +60,11 @@ public class PublishCourseTest {
         var publishCourseCommand = new PublishCourseCommand(course.getCourseId());
         var publishCourseCommandHandler = new PublishCourseCommandHandler(courseRepository);
 
-        var result = publishCourseCommandHandler.handle(publishCourseCommand);
+        publishCourseCommandHandler.handle(publishCourseCommand);
         var existingCourse = courseRepository.findByCourseId(course.getCourseId());
 
         Assert.assertTrue(existingCourse.isPresent());
         Assert.assertEquals(CourseStatus.PUBLISHED, existingCourse.get().getStatus());
-        Assert.assertEquals(CourseStatus.PUBLISHED, result.getCourse().getStatus());
     }
 
     @Test

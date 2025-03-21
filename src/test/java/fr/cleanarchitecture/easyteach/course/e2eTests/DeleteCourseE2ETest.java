@@ -11,6 +11,7 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +27,24 @@ public class DeleteCourseE2ETest extends EasyTeachIntegrationTests {
     private CourseRepository courseRepository;
     @Autowired
     private UserRepository userRepository;
+    private Course course;
+    private User user;
 
-    @Test
-    public void deleteCourseTest() throws Exception {
-        var user = new User();
+    @Before
+    public void setUp() {
+        user = new User();
         userRepository.save(user);
-        var course = new Course(
+        course = new Course(
                 "title",
                 "description",
                 new Teacher(),
                 new Price(BigDecimal.ZERO, "FCFA")
         );
         courseRepository.save(course);
+    }
+
+    @Test
+    public void deleteCourseTest() throws Exception {
         mockMvc
             .perform(MockMvcRequestBuilders.delete("/courses/" + course.getCourseId()))
                     //.header("Authorization", createJwt())
@@ -48,30 +55,14 @@ public class DeleteCourseE2ETest extends EasyTeachIntegrationTests {
 
     @Test
     public void deleteUnexistingCourseTest_shouldThrow() throws Exception {
-        var user = new User();
-        userRepository.save(user);
-        var course = new Course(
-                "title",
-                "description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
         mockMvc
-            .perform(MockMvcRequestBuilders.delete("/courses/" + course.getCourseId()))
+            .perform(MockMvcRequestBuilders.delete("/courses/Garbage"))
             //.header("Authorization", createJwt())
             .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
     public void deleteExistingCourseWithStatusPublishedTest_shouldThrow() throws Exception {
-        var user = new User();
-        userRepository.save(user);
-        var course = new Course(
-                "title",
-                "description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
         var module = new Module("moduleTitle", "moduleDescription",1);
         course.addModule(module);
         course.addLessonToModule(

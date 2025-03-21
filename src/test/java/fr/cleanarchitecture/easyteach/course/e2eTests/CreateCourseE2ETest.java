@@ -4,9 +4,7 @@ import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
 import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
 import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.CreateCourseDto;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +15,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @RunWith(SpringRunner.class)
 public class CreateCourseE2ETest extends EasyTeachIntegrationTests {
@@ -42,21 +42,14 @@ public class CreateCourseE2ETest extends EasyTeachIntegrationTests {
                 "FCFA",
                 user.getUserId());
 
-        var result = mockMvc
-                .perform(MockMvcRequestBuilders.post("/courses")
-                        //.header("Authorization", createJwt())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andReturn();
-
-        var courseViewModel = objectMapper.readValue(
-                result.getResponse().getContentAsString(),
-                CourseViewModel.class);
-
-        var course = courseRepository.findByCourseId(courseViewModel.getCourse().getCourseId());
-
-        Assert.assertTrue(course.isPresent());
-        Assert.assertEquals(dto.getTitle(), course.get().getCourseTitle());
+        mockMvc
+            .perform(MockMvcRequestBuilders.post("/courses")
+                    //.header("Authorization", createJwt())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(dto)))
+            .andExpect(MockMvcResultMatchers.status().isCreated())
+            .andExpect(jsonPath("$.message").value("A new course was created successfully"))
+            .andExpect(jsonPath("$.course.courseTitle").value(dto.getTitle()))
+            .andExpect(jsonPath("$.course.courseDescription").value(dto.getDescription()));
     }
 }

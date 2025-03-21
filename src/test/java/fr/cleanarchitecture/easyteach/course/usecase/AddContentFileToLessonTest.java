@@ -59,12 +59,7 @@ public class AddContentFileToLessonTest {
     @Test
     public void addContentFileToLessonTest() {
         var idsCourse = new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId());
-        MockMultipartFile pdfFile = new MockMultipartFile(
-                "file",
-                "test.pdf",
-                "DOCUMENTS",
-                "Pdf content".getBytes()
-        );
+        var pdfFile =  createMockFile();
         var addContentFileToLessonCommand = new AddContentFileToLessonCommand(idsCourse, pdfFile, "DOCUMENTS");
         var addContentFileToLessonCommandHandler = new AddContentFileToLessonCommandHandler(courseRepository, fileFunctions);
 
@@ -85,5 +80,13 @@ public class AddContentFileToLessonTest {
         Assert.assertEquals(
                 UPLOAD_DIR + "/documents/" + result.getFileName(),
                 updatedLesson.getContentFileUrl());
+    }
+
+    private MockMultipartFile createMockFile() {
+        return new MockMultipartFile(
+                "file",
+                "test.pdf",
+                "DOCUMENTS",
+                "Pdf content".getBytes());
     }
 }

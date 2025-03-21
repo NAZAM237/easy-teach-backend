@@ -9,6 +9,7 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -16,17 +17,21 @@ import java.math.BigDecimal;
 public class GetCourseByIdTest {
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
+    private Course course;
+
+    @Before
+    public void setUp() {
+        course = new Course(
+            "title",
+            "description",
+            new Teacher(),
+            new Price(BigDecimal.ZERO, "FCFA")
+        );
+        courseRepository.save(course);
+    }
 
     @Test
     public void getCourseByIdTest() {
-        var course = new Course(
-                "title",
-                "description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
-        courseRepository.save(course);
-
         var getCourseByIdCommand = new GetCourseByIdCommand(course.getCourseId());
         var getCourseByIdCommandHandler = new GetCourseByIdCommandHandler(courseRepository);
 
@@ -38,14 +43,7 @@ public class GetCourseByIdTest {
 
     @Test
     public void getNotExistingCourseByIdTest_shouldThrowException() {
-        var course = new Course(
-                "title",
-                "description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
-
-        var getCourseByIdCommand = new GetCourseByIdCommand(course.getCourseId());
+        var getCourseByIdCommand = new GetCourseByIdCommand("Garbage");
         var getCourseByIdCommandHandler = new GetCourseByIdCommandHandler(courseRepository);
 
         Assert.assertThrows(

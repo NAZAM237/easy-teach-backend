@@ -24,6 +24,7 @@ public class UpdateLessonFromModuleTest {
     private Course course;
     private Module module;
     private Lesson lesson;
+    private InputLesson inputLesson;
 
     @Before
     public void setUp() {
@@ -38,16 +39,17 @@ public class UpdateLessonFromModuleTest {
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson);
         courseRepository.save(course);
-    }
 
-    @Test
-    public void updateLessonFromModuleTest() {
-        var inputLesson = new InputLesson(
+        inputLesson = new InputLesson(
                 "lessonTitle2",
                 "DOCUMENTS",
                 "Documents",
                 null
         );
+    }
+
+    @Test
+    public void updateLessonFromModuleTest() {
         var updateLessonFromModuleCommand = new UpdateLessonFromModuleCommand(
                 course.getCourseId(), module.getModuleId(), lesson.getLessonId(), inputLesson
         );
@@ -71,12 +73,6 @@ public class UpdateLessonFromModuleTest {
 
     @Test
     public void updateLessonFromNotExistingModuleTest_shouldThrowException() {
-        var inputLesson = new InputLesson(
-                "lessonTitle2",
-                "DOCUMENTS",
-                null,
-                null
-        );
         var updateLessonFromModuleCommand = new UpdateLessonFromModuleCommand(
                 course.getCourseId(), "Garbage", lesson.getLessonId(), inputLesson
         );
@@ -91,12 +87,6 @@ public class UpdateLessonFromModuleTest {
 
     @Test
     public void updateNotExistLessonFromModuleTest_shouldThrowException() {
-        var inputLesson = new InputLesson(
-                "lessonTitle2",
-                "DOCUMENTS",
-                null,
-                null
-        );
         var updateLessonFromModuleCommand = new UpdateLessonFromModuleCommand(
                 course.getCourseId(), module.getModuleId(), "Garbage", inputLesson
         );

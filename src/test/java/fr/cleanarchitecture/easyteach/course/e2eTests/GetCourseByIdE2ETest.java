@@ -46,15 +46,8 @@ public class GetCourseByIdE2ETest extends EasyTeachIntegrationTests {
 
     @Test
     public void getNotExistingCourseE2ETest() throws Exception {
-        var course = new Course(
-                "title",
-                "description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
-
         mockMvc
-                .perform(MockMvcRequestBuilders.get("/courses/" + course.getCourseId()))
+                .perform(MockMvcRequestBuilders.get("/courses/Garbage"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andReturn();
     }

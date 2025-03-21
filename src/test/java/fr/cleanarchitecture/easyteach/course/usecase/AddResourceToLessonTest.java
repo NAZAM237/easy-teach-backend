@@ -6,10 +6,8 @@ import fr.cleanarchitecture.easyteach.course.application.ports.FileFunctions;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AddResourceToLessonCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.AddResourceToLessonCommandHandler;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
-import fr.cleanarchitecture.easyteach.course.domain.model.Course;
-import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
-import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
+import fr.cleanarchitecture.easyteach.course.domain.model.*;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.IdsCourse;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
@@ -18,11 +16,11 @@ import fr.cleanarchitecture.easyteach.course.infrastructure.spring.configuration
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class AddResourceToLessonTest {
 
@@ -34,6 +32,7 @@ public class AddResourceToLessonTest {
     private Course course;
     private Module module;
     private Lesson lesson;
+    private IdsCourse idsCourse;
 
     @Before
     public void init() {
@@ -56,34 +55,19 @@ public class AddResourceToLessonTest {
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson);
         courseRepository.save(course);
+        idsCourse = new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId());
     }
 
     @Test
     public void addVideoResourceToLessonTest() {
-        var idsCourse = new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId());
-        MockMultipartFile videoFile = new MockMultipartFile(
-                "file",
-                "test.mp4",
-                "video/mp4",
-                "Video content".getBytes()
-        );
+        MockMultipartFile videoFile = createMockFile("test.mp4", "video/mp4");
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, videoFile, "VIDEOS");
-        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
+        var addResourceToLessonCommandHandler = createHandler();
 
         addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
 
         var course = courseRepository.findByCourseId(idsCourse.getCourseId()).orElseThrow();
-        var resources = course.getModules()
-                .stream()
-                .filter(module1 -> module1.getModuleId().equals(idsCourse.getModuleId()))
-                .findFirst()
-                .orElseThrow()
-                    .getLessons()
-                    .stream()
-                    .filter(lesson1 -> lesson1.getLessonId().equals(idsCourse.getLessonId()))
-                    .findFirst()
-                    .orElseThrow()
-                        .getResources();
+        var resources = getResources(course);
         var newResource = resources.get(0);
         Assert.assertEquals(
                 UPLOAD_DIR + "/videos/" + newResource.getResourceName(),
@@ -92,30 +76,14 @@ public class AddResourceToLessonTest {
 
     @Test
     public void addAudioResourceToLessonTest() {
-        var idsCourse = new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId());
-        MockMultipartFile audioFile = new MockMultipartFile(
-                "audio",
-                "test.mp3",
-                "audio/mp3",
-                "Audio content".getBytes()
-        );
+        MockMultipartFile audioFile = createMockFile("tset.mp3", "audio/mp3");
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, audioFile, "AUDIOS");
-        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
+        var addResourceToLessonCommandHandler = createHandler();
 
         addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
 
         var course = courseRepository.findByCourseId(idsCourse.getCourseId()).orElseThrow();
-        var resources = course.getModules()
-                .stream()
-                .filter(module1 -> module1.getModuleId().equals(idsCourse.getModuleId()))
-                .findFirst()
-                .orElseThrow()
-                .getLessons()
-                .stream()
-                .filter(lesson1 -> lesson1.getLessonId().equals(idsCourse.getLessonId()))
-                .findFirst()
-                .orElseThrow()
-                .getResources();
+        var resources = getResources(course);
         var newResource = resources.get(0);
         Assert.assertEquals(
                 UPLOAD_DIR + "/audios/" + newResource.getResourceName(),
@@ -125,29 +93,14 @@ public class AddResourceToLessonTest {
     @Test
     public void addDocumentResourceToLessonTest() {
         var idsCourse = new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId());
-        MockMultipartFile textFile = new MockMultipartFile(
-                "document",
-                "test.txt",
-                MediaType.TEXT_PLAIN_VALUE,
-                "Text content".getBytes()
-        );
+        MockMultipartFile textFile = createMockFile("test.txt", "text/plain");
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, textFile, "DOCUMENTS");
-        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
+        var addResourceToLessonCommandHandler = createHandler();
 
         addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
 
         var course = courseRepository.findByCourseId(idsCourse.getCourseId()).orElseThrow();
-        var resources = course.getModules()
-                .stream()
-                .filter(module1 -> module1.getModuleId().equals(idsCourse.getModuleId()))
-                .findFirst()
-                .orElseThrow()
-                .getLessons()
-                .stream()
-                .filter(lesson1 -> lesson1.getLessonId().equals(idsCourse.getLessonId()))
-                .findFirst()
-                .orElseThrow()
-                .getResources();
+        var resources = getResources(course);
         var newResource = resources.get(0);
         Assert.assertEquals(
                 UPLOAD_DIR + "/documents/" + newResource.getResourceName(),
@@ -156,30 +109,14 @@ public class AddResourceToLessonTest {
 
     @Test
     public void addImageResourceToLessonTest() {
-        var idsCourse = new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId());
-        MockMultipartFile imageFile = new MockMultipartFile(
-                "image",
-                "test.jpeg",
-                MediaType.IMAGE_JPEG_VALUE,
-                "Image content".getBytes()
-        );
+        MockMultipartFile imageFile = createMockFile("test.png", "image/png");
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, imageFile, "IMAGES");
-        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
+        var addResourceToLessonCommandHandler = createHandler();
 
         addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
 
         var course = courseRepository.findByCourseId(idsCourse.getCourseId()).orElseThrow();
-        var resources = course.getModules()
-                .stream()
-                .filter(module1 -> module1.getModuleId().equals(idsCourse.getModuleId()))
-                .findFirst()
-                .orElseThrow()
-                .getLessons()
-                .stream()
-                .filter(lesson1 -> lesson1.getLessonId().equals(idsCourse.getLessonId()))
-                .findFirst()
-                .orElseThrow()
-                .getResources();
+        var resources = getResources(course);
         var newResource = resources.get(0);
         Assert.assertEquals(
                 UPLOAD_DIR + "/images/" + newResource.getResourceName(),
@@ -188,15 +125,9 @@ public class AddResourceToLessonTest {
 
     @Test
     public void addInvalidCategoryResourceToLessonTest_shouldThrowException() {
-        var idsCourse = new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId());
-        MockMultipartFile videoFile = new MockMultipartFile(
-                "file",
-                "test.mp4",
-                "video/mp4",
-                "Video content".getBytes()
-        );
+        MockMultipartFile videoFile = createMockFile("test.mp4", "video/mp4");
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, videoFile, "VIEW");
-        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
+        var addResourceToLessonCommandHandler = createHandler();
 
         var resultThrow = Assert.assertThrows(
                 BadRequestException.class,
@@ -207,15 +138,10 @@ public class AddResourceToLessonTest {
 
     @Test
     public void addInvalidFileExtensionResourceToLessonTest_shouldThrowException() {
-        var idsCourse = new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId());
-        MockMultipartFile videoFile = new MockMultipartFile(
-                "file",
-                "test.mp11",
-                "video/mp4",
-                "Video content".getBytes()
-        );
+        MockMultipartFile videoFile = createMockFile("test.mp11", "video/mp4");
+
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, videoFile, "VIDEOS");
-        var addResourceToLessonCommandHandler = new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
+        var addResourceToLessonCommandHandler = createHandler();
 
         var resultThrow = Assert.assertThrows(
                 BadRequestException.class,
@@ -224,5 +150,32 @@ public class AddResourceToLessonTest {
         Assert.assertEquals(
                 "Invalid file extension for category: " + addResourceToLessonCommand.getResourceType(),
                 resultThrow.getMessage());
+    }
+
+    private MockMultipartFile createMockFile(String originalFileName, String contentType) {
+        return new MockMultipartFile(
+                "file",
+                originalFileName,
+                contentType,
+                "File content".getBytes()
+        );
+    }
+
+    private AddResourceToLessonCommandHandler createHandler() {
+        return new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
+    }
+
+    private List<Resource> getResources(Course course) {
+        return course.getModules()
+                .stream()
+                .filter(module1 -> module1.getModuleId().equals(idsCourse.getModuleId()))
+                .findFirst()
+                .orElseThrow()
+                .getLessons()
+                .stream()
+                .filter(lesson1 -> lesson1.getLessonId().equals(idsCourse.getLessonId()))
+                .findFirst()
+                .orElseThrow()
+                .getResources();
     }
 }

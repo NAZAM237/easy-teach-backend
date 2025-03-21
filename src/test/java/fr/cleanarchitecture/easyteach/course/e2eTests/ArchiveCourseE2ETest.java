@@ -11,8 +11,6 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +22,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 @RunWith(SpringRunner.class)
 public class ArchiveCourseE2ETest extends EasyTeachIntegrationTests {
     @Autowired
@@ -32,6 +32,7 @@ public class ArchiveCourseE2ETest extends EasyTeachIntegrationTests {
     private UserRepository userRepository;
     private User user;
     private Course course;
+    private Module module;
 
     @Before
     public void setUp() {
@@ -43,11 +44,7 @@ public class ArchiveCourseE2ETest extends EasyTeachIntegrationTests {
                 new Teacher(),
                 new Price(BigDecimal.ZERO, "FCFA")
         );
-    }
-
-    @Test
-    public void shouldArchiveCourseTest() throws Exception {
-        var module = new Module("moduleTitle", "moduleDescription",1);
+        module = new Module("moduleTitle", "moduleDescription",1);
         course.addModule(module);
         course.addLessonToModule(
                 module.getModuleId(),
@@ -55,27 +52,22 @@ public class ArchiveCourseE2ETest extends EasyTeachIntegrationTests {
         );
         course.publish();
         courseRepository.save(course);
+    }
 
-        var result = mockMvc
-                .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId() + "/archive"))
+    @Test
+    public void shouldArchiveCourseTest() throws Exception {
+        mockMvc
+            .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId() + "/archive"))
                 //.header("Authorization", createJwt()))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
-
-        var courseViewModel = objectMapper.readValue(
-                result.getResponse().getContentAsString(),
-                CourseViewModel.class);
-
-        var archivedCourse = courseRepository.findByCourseId(courseViewModel.getCourse().getCourseId());
-
-        Assert.assertTrue(archivedCourse.isPresent());
-        Assert.assertEquals(CourseStatus.ARCHIVED, courseViewModel.getCourse().getStatus());
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(jsonPath("$.message").value("Course archived successfully"))
+            .andExpect(jsonPath("$.course.status").value(CourseStatus.ARCHIVED.name()));
     }
 
     @Test
     public void archiveUnExistingCourseTest_shouldThrowException() throws Exception {
         mockMvc
-                .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId() + "/archive")
+                .perform(MockMvcRequestBuilders.patch("/courses/Garbage/archive")
                         //.header("Authorization", createJwt())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())

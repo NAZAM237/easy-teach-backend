@@ -33,7 +33,7 @@ public class RemoveResourceFromLessonCommandHandler implements Command.Handler<R
         try {
             fileFunctions.deleteFile(resource.getResourceUrl());
         } catch (IOException e) {
-            throw new BadRequestException("Unable to delete file. File not found!");
+            throw new BadRequestException(e.getMessage());
         }
         lesson.removeResource(resource.getResourceId());
         courseRepository.save(course);

@@ -10,6 +10,7 @@ import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -19,16 +20,18 @@ public class CreateCourseTest {
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
     private final UserRepository userRepository = new InMemoryUserRepository();
 
+    private User user;
+
+    @Before
+    public void setUp() {
+        user = new User();
+        userRepository.save(user);
+    }
+
     @Test
     public void shouldCreateCourse() {
-        var user = new User();
-        userRepository.save(user);
-        var createCourseCommand = new CreateCourseCommand(
-                "course name",
-                "course description",
-                user.getUserId(),
-                new Price(BigDecimal.valueOf(1000), "FCFA"));
-        var createCourseCommandHandler = new CreateCourseCommandHandler(courseRepository, userRepository);
+        var createCourseCommand = createCommand();
+        var createCourseCommandHandler = createHandler();
 
         var result = createCourseCommandHandler.handle(createCourseCommand);
 
@@ -41,14 +44,8 @@ public class CreateCourseTest {
 
     @Test
     public void createCourseIfCourseAlreadyExists_shouldThrowException() {
-        var user = new User();
-        userRepository.save(user);
-        var createCourseCommand = new CreateCourseCommand(
-                "course name",
-                "course description",
-                user.getUserId(),
-                new Price(BigDecimal.valueOf(1000), "FCFA"));
-        var createCourseCommandHandler = new CreateCourseCommandHandler(courseRepository, userRepository);
+        var createCourseCommand = createCommand();
+        var createCourseCommandHandler = createHandler();
 
         createCourseCommandHandler.handle(createCourseCommand);
 
@@ -57,5 +54,17 @@ public class CreateCourseTest {
                 () -> createCourseCommandHandler.handle(createCourseCommand)
         );
         Assert.assertEquals("Course already exists", throwValue.getMessage());
+    }
+
+    private CreateCourseCommand createCommand() {
+        return new CreateCourseCommand(
+                "course name",
+                "course description",
+                user.getUserId(),
+                new Price(BigDecimal.valueOf(1000), "FCFA"));
+    }
+
+    private CreateCourseCommandHandler createHandler() {
+        return new CreateCourseCommandHandler(courseRepository, userRepository);
     }
 }

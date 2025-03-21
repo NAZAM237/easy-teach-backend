@@ -41,4 +41,14 @@ public class GetAllCoursesTest {
         Assert.assertFalse(courses.isEmpty());
         Assert.assertEquals(2, courses.size());
     }
+
+    @Test
+    public void getAllCoursesShouldBeEmpty() {
+        var getAllCoursesCommand = new GetAllCoursesCommand();
+        var getAllCourseCommandHandler = new GetAllCoursesCommandHandler(courseRepository);
+
+        var courses = getAllCourseCommandHandler.handle(getAllCoursesCommand);
+
+        Assert.assertTrue(courses.isEmpty());
+    }
 }

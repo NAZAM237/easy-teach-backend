@@ -14,6 +14,7 @@ import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -21,20 +22,28 @@ import java.math.BigDecimal;
 public class AddLessonToModuleTests {
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
+    private Course course;
+    private Module module;
+    private InputLesson inputLesson;
 
-    @Test
-    public void addLessonToModuleTest() {
-        var course = new Course(
+    @Before
+    public void setUp() {
+        inputLesson = new InputLesson("title", "IMAGES", "videoUrl", "textContent", 1);
+
+        course = new Course(
                 "courseTitle",
                 "courseDescription",
                 new Teacher(),
                 new Price(BigDecimal.ZERO, "FCFA")
         );
-        var module = new Module("Introduction à JAVA", "Cours complet", 1);
+        module = new Module("Introduction à JAVA", "Cours complet", 1);
         course.addModule(module);
+    }
+
+    @Test
+    public void addLessonToModuleTest() {
         courseRepository.save(course);
 
-        var inputLesson = new InputLesson("title", "IMAGES", "videoUrl", "textContent", 1);
         var addLessonToModuleCommand = new AddLessonToModuleCommand(
                 course.getCourseId(),
                 module.getModuleId(),
@@ -48,15 +57,6 @@ public class AddLessonToModuleTests {
 
     @Test
     public void addLessonToNotExistModuleTest() {
-        var course = new Course(
-                "courseTitle",
-                "courseDescription",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
-        var module = new Module("Introduction à JAVA", "Cours complet", 1);
-        course.addModule(module);
-        var inputLesson = new InputLesson("title", "IMAGES", "videoUrl", "textContent", 1);
         var addLessonToModuleCommand = new AddLessonToModuleCommand(
                 course.getCourseId(),
                 "Garbage",
@@ -72,18 +72,10 @@ public class AddLessonToModuleTests {
 
     @Test
     public void addLessonToModuleWhenPositionAlreaydInUseTest_shouldThrowException() {
-        var course = new Course(
-                "courseTitle",
-                "courseDescription",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
-        var module = new Module("Introduction à JAVA", "Cours complet", 1);
         var lesson = new Lesson("title", ResourceType.IMAGES, "videoUrl", "textContent", 1);
-        course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson);
         courseRepository.save(course);
-        var inputLesson = new InputLesson("title", "IMAGES", "videoUrl", "textContent", 1);
+
         var addLessonToModuleCommand = new AddLessonToModuleCommand(
                 course.getCourseId(),
                 module.getModuleId(),

@@ -11,6 +11,7 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -18,22 +19,27 @@ import java.math.BigDecimal;
 public class RemoveModuleFromCourseTest {
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
+    private Course course;
+    private Module module;
+
+    @Before
+    public void setUp() {
+        course = new Course(
+            "Course title",
+            "Course description",
+            new Teacher(),
+            new Price(BigDecimal.ZERO, "FCFA")
+        );
+        module = new Module(
+            "title",
+            "description",
+            1);
+        course.addModule(module);
+        courseRepository.save(course);
+    }
 
     @Test
     public void shouldRemoveModuleFromCourseE2ETest() {
-        var course = new Course(
-                "Course title",
-                "Course description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
-        var module = new Module(
-                "title",
-                "description",
-                1);
-        course.addModule(module);
-        courseRepository.save(course);
-
         var removeModuleFromCourseCommand = new RemoveModuleFromCourseCommand(
                 course.getCourseId(), module.getModuleId());
         var removeModuleFromCourseCommandHandler = new RemoveModuleFromCourseCommandHandler(courseRepository);
@@ -49,20 +55,8 @@ public class RemoveModuleFromCourseTest {
 
     @Test
     public void removeModuleFromNotExistsCourseTest_shouldThrowException() {
-        var course = new Course(
-                "Course title",
-                "Course description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
-        var module = new Module(
-                "title",
-                "description",
-                1);
-        course.addModule(module);
-
         var removeModuleFromCourseCommand = new RemoveModuleFromCourseCommand(
-                course.getCourseId(), module.getModuleId());
+                "Garbage", module.getModuleId());
         var removeModuleFromCourseCommandHandler = new RemoveModuleFromCourseCommandHandler(courseRepository);
 
         Assert.assertThrows(
@@ -74,20 +68,8 @@ public class RemoveModuleFromCourseTest {
 
     @Test
     public void removeNotLinkedModuleToCourseTest_shouldThrowException() {
-        var course = new Course(
-                "Course title",
-                "Course description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
-        var module = new Module(
-                "title",
-                "description",
-                1);
-        courseRepository.save(course);
-
         var removeModuleFromCourseCommand = new RemoveModuleFromCourseCommand(
-                course.getCourseId(), module.getModuleId());
+                course.getCourseId(), "Garbage");
         var removeModuleFromCourseCommandHandler = new RemoveModuleFromCourseCommandHandler(courseRepository);
 
         Assert.assertThrows(

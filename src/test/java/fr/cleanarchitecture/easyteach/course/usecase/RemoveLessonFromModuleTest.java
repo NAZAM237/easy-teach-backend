@@ -43,7 +43,7 @@ public class RemoveLessonFromModuleTest {
     public void removeLessonFromModuleTest() {
         var removeLessonFromModuleCommand = new RemoveLessonFromModuleCommand(
                 course.getCourseId(), module.getModuleId(), lesson.getLessonId());
-        var removeLessonFromModuleCommandHandler = new RemoveLessonFromModuleCommandHandler(courseRepository);
+        var removeLessonFromModuleCommandHandler = createHandler();
 
         removeLessonFromModuleCommandHandler.handle(removeLessonFromModuleCommand);
 
@@ -53,7 +53,7 @@ public class RemoveLessonFromModuleTest {
     @Test
     public void removeNotExistLessonFromModuleTest() {
         var removeLessonFromModuleCommand = new RemoveLessonFromModuleCommand(course.getCourseId(), module.getModuleId(), "FakeLessonId");
-        var removeLessonFromModuleCommandHandler = new RemoveLessonFromModuleCommandHandler(courseRepository);
+        var removeLessonFromModuleCommandHandler = createHandler();
 
         Assert.assertThrows(
                 "Lesson not found",
@@ -61,4 +61,8 @@ public class RemoveLessonFromModuleTest {
                 () -> removeLessonFromModuleCommandHandler.handle(removeLessonFromModuleCommand)
         );
     }
+
+    private RemoveLessonFromModuleCommandHandler createHandler() {
+        return new RemoveLessonFromModuleCommandHandler(courseRepository);
+    };
 }

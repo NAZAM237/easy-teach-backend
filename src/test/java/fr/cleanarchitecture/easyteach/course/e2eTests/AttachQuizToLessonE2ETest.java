@@ -33,7 +33,7 @@ public class AttachQuizToLessonE2ETest extends EasyTeachIntegrationTests {
 
     private Course course;
     private Lesson lesson;
-    private fr.cleanarchitecture.easyteach.course.domain.model.Module module;
+    private Module module;
     private QuestionDto question1;
     private QuestionDto question2;
     private QuestionDto question3;

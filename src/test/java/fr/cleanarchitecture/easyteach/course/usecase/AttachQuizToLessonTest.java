@@ -26,6 +26,8 @@ public class AttachQuizToLessonTest {
     private Course course;
     private Lesson lesson;
     private Module module;
+    private Quiz quiz;
+    private IdsCourse idsCourse;
     private Question question1;
     private Question question2;
     private Question question3;
@@ -62,18 +64,18 @@ public class AttachQuizToLessonTest {
                 QuestionType.TEXT,
                 List.of(new Answer("Explication Encapsulation", true))
         );
-    }
 
-    @Test
-    public void attachQuizToLessonTest() {
-        var idsCourse = new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId());
-        var quiz = new Quiz(
+        idsCourse = new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId());
+        quiz = new Quiz(
                 "Quiz sur le POO",
                 "Ce quiz teste vos connaissances de base sur la POO",
                 Set.of(question1, question2, question3),
                 70
         );
+    }
 
+    @Test
+    public void attachQuizToLessonTest() {
         var attachQuizToLessonCommand = new AttachQuizToLessonCommand(idsCourse, quiz);
         var attachQuizToLessonCommandHandler = new AttachQuizToLessonCommandHandler(courseRepository);
 
@@ -86,14 +88,6 @@ public class AttachQuizToLessonTest {
 
     @Test
     public void attachQuizToLessonWithAlreadyQuizTest_shouldThrowException() {
-        var idsCourse = new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId());
-        var quiz = new Quiz(
-                "Quiz sur le POO",
-                "Ce quiz teste vos connaissances de base sur la POO",
-                Set.of(question1, question2, question3),
-                70
-        );
-
         var attachQuizToLessonCommand = new AttachQuizToLessonCommand(idsCourse, quiz);
         var attachQuizToLessonCommandHandler = new AttachQuizToLessonCommandHandler(courseRepository);
 

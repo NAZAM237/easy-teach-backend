@@ -3,10 +3,8 @@ package fr.cleanarchitecture.easyteach.course.e2eTests;
 import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
-import fr.cleanarchitecture.easyteach.course.domain.model.Course;
-import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
-import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
+import fr.cleanarchitecture.easyteach.course.domain.model.*;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,6 +16,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,12 +49,7 @@ public class AddResourceToLessonE2ETest extends EasyTeachIntegrationTests {
 
     @Test
     public void shouldAddResourceToLessonTest() throws Exception {
-        MockMultipartFile pdfFile = new MockMultipartFile(
-                "file",
-                "test.pdf",
-                "application/pdf",
-                "PDF content".getBytes()
-        );
+        MockMultipartFile pdfFile = createFile();
 
         mockMvc.perform(multipart(
                     HttpMethod.POST,
@@ -66,18 +60,7 @@ public class AddResourceToLessonE2ETest extends EasyTeachIntegrationTests {
                 .andExpect(status().isOk());
 
         var course = courseRepository.findByCourseId(this.course.getCourseId()).orElseThrow();
-        var resources = course.getModules()
-                .stream()
-                .filter(module1 -> module1.getModuleId().equals(module.getModuleId()))
-                .findFirst()
-                .orElseThrow()
-                .getLessons()
-                .stream()
-                .filter(lesson1 -> lesson1.getLessonId().equals(lesson.getLessonId()))
-                .findFirst()
-                .orElseThrow()
-                .getResources();
-        var newResource = resources.get(0);
+        var newResource = getResources(course).get(0);
         Assert.assertEquals(
                 UPLOAD_DIR + "/documents/" + newResource.getResourceName(),
                 newResource.getResourceUrl());
@@ -90,5 +73,30 @@ public class AddResourceToLessonE2ETest extends EasyTeachIntegrationTests {
                         "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/resources",
                         course.getCourseId(), module.getModuleId(), lesson.getLessonId()))
                 .andExpect(status().isBadRequest());
+    }
+
+
+
+    private MockMultipartFile createFile() {
+        return new MockMultipartFile(
+                "file",
+                "test.pdf",
+                "application/pdf",
+                "PDF content".getBytes()
+        );
+    }
+
+    private List<Resource> getResources(Course course) {
+        return course.getModules()
+                .stream()
+                .filter(module1 -> module1.getModuleId().equals(module.getModuleId()))
+                .findFirst()
+                .orElseThrow()
+                .getLessons()
+                .stream()
+                .filter(lesson1 -> lesson1.getLessonId().equals(lesson.getLessonId()))
+                .findFirst()
+                .orElseThrow()
+                .getResources();
     }
 }

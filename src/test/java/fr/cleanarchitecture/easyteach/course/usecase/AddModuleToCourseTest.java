@@ -1,8 +1,5 @@
 package fr.cleanarchitecture.easyteach.course.usecase;
 
-import fr.cleanarchitecture.easyteach.authentication.application.ports.UserRepository;
-import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
-import fr.cleanarchitecture.easyteach.authentication.infrastructure.persistence.inmemory.InMemoryUserRepository;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AddModuleToCourseCommand;
@@ -12,6 +9,7 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -19,18 +17,20 @@ import java.math.BigDecimal;
 public class AddModuleToCourseTest {
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
-    private final UserRepository userRepository = new InMemoryUserRepository();
+    private Course course;
 
-    @Test
-    public void addModuleToCourseTest() {
-        var user = new User();
-        userRepository.save(user);
-        var course = new Course(
+    @Before
+    public void setUp() {
+        course = new Course(
                 "Course title",
                 "Course description",
                 new Teacher(),
                 new Price(BigDecimal.ZERO, "FCFA")
         );
+    }
+
+    @Test
+    public void addModuleToCourseTest() {
         courseRepository.save(course);
 
         var addModuleToCourseCommand = new AddModuleToCourseCommand(
@@ -47,14 +47,6 @@ public class AddModuleToCourseTest {
 
     @Test
     public void addModuleToNotExistsCourseTest_shouldThrowException() {
-        var user = new User();
-        userRepository.save(user);
-        var course = new Course(
-                "Course title",
-                "Course description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
         var addModuleToCourseCommand = new AddModuleToCourseCommand(
                 course.getCourseId(), "courseTitle", "courseDescription", 1);
         var addModuleToCourseCommandHandler = new AddModuleToCourseCommandHandler(courseRepository);

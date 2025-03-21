@@ -7,6 +7,7 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.AddModuleToCourseDto;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,22 +23,27 @@ public class AddModuleToCourseE2ETest extends EasyTeachIntegrationTests {
 
     @Autowired
     private CourseRepository courseRepository;
+    private Course course;
+    private AddModuleToCourseDto dto;
 
-    @Test
-    public void addModuleToCourseE2ETest() throws Exception {
-        var course = new Course(
-                "Title",
-                "Description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
+    @Before
+    public void setUp() {
+        course = new Course(
+            "Title",
+            "Description",
+            new Teacher(),
+            new Price(BigDecimal.ZERO, "FCFA")
         );
         courseRepository.save(course);
 
-        var dto = new AddModuleToCourseDto(
-                "module title",
-                "Module description",
-                1);
+        dto = new AddModuleToCourseDto(
+            "module title",
+            "Module description",
+            1);
+    }
 
+    @Test
+    public void addModuleToCourseE2ETest() throws Exception {
         mockMvc
                 .perform(
                     MockMvcRequestBuilders.patch("/courses/" +course.getCourseId()+ "/add-module-to-course")
@@ -53,21 +59,9 @@ public class AddModuleToCourseE2ETest extends EasyTeachIntegrationTests {
 
     @Test
     public void addModuleToNotExistCourseE2ETest_shouldThrowException() throws Exception {
-        var course = new Course(
-                "Title",
-                "Description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA")
-        );
-
-        var dto = new AddModuleToCourseDto(
-                "module title",
-                "Module description",
-                1);
-
         mockMvc
                 .perform(
-                        MockMvcRequestBuilders.patch("/courses/" +course.getCourseId()+ "/add-module-to-course")
+                        MockMvcRequestBuilders.patch("/courses/Garbage/add-module-to-course")
                                 .content(objectMapper.writeValueAsBytes(dto))
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());

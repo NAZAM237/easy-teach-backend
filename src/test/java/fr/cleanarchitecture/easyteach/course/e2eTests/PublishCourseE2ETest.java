@@ -11,8 +11,7 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
-import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +29,18 @@ public class PublishCourseE2ETest extends EasyTeachIntegrationTests {
     @Autowired
     private UserRepository userRepository;
 
-    @Test
-    public void shouldPublishExistingCourseTest() throws Exception {
-        var user = new User();
+    private Course course;
+    private User user;
+
+    @Before
+    public void setUp() {
+        user = new User();
         userRepository.save(user);
-        var course = new Course(
-                "course title",
-                "course description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA"));
+        course = new Course(
+            "course title",
+            "course description",
+            new Teacher(),
+            new Price(BigDecimal.ZERO, "FCFA"));
         var module = new Module("moduleTitle", "moduleDescription",1);
         course.addModule(module);
         course.addLessonToModule(
@@ -47,37 +49,24 @@ public class PublishCourseE2ETest extends EasyTeachIntegrationTests {
         );
         courseRepository.save(course);
 
-        var result = mockMvc
-                .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId() + "/publish"))
-                        //.header("Authorization", createJwt()))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
+    }
 
-        var courseViewModel = objectMapper.readValue(
-                result.getResponse().getContentAsString(),
-                CourseViewModel.class);
-
-        var existingCourse = courseRepository.findByCourseId(courseViewModel.getCourse().getCourseId());
-
-        Assert.assertTrue(existingCourse.isPresent());
-        Assert.assertEquals(CourseStatus.PUBLISHED, courseViewModel.getCourse().getStatus());
+    @Test
+    public void shouldPublishExistingCourseTest() throws Exception {
+        mockMvc
+            .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId() + "/publish"))
+                    //.header("Authorization", createJwt()))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.course.status").value(CourseStatus.PUBLISHED.name()));
     }
 
     @Test
     public void publishUnExistingCourseTest_shouldThrowException() throws Exception {
-        var user = new User();
-        userRepository.save(user);
-        var course = new Course(
-                "course title",
-                "course description",
-                new Teacher(),
-                new Price(BigDecimal.ZERO, "FCFA"));
-
         mockMvc
-                .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId() + "/publish")
-                        //.header("Authorization", createJwt())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andReturn();
+            .perform(MockMvcRequestBuilders.patch("/courses/Garbage/publish")
+                    //.header("Authorization", createJwt())
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isNotFound())
+            .andReturn();
     }
 }
