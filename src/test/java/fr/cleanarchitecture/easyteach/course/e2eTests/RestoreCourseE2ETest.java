@@ -9,8 +9,6 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,27 +49,17 @@ public class RestoreCourseE2ETest extends EasyTeachIntegrationTests {
         course.archive();
         courseRepository.save(course);
 
-        var result = mockMvc
-                .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId() + "/restore"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
-
-        var courseViewModel = objectMapper.readValue(
-                result.getResponse().getContentAsString(),
-                CourseViewModel.class);
-
-        var restoredCourse = courseRepository.findByCourseId(courseViewModel.getCourse().getCourseId());
-
-        Assert.assertTrue(restoredCourse.isPresent());
-        Assert.assertEquals(CourseStatus.DRAFT, courseViewModel.getCourse().getStatus());
+        mockMvc
+            .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId() + "/restore"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.status").value(CourseStatus.DRAFT.name()));
     }
 
     @Test
     public void archiveUnExistingCourseTest_shouldThrowException() throws Exception {
         mockMvc
-                .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId() + "/restore")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andReturn();
+            .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId() + "/restore")
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }

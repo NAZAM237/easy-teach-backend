@@ -2,13 +2,13 @@ package fr.cleanarchitecture.easyteach.course.application.usecases.handlers;
 
 import an.awesome.pipelinr.Command;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
+import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.CreateCourseCommand;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 
-public class CreateCourseCommandHandler implements Command.Handler<CreateCourseCommand, CourseViewModel> {
+public class CreateCourseCommandHandler implements Command.Handler<CreateCourseCommand, BaseViewModel<Course>> {
 
     private final CourseRepository courseRepository;
 
@@ -17,7 +17,7 @@ public class CreateCourseCommandHandler implements Command.Handler<CreateCourseC
     }
 
     @Override
-    public CourseViewModel handle(CreateCourseCommand createCourseCommand) {
+    public BaseViewModel<Course> handle(CreateCourseCommand createCourseCommand) {
         var existingCourse = this.courseRepository.findByTitle(createCourseCommand.getCourseTitle());
 
         if (existingCourse.isPresent()) {
@@ -33,9 +33,6 @@ public class CreateCourseCommandHandler implements Command.Handler<CreateCourseC
 
         this.courseRepository.save(course);
 
-        return new CourseViewModel(
-                "A new course was created successfully",
-                course
-        );
+        return new BaseViewModel<>(course);
     }
 }

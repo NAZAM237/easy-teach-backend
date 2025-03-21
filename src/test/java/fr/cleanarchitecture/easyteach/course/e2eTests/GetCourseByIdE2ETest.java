@@ -5,8 +5,6 @@ import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.GetCourseViewModel;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,17 +29,11 @@ public class GetCourseByIdE2ETest extends EasyTeachIntegrationTests {
                 new Price(BigDecimal.ZERO, "FCFA")
         );
         courseRepository.save(course);
-        var result = mockMvc
-                .perform(MockMvcRequestBuilders.get("/courses/" + course.getCourseId()))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
-
-        var getCourseViewModel = objectMapper.readValue(
-                result.getResponse().getContentAsString(),
-                GetCourseViewModel.class
-        );
-
-        Assert.assertEquals(course.getCourseId(), getCourseViewModel.getCourseId());
+        mockMvc
+            .perform(MockMvcRequestBuilders.get("/courses/" + course.getCourseId()))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.courseTitle").value(course.getCourseTitle()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.courseDescription").value(course.getCourseDescription()));
     }
 
     @Test

@@ -48,18 +48,15 @@ public class PublishCourseE2ETest extends EasyTeachIntegrationTests {
     public void shouldPublishExistingCourseTest() throws Exception {
         mockMvc
             .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId() + "/publish"))
-                    //.header("Authorization", createJwt()))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.course.status").value(CourseStatus.PUBLISHED.name()));
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.status").value(CourseStatus.PUBLISHED.name()));
     }
 
     @Test
     public void publishUnExistingCourseTest_shouldThrowException() throws Exception {
         mockMvc
             .perform(MockMvcRequestBuilders.patch("/courses/Garbage/publish")
-                    //.header("Authorization", createJwt())
                     .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isNotFound())
-            .andReturn();
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }

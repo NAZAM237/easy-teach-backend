@@ -1,11 +1,12 @@
 package fr.cleanarchitecture.easyteach.course.application.usecases.commands;
 
 import an.awesome.pipelinr.Command;
+import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.FileUploadResponse;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.IdsCourse;
 import org.springframework.web.multipart.MultipartFile;
 
-public class AddContentFileToLessonCommand implements Command<FileUploadResponse> {
+public class AddContentFileToLessonCommand implements Command<BaseViewModel<FileUploadResponse>> {
     private final IdsCourse idsCourse;
     private final MultipartFile file;
     private final String lessonContentType;

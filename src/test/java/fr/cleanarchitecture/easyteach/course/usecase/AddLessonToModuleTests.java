@@ -52,7 +52,9 @@ public class AddLessonToModuleTests {
 
         var result = addLessonToModuleCommandHandler.handle(addLessonToModuleCommand);
 
-        Assert.assertEquals(1, result.getCourse().getModules().size());
+        Assert.assertEquals(inputLesson.getContentType(), result.getData().getContentType());
+        Assert.assertEquals(inputLesson.getTitle(), result.getData().getLessonTitle());
+        Assert.assertEquals(inputLesson.getOrder(), result.getData().getOrder());
     }
 
     @Test

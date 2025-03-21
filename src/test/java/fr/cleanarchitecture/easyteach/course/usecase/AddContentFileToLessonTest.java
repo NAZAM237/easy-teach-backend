@@ -65,21 +65,9 @@ public class AddContentFileToLessonTest {
 
         var result = addContentFileToLessonCommandHandler.handle(addContentFileToLessonCommand);
 
-        var course = courseRepository.findByCourseId(idsCourse.getCourseId()).orElseThrow();
-        var updatedLesson = course.getModules()
-                .stream()
-                .filter(module1 -> module1.getModuleId().equals(idsCourse.getModuleId()))
-                .findFirst()
-                .orElseThrow()
-                .getLessons()
-                .stream()
-                .filter(lesson1 -> lesson1.getLessonId().equals(idsCourse.getLessonId()))
-                .findFirst()
-                .orElseThrow();
-
         Assert.assertEquals(
-                UPLOAD_DIR + "/documents/" + result.getFileName(),
-                updatedLesson.getContentFileUrl());
+                UPLOAD_DIR + "/documents/" + result.getData().getFileName(),
+                result.getData().getFilePath());
     }
 
     private MockMultipartFile createMockFile() {

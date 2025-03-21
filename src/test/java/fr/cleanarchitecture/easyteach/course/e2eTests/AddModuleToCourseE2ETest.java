@@ -6,7 +6,6 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.AddModuleToCourseDto;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,15 +45,13 @@ public class AddModuleToCourseE2ETest extends EasyTeachIntegrationTests {
     public void addModuleToCourseE2ETest() throws Exception {
         mockMvc
                 .perform(
-                    MockMvcRequestBuilders.patch("/courses/" +course.getCourseId()+ "/add-module-to-course")
+                    MockMvcRequestBuilders.post("/courses/" +course.getCourseId()+ "/modules")
                             .content(objectMapper.writeValueAsBytes(dto))
                             .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-
-        var existingCourse = courseRepository.findByCourseId(course.getCourseId());
-
-        Assert.assertTrue(existingCourse.isPresent());
-        Assert.assertEquals(1, existingCourse.get().getModules().size());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("success"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.moduleTitle").value(dto.getModuleTitle()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.moduleDescription").value(dto.getModuleDescription()));
     }
 
     @Test

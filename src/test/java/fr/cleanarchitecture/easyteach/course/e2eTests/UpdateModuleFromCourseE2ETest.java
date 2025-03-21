@@ -6,9 +6,7 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.UpdateModuleDto;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,28 +38,16 @@ public class UpdateModuleFromCourseE2ETest extends EasyTeachIntegrationTests {
 
         var updateModuleDto = new UpdateModuleDto("title", "description");
 
-        var result = mockMvc
-                .perform(MockMvcRequestBuilders.patch(
-                        "/courses/{courseId}/modules/{moduleId}",
-                                course.getCourseId(),
-                                module.getModuleId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(updateModuleDto)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
-
-        var courseViewModel = objectMapper.readValue(
-                result.getResponse().getContentAsString(),
-                CourseViewModel.class);
-
-        var updatedCourse = courseRepository.findByCourseId(courseViewModel.getCourse().getCourseId()).orElseThrow();
-        var updatedModule = updatedCourse.getModules().stream()
-                .filter(m -> m.getModuleId().equals(module.getModuleId()))
-                .findFirst()
-                .orElseThrow();
-
-        Assert.assertEquals("title", updatedModule.getModuleTitle());
-        Assert.assertEquals("description", updatedModule.getModuleDescription());
+        mockMvc
+            .perform(MockMvcRequestBuilders.patch(
+                    "/courses/{courseId}/modules/{moduleId}",
+                            course.getCourseId(),
+                            module.getModuleId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsBytes(updateModuleDto)))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.moduleTitle").value(updateModuleDto.getModuleTitle()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.moduleDescription").value(updateModuleDto.getModuleDescription()));
     }
 
     @Test

@@ -36,10 +36,10 @@ public class GetAllCoursesTest {
         var getAllCoursesCommand = new GetAllCoursesCommand();
         var getAllCourseCommandHandler = new GetAllCoursesCommandHandler(courseRepository);
 
-        var courses = getAllCourseCommandHandler.handle(getAllCoursesCommand);
+        var result = getAllCourseCommandHandler.handle(getAllCoursesCommand);
 
-        Assert.assertFalse(courses.isEmpty());
-        Assert.assertEquals(2, courses.size());
+        Assert.assertFalse(result.getData().isEmpty());
+        Assert.assertEquals(2, result.getData().size());
     }
 
     @Test
@@ -47,8 +47,8 @@ public class GetAllCoursesTest {
         var getAllCoursesCommand = new GetAllCoursesCommand();
         var getAllCourseCommandHandler = new GetAllCoursesCommandHandler(courseRepository);
 
-        var courses = getAllCourseCommandHandler.handle(getAllCoursesCommand);
+        var result = getAllCourseCommandHandler.handle(getAllCoursesCommand);
 
-        Assert.assertTrue(courses.isEmpty());
+        Assert.assertTrue(result.getData().isEmpty());
     }
 }

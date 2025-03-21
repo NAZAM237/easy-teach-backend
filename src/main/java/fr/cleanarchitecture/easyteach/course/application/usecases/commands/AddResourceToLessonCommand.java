@@ -1,10 +1,12 @@
 package fr.cleanarchitecture.easyteach.course.application.usecases.commands;
 
 import an.awesome.pipelinr.Command;
+import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
+import fr.cleanarchitecture.easyteach.course.domain.model.Resource;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.IdsCourse;
 import org.springframework.web.multipart.MultipartFile;
 
-public class AddResourceToLessonCommand implements Command<Void> {
+public class AddResourceToLessonCommand implements Command<BaseViewModel<Resource>> {
     private IdsCourse idsCourse;
     private MultipartFile file;
     private String resourceType;

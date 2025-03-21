@@ -5,9 +5,7 @@ import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.UpdateCourseDto;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,23 +37,13 @@ public class UpdateCourseE2ETest extends EasyTeachIntegrationTests {
                 BigDecimal.valueOf(1000),
                 "FCFA");
 
-        var result = mockMvc
-                .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId())
-                        //.header("Authorization", createJwt())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
-
-        var courseViewModel = objectMapper.readValue(
-                result.getResponse().getContentAsString(),
-                CourseViewModel.class);
-
-        var existingCourse = courseRepository.findByCourseId(courseViewModel.getCourse().getCourseId());
-
-        Assert.assertTrue(existingCourse.isPresent());
-        Assert.assertEquals(dto.getCourseTitle(), existingCourse.get().getCourseTitle());
-        Assert.assertEquals(dto.getCourseDescription(), existingCourse.get().getCourseDescription());
+        mockMvc
+            .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(dto)))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.courseTitle").value(dto.getCourseTitle()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.courseDescription").value(dto.getCourseDescription()));
     }
 
     @Test

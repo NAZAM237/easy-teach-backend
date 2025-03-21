@@ -2,11 +2,12 @@ package fr.cleanarchitecture.easyteach.course.application.usecases.handlers;
 
 import an.awesome.pipelinr.Command;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
+import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.UpdateCourseCommand;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
+import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 
-public class UpdateCourseCommandHandler implements Command.Handler<UpdateCourseCommand, CourseViewModel> {
+public class UpdateCourseCommandHandler implements Command.Handler<UpdateCourseCommand, BaseViewModel<Course>> {
 
     private final CourseRepository courseRepository;
 
@@ -15,7 +16,7 @@ public class UpdateCourseCommandHandler implements Command.Handler<UpdateCourseC
     }
 
     @Override
-    public CourseViewModel handle(UpdateCourseCommand updateCourseCommand) {
+    public BaseViewModel<Course> handle(UpdateCourseCommand updateCourseCommand) {
         var existingCourse = courseRepository.findByCourseId(updateCourseCommand.getCourseId())
                 .orElseThrow(() -> new NotFoundException("Course not found"));
 
@@ -26,9 +27,6 @@ public class UpdateCourseCommandHandler implements Command.Handler<UpdateCourseC
         );
 
         this.courseRepository.save(existingCourse);
-        return new CourseViewModel(
-                "Your course was successfully updated",
-                existingCourse
-        );
+        return new BaseViewModel<>(existingCourse);
     }
 }

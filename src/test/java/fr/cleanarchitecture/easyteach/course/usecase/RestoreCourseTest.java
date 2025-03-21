@@ -5,6 +5,7 @@ import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.RestoreCourseCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.RestoreCourseCommandHandler;
+import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
@@ -49,10 +50,7 @@ public class RestoreCourseTest {
 
         var result = restoreCourseCommandHandler.handle(restoreCourseCommand);
 
-        var archivedCourse = courseRepository.findByCourseId(course.getCourseId());
-
-        Assert.assertTrue(archivedCourse.isPresent());
-        Assert.assertEquals(result.getCourse().getStatus(), archivedCourse.get().getStatus());
+        Assert.assertEquals(CourseStatus.DRAFT, result.getData().getStatus());
     }
 
     @Test

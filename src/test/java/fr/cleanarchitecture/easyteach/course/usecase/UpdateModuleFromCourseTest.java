@@ -44,17 +44,10 @@ public class UpdateModuleFromCourseTest {
                 "Desc");
         var updateModuleCommandHandler = new UpdateModuleFromCourseCommandHandler(courseRepository);
 
-        updateModuleCommandHandler.handle(updateModuleCommand);
+        var result = updateModuleCommandHandler.handle(updateModuleCommand);
 
-        var updatedCourse = courseRepository.findByCourseId(course.getCourseId()).orElseThrow();
-        var updatedModule = updatedCourse.getModules()
-                .stream()
-                .filter(module1 -> module1.getModuleId().equals(module.getModuleId()))
-                .findFirst()
-                .orElseThrow();
-
-        Assert.assertEquals(updateModuleCommand.getModuleTitle(), updatedModule.getModuleTitle());
-        Assert.assertEquals(updateModuleCommand.getModuleDescription(), updatedModule.getModuleDescription());
+        Assert.assertEquals(updateModuleCommand.getModuleTitle(), result.getData().getModuleTitle());
+        Assert.assertEquals(updateModuleCommand.getModuleDescription(), result.getData().getModuleDescription());
     }
 
     @Test

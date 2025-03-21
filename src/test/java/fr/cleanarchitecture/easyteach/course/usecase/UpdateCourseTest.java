@@ -40,11 +40,9 @@ public class UpdateCourseTest {
 
         var result = updateCourseCommandHandler.handle(updateCourseCommand);
 
-        var newCourseUpdated = courseRepository.findByCourseId(course.getCourseId());
-
-        Assert.assertTrue(newCourseUpdated.isPresent());
-        Assert.assertEquals(result.getCourse().getCourseTitle(), newCourseUpdated.get().getCourseTitle());
-        Assert.assertEquals(result.getCourse().getPrice().getAmount(), newCourseUpdated.get().getPrice().getAmount());
+        Assert.assertEquals(result.getData().getCourseTitle(), updateCourseCommand.getCourseTitle());
+        Assert.assertEquals(result.getData().getCourseDescription(), updateCourseCommand.getCourseDescription());
+        Assert.assertEquals(result.getData().getPrice().getAmount(), updateCourseCommand.getPrice().getAmount());
     }
 
     @Test

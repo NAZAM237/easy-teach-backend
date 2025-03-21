@@ -5,7 +5,6 @@ import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +14,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 public class GetAllCourseE2ETest extends EasyTeachIntegrationTests {
@@ -45,16 +43,12 @@ public class GetAllCourseE2ETest extends EasyTeachIntegrationTests {
         courseRepository.save(course1);
         courseRepository.save(course2);
 
-        var result = mockMvc.perform(MockMvcRequestBuilders.get("/courses/"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
-
-        var courses = objectMapper.readValue(
-                result.getResponse().getContentAsString(),
-                List.class
-        );
-
-        Assert.assertFalse(courses.isEmpty());
-        Assert.assertEquals(2, courses.size());
+        mockMvc.perform(MockMvcRequestBuilders.get("/courses"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("success"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].courseTitle").value(course2.getCourseTitle()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].courseDescription").value(course2.getCourseDescription()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].courseTitle").value(course1.getCourseTitle()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].courseDescription").value(course1.getCourseDescription()));
     }
 }

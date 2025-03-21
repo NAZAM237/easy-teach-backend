@@ -6,9 +6,7 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.AddLessonToModuleDto;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,27 +35,18 @@ public class AddLessonToModuleE2ETest extends EasyTeachIntegrationTests {
         course.addModule(module);
         courseRepository.save(course);
 
-        var dto = new AddLessonToModuleDto("title", "IMAGES", "videoUrl", "textContent", 1);
+        var dto = new AddLessonToModuleDto("title", "IMAGES", "contentFileUrl", "textContent", 1);
 
-        var result = mockMvc
-                .perform(MockMvcRequestBuilders.patch("/courses/{courseId}/modules/{moduleId}/add-lesson-to-module",
-                                course.getCourseId(), module.getModuleId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(dto)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
-
-        var courseViewModel = objectMapper.readValue(
-                result.getResponse().getContentAsString(),
-                CourseViewModel.class
-        );
-
-        var updatedCourse = courseRepository.findByCourseId(courseViewModel.getCourse().getCourseId()).orElseThrow();
-        var updatedModule = updatedCourse.getModules().stream()
-                .filter(module1 -> module1.getModuleId().equals(module.getModuleId()))
-                .findFirst()
-                .orElseThrow();
-        Assert.assertNotNull(updatedModule);
-        Assert.assertEquals(1, updatedModule.getLessons().size());
+        mockMvc
+            .perform(MockMvcRequestBuilders.post("/courses/{courseId}/modules/{moduleId}/lessons",
+                            course.getCourseId(), module.getModuleId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsBytes(dto)))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("success"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.lessonTitle").value("title"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.contentType").value("IMAGES"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.contentFileUrl").value("contentFileUrl"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.textContent").value("textContent"));
     }
 }

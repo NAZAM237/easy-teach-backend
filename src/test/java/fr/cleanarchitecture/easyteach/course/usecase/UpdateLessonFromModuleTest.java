@@ -54,21 +54,11 @@ public class UpdateLessonFromModuleTest {
                 course.getCourseId(), module.getModuleId(), lesson.getLessonId(), inputLesson
         );
         var updateLessonFromModuleCommandHandler = new UpdateLessonFromModuleCommandHandler(courseRepository);
-        var courseView = updateLessonFromModuleCommandHandler.handle(updateLessonFromModuleCommand);
+        var lessonView = updateLessonFromModuleCommandHandler.handle(updateLessonFromModuleCommand);
 
-        var updatedModule = courseView.getCourse().getModules()
-                .stream()
-                .filter(module1 -> module1.getModuleId().equals(module.getModuleId()))
-                .findFirst()
-                .orElseThrow();
-        var updatedLesson = updatedModule.getLessons()
-                .stream()
-                .filter(lesson1 -> lesson1.getLessonId().equals(lesson.getLessonId()))
-                .findFirst()
-                .orElseThrow();
-
-        Assert.assertEquals("lessonTitle2", updatedLesson.getLessonTitle());
-        Assert.assertEquals(ResourceType.DOCUMENTS, updatedLesson.getContentType());
+        Assert.assertEquals(inputLesson.getTitle(), lessonView.getData().getLessonTitle());
+        Assert.assertEquals(inputLesson.getContentFileUrl(), lessonView.getData().getContentFileUrl());
+        Assert.assertEquals(ResourceType.DOCUMENTS, lessonView.getData().getContentType());
     }
 
     @Test

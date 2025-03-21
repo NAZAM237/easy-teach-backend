@@ -2,12 +2,12 @@ package fr.cleanarchitecture.easyteach.course.application.usecases.handlers;
 
 import an.awesome.pipelinr.Command;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
+import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AddLessonToModuleCommand;
 import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 
-public class AddLessonToModuleCommandHandler implements Command.Handler<AddLessonToModuleCommand, CourseViewModel> {
+public class AddLessonToModuleCommandHandler implements Command.Handler<AddLessonToModuleCommand, BaseViewModel<Lesson>> {
 
     private final CourseRepository courseRepository;
 
@@ -16,7 +16,7 @@ public class AddLessonToModuleCommandHandler implements Command.Handler<AddLesso
     }
 
     @Override
-    public CourseViewModel handle(AddLessonToModuleCommand addLessonToModuleCommand) {
+    public BaseViewModel<Lesson> handle(AddLessonToModuleCommand addLessonToModuleCommand) {
         var course = courseRepository.findByCourseId(addLessonToModuleCommand.getCourseId())
                 .orElseThrow(() -> new NotFoundException("Course not found"));
         var lesson = new Lesson(
@@ -32,9 +32,6 @@ public class AddLessonToModuleCommandHandler implements Command.Handler<AddLesso
         );
         courseRepository.save(course);
 
-        return new CourseViewModel(
-                "New lesson added successfully in course",
-                course
-        );
+        return new BaseViewModel<>(lesson);
     }
 }

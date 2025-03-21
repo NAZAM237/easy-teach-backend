@@ -2,11 +2,12 @@ package fr.cleanarchitecture.easyteach.course.application.usecases.handlers;
 
 import an.awesome.pipelinr.Command;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
+import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.UpdateModuleFromCourseCommand;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
+import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 
-public class UpdateModuleFromCourseCommandHandler implements Command.Handler<UpdateModuleFromCourseCommand, CourseViewModel> {
+public class UpdateModuleFromCourseCommandHandler implements Command.Handler<UpdateModuleFromCourseCommand, BaseViewModel<Module>> {
 
     private CourseRepository courseRepository;
 
@@ -15,7 +16,7 @@ public class UpdateModuleFromCourseCommandHandler implements Command.Handler<Upd
     }
 
     @Override
-    public CourseViewModel handle(UpdateModuleFromCourseCommand updateModuleFromCourseCommand) {
+    public BaseViewModel<Module> handle(UpdateModuleFromCourseCommand updateModuleFromCourseCommand) {
         var course = courseRepository.findByCourseId(updateModuleFromCourseCommand.getCourseId())
                 .orElseThrow(() -> new NotFoundException("Course not found"));
         course.updateModuleData(
@@ -24,8 +25,10 @@ public class UpdateModuleFromCourseCommandHandler implements Command.Handler<Upd
                 updateModuleFromCourseCommand.getModuleDescription()
         );
         courseRepository.save(course);
-        return new CourseViewModel(
-                "Module " + updateModuleFromCourseCommand.getModuleId()+ "has been update successfully",
-                course);
+        var module = course.getModules()
+                .stream()
+                .filter(module1 -> module1.getModuleId().equals(updateModuleFromCourseCommand.getModuleId()))
+                .findFirst().orElseThrow();
+        return new BaseViewModel<>(module);
     }
 }

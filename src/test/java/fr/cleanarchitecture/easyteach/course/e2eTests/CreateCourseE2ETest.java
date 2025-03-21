@@ -40,8 +40,8 @@ public class CreateCourseE2ETest extends EasyTeachIntegrationTests {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
             .andExpect(MockMvcResultMatchers.status().isCreated())
-            .andExpect(jsonPath("$.message").value("A new course was created successfully"))
-            .andExpect(jsonPath("$.course.courseTitle").value(dto.getTitle()))
-            .andExpect(jsonPath("$.course.courseDescription").value(dto.getDescription()));
+            .andExpect(jsonPath("$.message").value("success"))
+            .andExpect(jsonPath("$.data.courseTitle").value(dto.getTitle()))
+            .andExpect(jsonPath("$.data.courseDescription").value(dto.getDescription()));
     }
 }

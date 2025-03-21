@@ -1,12 +1,13 @@
 package fr.cleanarchitecture.easyteach.course.application.usecases.commands;
 
 import an.awesome.pipelinr.Command;
+import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
+import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
 
 import java.util.List;
 
-public class ReorderLessonFromModuleCommand implements Command<CourseViewModel> {
+public class ReorderLessonFromModuleCommand implements Command<BaseViewModel<Course>> {
     private String courseId;
     private final String moduleId;
     private final List<Lesson> lessons;

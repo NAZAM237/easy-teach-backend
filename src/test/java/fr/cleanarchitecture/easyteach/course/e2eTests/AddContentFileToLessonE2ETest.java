@@ -62,9 +62,9 @@ public class AddContentFileToLessonE2ETest extends EasyTeachIntegrationTests {
                     .file(pdfFile)
                     .param("type", "DOCUMENTS"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.fileName").value("file.pdf"))
-            .andExpect(jsonPath("$.fileType").value("application/pdf"))
-            .andExpect(jsonPath("$.fileSize").value(11))
-            .andExpect(jsonPath("$.filePath").value(lesson.getContentFileUrl()));
+            .andExpect(jsonPath("$.data.fileName").value("file.pdf"))
+            .andExpect(jsonPath("$.data.fileType").value("application/pdf"))
+            .andExpect(jsonPath("$.data.fileSize").value(11))
+            .andExpect(jsonPath("$.data.filePath").value(lesson.getContentFileUrl()));
     }
 }

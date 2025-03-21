@@ -22,10 +22,10 @@ public class CreateCourseTest {
 
         var result = createCourseCommandHandler.handle(createCourseCommand);
 
-        var newCourseCreated = courseRepository.findByCourseId(result.getCourse().getCourseId());
+        var newCourseCreated = courseRepository.findByCourseId(result.getData().getCourseId());
 
         Assert.assertTrue(newCourseCreated.isPresent());
-        Assert.assertEquals(result.getCourse().getCourseId(), newCourseCreated.get().getCourseId());
+        Assert.assertEquals(result.getData().getCourseId(), newCourseCreated.get().getCourseId());
         Assert.assertEquals(CourseStatus.DRAFT, newCourseCreated.get().getStatus());
     }
 

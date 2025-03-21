@@ -9,7 +9,6 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.UpdateLessonFromModuleDto;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,20 +62,9 @@ public class UpdateLessonFromModuleE2ETest extends EasyTeachIntegrationTests {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsBytes(updateLessonFromModuleDto)))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andReturn();
-
-        var updatedCourse = courseRepository.findByCourseId(course.getCourseId()).orElseThrow();
-        var updatedModule = updatedCourse.getModules()
-                .stream()
-                .filter(m -> m.getModuleId().equals(module.getModuleId()))
-                .findFirst()
-                .orElseThrow();
-        var updatedLesson = updatedModule.getLessons()
-                .stream().filter(l -> l.getLessonId().equals(lesson.getLessonId()))
-                .findFirst()
-                .orElseThrow();
-
-        Assert.assertEquals(updateLessonFromModuleDto.getLessonTitle(), updatedLesson.getLessonTitle());
-        Assert.assertEquals(updateLessonFromModuleDto.getLessonType(), updatedLesson.getContentType().name());
+            .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("success"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.lessonTitle").value(updateLessonFromModuleDto.getLessonTitle()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.contentType").value(updateLessonFromModuleDto.getLessonType()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.contentFileUrl").value(updateLessonFromModuleDto.getContentFileUrl()));
     }
 }

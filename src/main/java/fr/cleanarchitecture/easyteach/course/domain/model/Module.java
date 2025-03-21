@@ -45,6 +45,18 @@ public class Module {
         return lessons;
     }
 
+    public void setModuleTitle(String moduleTitle) {
+        this.moduleTitle = moduleTitle;
+    }
+
+    public void setModuleDescription(String moduleDescription) {
+        this.moduleDescription = moduleDescription;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
     public void updateData(String moduleTitle, String moduleDescription) {
         this.moduleTitle = moduleTitle;
         this.moduleDescription = moduleDescription;

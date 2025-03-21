@@ -1,8 +1,10 @@
 package fr.cleanarchitecture.easyteach.course.application.usecases.commands;
 
 import an.awesome.pipelinr.Command;
+import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
+import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 
-public class AddModuleToCourseCommand implements Command<Void> {
+public class AddModuleToCourseCommand implements Command<BaseViewModel<Module>> {
     private String courseId;
     private String moduleTitle;
     private String moduleDescription;

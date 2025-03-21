@@ -1,14 +1,21 @@
 package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 
 import an.awesome.pipelinr.Pipeline;
+import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.*;
+import fr.cleanarchitecture.easyteach.course.domain.model.Course;
+import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
+import fr.cleanarchitecture.easyteach.course.domain.model.Resource;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.*;
+import fr.cleanarchitecture.easyteach.course.domain.viewmodel.FileUploadResponse;
+import fr.cleanarchitecture.easyteach.course.domain.viewmodel.IdsCourse;
+import fr.cleanarchitecture.easyteach.course.domain.viewmodel.ModuleFromCourseViewModel;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.*;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.mapper.MapQuizDtoToQuiz;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,14 +32,14 @@ public class CourseController {
         this.pipeline = pipeline;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<GetCourseViewModel>> getAllCourses() {
+    @GetMapping
+    public ResponseEntity<BaseViewModel<List<Course>>> getAllCourses() {
         var result = this.pipeline.send(new GetAllCoursesCommand());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/{courseId}")
-    public ResponseEntity<GetCourseViewModel> getCourseById(@PathVariable String courseId) {
+    public ResponseEntity<BaseViewModel<Course>> getCourseById(@PathVariable String courseId) {
         var result = this.pipeline.send(
                 new GetCourseByIdCommand(courseId)
         );
@@ -46,57 +53,55 @@ public class CourseController {
     }
 
     @PostMapping
-    public ResponseEntity<CourseViewModel> createCourse(@RequestBody CreateCourseDto course) {
+    public ResponseEntity<BaseViewModel<Course>> createCourse(@RequestBody CreateCourseDto course) {
         var result = this.pipeline.send(
                 new CreateCourseCommand(course.getTitle(), course.getDescription(), new Price(course.getAmount(), course.getCurrency())));
-        return new ResponseEntity<>(new CourseViewModel(result.getMessage(), result.getCourse()),
-                HttpStatus.CREATED);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{courseId}")
-    public ResponseEntity<CourseViewModel> updateCourse(@RequestBody UpdateCourseDto course, @PathVariable String courseId) {
+    public ResponseEntity<BaseViewModel<Course>> updateCourse(@RequestBody UpdateCourseDto course, @PathVariable String courseId) {
         var result = this.pipeline.send(
                 new UpdateCourseCommand(courseId, course.getCourseTitle(), course.getCourseDescription(), new Price(course.getCoursePrice(), course.getCurrency())));
-        return new ResponseEntity<>(new CourseViewModel(result.getMessage(), result.getCourse()),
-                HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PatchMapping("/{courseId}/publish")
-    public ResponseEntity<CourseViewModel> publishCourse(@PathVariable String courseId) {
+    public ResponseEntity<BaseViewModel<Course>> publishCourse(@PathVariable String courseId) {
         var result = this.pipeline.send(new PublishCourseCommand(courseId));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PatchMapping("/{courseId}/archive")
-    public ResponseEntity<CourseViewModel> archiveCourse(@PathVariable String courseId) {
+    public ResponseEntity<BaseViewModel<Course>> archiveCourse(@PathVariable String courseId) {
         var result = this.pipeline.send(new ArchiveCourseCommand(courseId));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PatchMapping("/{courseId}/restore")
-    public ResponseEntity<CourseViewModel> restoreCourse(@PathVariable String courseId) {
+    public ResponseEntity<BaseViewModel<Course>> restoreCourse(@PathVariable String courseId) {
         var result = this.pipeline.send(new RestoreCourseCommand(courseId));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PatchMapping("/{courseId}/add-module-to-course")
-    public ResponseEntity<Void> addModuleToCourse(@PathVariable String courseId, @RequestBody AddModuleToCourseDto module) {
-        this.pipeline.send(
+    @PostMapping("/{courseId}/modules")
+    public ResponseEntity<BaseViewModel<Module>> addModuleToCourse(@PathVariable String courseId, @RequestBody AddModuleToCourseDto module) {
+        var result = this.pipeline.send(
                 new AddModuleToCourseCommand(
                         courseId,
                         module.getModuleTitle(),
                         module.getModuleDescription(),
                         module.getModuleOrder()));
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(result);
     }
 
-    @PatchMapping("/{courseId}/remove-module-from-course")
+    @DeleteMapping("/{courseId}/modules")
     public ResponseEntity<Void> removeModuleFromCourse(@PathVariable String courseId, @RequestBody RemoveModuleFromCourseDto module) {
         this.pipeline.send(
                 new RemoveModuleFromCourseCommand(
                         courseId,
                         module.getModuleId()));
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{courseId}")
@@ -106,7 +111,7 @@ public class CourseController {
     }
 
     @PatchMapping("/{courseId}/modules/{moduleId}/lessons")
-    public ResponseEntity<CourseViewModel> reorderLessonsFromModule(
+    public ResponseEntity<BaseViewModel<Course>> reorderLessonsFromModule(
             @PathVariable String courseId,
             @PathVariable String moduleId,
             @RequestBody ReorderLessonToModuleDto reOrderLessonToModuleDto) {
@@ -116,8 +121,8 @@ public class CourseController {
         return ResponseEntity.ok(result);
     }
 
-    @PatchMapping("{courseId}/modules/{moduleId}/add-lesson-to-module")
-    public ResponseEntity<CourseViewModel> addLessonToModule(
+    @PostMapping("{courseId}/modules/{moduleId}/lessons")
+    public ResponseEntity<BaseViewModel<Lesson>> addLessonToModule(
             @PathVariable String courseId,
             @PathVariable String moduleId,
             @RequestBody AddLessonToModuleDto addLessonToModuleDto,
@@ -136,7 +141,7 @@ public class CourseController {
         return ResponseEntity.ok(result);
     }
 
-    @PatchMapping("{courseId}/modules/{moduleId}/remove-lesson-from-module")
+    @DeleteMapping("{courseId}/modules/{moduleId}/lessons")
     public ResponseEntity<Void> removeLessonFromModule(
             @PathVariable String courseId,
             @PathVariable String moduleId,
@@ -146,11 +151,11 @@ public class CourseController {
                         courseId,
                         moduleId,
                         removeLessonFromModuleDto.getLessonId()));
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping("/{courseId}/modules/{moduleId}")
-    public ResponseEntity<CourseViewModel> updateModule(
+    public ResponseEntity<BaseViewModel<Module>> updateModule(
             @PathVariable String courseId,
             @PathVariable String moduleId,
             @RequestBody UpdateModuleDto updateModuleDto) {
@@ -164,7 +169,7 @@ public class CourseController {
     }
 
     @PatchMapping("/{courseId}/modules")
-    public ResponseEntity<CourseViewModel> reorderModulesFromCourse(
+    public ResponseEntity<BaseViewModel<Course>> reorderModulesFromCourse(
             @PathVariable String courseId,
             @RequestBody List<Module> newModules) {
         var result = this.pipeline.send(
@@ -175,7 +180,7 @@ public class CourseController {
     }
 
     @PatchMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}")
-    public ResponseEntity<CourseViewModel> updateLessonFromModule(
+    public ResponseEntity<BaseViewModel<Lesson>> updateLessonFromModule(
             @PathVariable String courseId,
             @PathVariable String moduleId,
             @PathVariable String lessonId,
@@ -194,19 +199,21 @@ public class CourseController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/resources")
-    public ResponseEntity<Void> addResourceToLesson(
+    @PostMapping(
+            value = "/{courseId}/modules/{moduleId}/lessons/{lessonId}/resources",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BaseViewModel<Resource>> addResourceToLesson(
             @PathVariable String courseId,
             @PathVariable String moduleId,
             @PathVariable String lessonId,
             @RequestParam("file") MultipartFile file,
             @RequestParam("type") String resourceType) {
-        this.pipeline.send(new AddResourceToLessonCommand(new IdsCourse(courseId, moduleId, lessonId), file, resourceType));
-        return new ResponseEntity<>(HttpStatus.OK);
+        var result = this.pipeline.send(new AddResourceToLessonCommand(new IdsCourse(courseId, moduleId, lessonId), file, resourceType));
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/content")
-    public ResponseEntity<FileUploadResponse> addContentFileToLesson(
+    public ResponseEntity<BaseViewModel<FileUploadResponse>> addContentFileToLesson(
             @PathVariable String courseId,
             @PathVariable String moduleId,
             @PathVariable String lessonId,
@@ -227,15 +234,15 @@ public class CourseController {
     }
 
     @PostMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/quiz")
-    public ResponseEntity<Void> attachQuizToLesson(
+    public ResponseEntity<BaseViewModel<Lesson>> attachQuizToLesson(
             @PathVariable String courseId,
             @PathVariable String moduleId,
             @PathVariable String lessonId,
             @RequestBody QuizDto quizDto) {
-        this.pipeline.send(
+        var result = this.pipeline.send(
                 new AttachQuizToLessonCommand(
                         new IdsCourse(courseId, moduleId, lessonId),
                         MapQuizDtoToQuiz.execute(quizDto)));
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

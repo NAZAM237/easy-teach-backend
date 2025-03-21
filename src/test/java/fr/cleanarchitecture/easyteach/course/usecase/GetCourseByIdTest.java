@@ -35,10 +35,10 @@ public class GetCourseByIdTest {
         var getCourseByIdCommand = new GetCourseByIdCommand(course.getCourseId());
         var getCourseByIdCommandHandler = new GetCourseByIdCommandHandler(courseRepository);
 
-        var courseViewModel = getCourseByIdCommandHandler.handle(getCourseByIdCommand);
+        var result = getCourseByIdCommandHandler.handle(getCourseByIdCommand);
 
-        Assert.assertNotNull(courseViewModel);
-        Assert.assertEquals(course.getCourseId(), courseViewModel.getCourseId());
+        Assert.assertNotNull(result.getData());
+        Assert.assertEquals(course.getCourseId(), result.getData().getCourseId());
     }
 
     @Test

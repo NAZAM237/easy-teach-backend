@@ -3,14 +3,15 @@ package fr.cleanarchitecture.easyteach.course.application.usecases.handlers;
 import an.awesome.pipelinr.Command;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
+import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.UpdateLessonFromModuleCommand;
 import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
+import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 
-public class UpdateLessonFromModuleCommandHandler implements Command.Handler<UpdateLessonFromModuleCommand, CourseViewModel> {
+public class UpdateLessonFromModuleCommandHandler implements Command.Handler<UpdateLessonFromModuleCommand, BaseViewModel<Lesson>> {
     private final CourseRepository courseRepository;
 
     public UpdateLessonFromModuleCommandHandler(CourseRepository courseRepository) {
@@ -18,7 +19,7 @@ public class UpdateLessonFromModuleCommandHandler implements Command.Handler<Upd
     }
 
     @Override
-    public CourseViewModel handle(UpdateLessonFromModuleCommand updateLessonFromModuleCommand) {
+    public BaseViewModel<Lesson> handle(UpdateLessonFromModuleCommand updateLessonFromModuleCommand) {
         var course = courseRepository.findByCourseId(updateLessonFromModuleCommand.getCourseId())
                 .orElseThrow(() -> new NotFoundException("Course not found"));
         var module = course.getModules()
@@ -35,9 +36,12 @@ public class UpdateLessonFromModuleCommandHandler implements Command.Handler<Upd
                 updateLessonFromModuleCommand.getLesson());
         courseRepository.save(course);
 
-        return new CourseViewModel(
-                "Lesson " + updateLessonFromModuleCommand.getLessonId() + "updated successfully",
-                course);
+        var lesson = module.getLessons()
+                .stream()
+                .filter(lesson1 -> lesson1.getLessonId().equals(updateLessonFromModuleCommand.getLessonId()))
+                .findFirst().orElseThrow();
+
+        return new BaseViewModel<>(lesson);
     }
 
     private boolean hasContentFileUrl(Course course, UpdateLessonFromModuleCommand command) {

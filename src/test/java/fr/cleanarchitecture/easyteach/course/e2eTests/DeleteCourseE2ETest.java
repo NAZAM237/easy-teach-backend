@@ -1,7 +1,6 @@
 package fr.cleanarchitecture.easyteach.course.e2eTests;
 
 import fr.cleanarchitecture.easyteach.EasyTeachIntegrationTests;
-import fr.cleanarchitecture.easyteach.authentication.domain.model.User;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
@@ -25,7 +24,6 @@ public class DeleteCourseE2ETest extends EasyTeachIntegrationTests {
     @Autowired
     private CourseRepository courseRepository;
     private Course course;
-    private User user;
 
     @Before
     public void setUp() {

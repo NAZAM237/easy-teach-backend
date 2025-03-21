@@ -51,10 +51,10 @@ public class RemoveModuleFromCourseE2ETest extends EasyTeachIntegrationTests {
         var dto = new RemoveModuleFromCourseDto(module.getModuleId());
         mockMvc
                 .perform(
-                        MockMvcRequestBuilders.patch("/courses/" +course.getCourseId()+ "/remove-module-from-course")
+                        MockMvcRequestBuilders.delete("/courses/" +course.getCourseId()+ "/modules")
                                 .content(objectMapper.writeValueAsBytes(dto))
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
 
         var existingCourse = courseRepository.findByCourseId(course.getCourseId());
 

@@ -2,11 +2,12 @@ package fr.cleanarchitecture.easyteach.course.application.usecases.handlers;
 
 import an.awesome.pipelinr.Command;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
+import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.PublishCourseCommand;
-import fr.cleanarchitecture.easyteach.course.domain.viewmodel.CourseViewModel;
+import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 
-public class PublishCourseCommandHandler implements Command.Handler<PublishCourseCommand, CourseViewModel> {
+public class PublishCourseCommandHandler implements Command.Handler<PublishCourseCommand, BaseViewModel<Course>> {
 
     private final CourseRepository courseRepository;
 
@@ -15,11 +16,11 @@ public class PublishCourseCommandHandler implements Command.Handler<PublishCours
     }
 
     @Override
-    public CourseViewModel handle(PublishCourseCommand publishCourseCommand) {
+    public BaseViewModel<Course> handle(PublishCourseCommand publishCourseCommand) {
         var existingCourse = courseRepository.findByCourseId(publishCourseCommand.getCourseId())
                 .orElseThrow(() -> new NotFoundException("course not found"));
         existingCourse.publish();
         courseRepository.save(existingCourse);
-        return new CourseViewModel("course published successfully", existingCourse);
+        return new BaseViewModel<>(existingCourse);
     }
 }

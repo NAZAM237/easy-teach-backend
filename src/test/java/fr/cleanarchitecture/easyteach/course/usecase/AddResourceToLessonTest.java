@@ -6,8 +6,10 @@ import fr.cleanarchitecture.easyteach.course.application.ports.FileFunctions;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AddResourceToLessonCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.AddResourceToLessonCommandHandler;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
+import fr.cleanarchitecture.easyteach.course.domain.model.Course;
+import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
-import fr.cleanarchitecture.easyteach.course.domain.model.*;
+import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.IdsCourse;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
@@ -20,7 +22,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public class AddResourceToLessonTest {
 
@@ -64,14 +65,10 @@ public class AddResourceToLessonTest {
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, videoFile, "VIDEOS");
         var addResourceToLessonCommandHandler = createHandler();
 
-        addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
-
-        var course = courseRepository.findByCourseId(idsCourse.getCourseId()).orElseThrow();
-        var resources = getResources(course);
-        var newResource = resources.get(0);
+        var result = addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
         Assert.assertEquals(
-                UPLOAD_DIR + "/videos/" + newResource.getResourceName(),
-                newResource.getResourceUrl());
+                UPLOAD_DIR + "/videos/" + result.getData().getResourceName(),
+                result.getData().getResourceUrl());
     }
 
     @Test
@@ -80,14 +77,10 @@ public class AddResourceToLessonTest {
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, audioFile, "AUDIOS");
         var addResourceToLessonCommandHandler = createHandler();
 
-        addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
-
-        var course = courseRepository.findByCourseId(idsCourse.getCourseId()).orElseThrow();
-        var resources = getResources(course);
-        var newResource = resources.get(0);
+        var result = addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
         Assert.assertEquals(
-                UPLOAD_DIR + "/audios/" + newResource.getResourceName(),
-                newResource.getResourceUrl());
+                UPLOAD_DIR + "/audios/" + result.getData().getResourceName(),
+                result.getData().getResourceUrl());
     }
 
     @Test
@@ -97,14 +90,11 @@ public class AddResourceToLessonTest {
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, textFile, "DOCUMENTS");
         var addResourceToLessonCommandHandler = createHandler();
 
-        addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
+        var result = addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
 
-        var course = courseRepository.findByCourseId(idsCourse.getCourseId()).orElseThrow();
-        var resources = getResources(course);
-        var newResource = resources.get(0);
         Assert.assertEquals(
-                UPLOAD_DIR + "/documents/" + newResource.getResourceName(),
-                newResource.getResourceUrl());
+                UPLOAD_DIR + "/documents/" + result.getData().getResourceName(),
+                result.getData().getResourceUrl());
     }
 
     @Test
@@ -113,14 +103,11 @@ public class AddResourceToLessonTest {
         var addResourceToLessonCommand = new AddResourceToLessonCommand(idsCourse, imageFile, "IMAGES");
         var addResourceToLessonCommandHandler = createHandler();
 
-        addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
+        var result = addResourceToLessonCommandHandler.handle(addResourceToLessonCommand);
 
-        var course = courseRepository.findByCourseId(idsCourse.getCourseId()).orElseThrow();
-        var resources = getResources(course);
-        var newResource = resources.get(0);
         Assert.assertEquals(
-                UPLOAD_DIR + "/images/" + newResource.getResourceName(),
-                newResource.getResourceUrl());
+                UPLOAD_DIR + "/images/" + result.getData().getResourceName(),
+                result.getData().getResourceUrl());
     }
 
     @Test
@@ -163,19 +150,5 @@ public class AddResourceToLessonTest {
 
     private AddResourceToLessonCommandHandler createHandler() {
         return new AddResourceToLessonCommandHandler(courseRepository, fileFunctions);
-    }
-
-    private List<Resource> getResources(Course course) {
-        return course.getModules()
-                .stream()
-                .filter(module1 -> module1.getModuleId().equals(idsCourse.getModuleId()))
-                .findFirst()
-                .orElseThrow()
-                .getLessons()
-                .stream()
-                .filter(lesson1 -> lesson1.getLessonId().equals(idsCourse.getLessonId()))
-                .findFirst()
-                .orElseThrow()
-                .getResources();
     }
 }

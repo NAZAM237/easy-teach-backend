@@ -2,10 +2,12 @@ package fr.cleanarchitecture.easyteach.course.application.usecases.handlers;
 
 import an.awesome.pipelinr.Command;
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
+import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AttachQuizToLessonCommand;
+import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 
-public class AttachQuizToLessonCommandHandler implements Command.Handler<AttachQuizToLessonCommand, Void> {
+public class AttachQuizToLessonCommandHandler implements Command.Handler<AttachQuizToLessonCommand, BaseViewModel<Lesson>> {
 
     public CourseRepository courseRepository;
 
@@ -14,7 +16,7 @@ public class AttachQuizToLessonCommandHandler implements Command.Handler<AttachQ
     }
 
     @Override
-    public Void handle(AttachQuizToLessonCommand attachQuizToLessonCommand) {
+    public BaseViewModel<Lesson> handle(AttachQuizToLessonCommand attachQuizToLessonCommand) {
         var course = courseRepository.findByCourseId(attachQuizToLessonCommand.getIdsCourse().getCourseId())
                 .orElseThrow(() -> new NotFoundException("Course not found"));
         var module = course.getModules()
@@ -30,6 +32,6 @@ public class AttachQuizToLessonCommandHandler implements Command.Handler<AttachQ
 
         lesson.attachQuiz(attachQuizToLessonCommand.getQuiz());
         courseRepository.save(course);
-        return null;
+        return new BaseViewModel<>(lesson);
     }
 }

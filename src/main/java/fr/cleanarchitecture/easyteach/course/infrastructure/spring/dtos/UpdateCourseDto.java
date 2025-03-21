@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateCourseDto {
-    private String CourseTitle;
-    private String CourseDescription;
-    private BigDecimal CoursePrice;
+    private String courseTitle;
+    private String courseDescription;
+    private BigDecimal coursePrice;
     private String currency;
 }

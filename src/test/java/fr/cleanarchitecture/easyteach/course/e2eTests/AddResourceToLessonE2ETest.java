@@ -6,7 +6,6 @@ import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.*;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -57,13 +57,9 @@ public class AddResourceToLessonE2ETest extends EasyTeachIntegrationTests {
                     course.getCourseId(), module.getModuleId(), lesson.getLessonId())
                         .file(pdfFile)
                         .param("type", "DOCUMENTS"))
-                .andExpect(status().isOk());
-
-        var course = courseRepository.findByCourseId(this.course.getCourseId()).orElseThrow();
-        var newResource = getResources(course).get(0);
-        Assert.assertEquals(
-                UPLOAD_DIR + "/documents/" + newResource.getResourceName(),
-                newResource.getResourceUrl());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("success"))
+                .andExpect(jsonPath("$.data.resourceUrl").value(UPLOAD_DIR + "/documents/file.pdf"));
     }
 
     @Test

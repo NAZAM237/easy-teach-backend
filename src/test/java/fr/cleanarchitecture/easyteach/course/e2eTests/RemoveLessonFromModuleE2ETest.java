@@ -47,10 +47,10 @@ public class RemoveLessonFromModuleE2ETest extends EasyTeachIntegrationTests {
     public void shouldRemoveLessonFromModuleE2ETest() throws Exception {
         courseRepository.save(course);
         mockMvc
-                .perform(MockMvcRequestBuilders.patch("/courses/{courseId}/modules/{moduleId}/remove-lesson-from-module", course.getCourseId(), module.getModuleId())
+                .perform(MockMvcRequestBuilders.delete("/courses/{courseId}/modules/{moduleId}/lessons", course.getCourseId(), module.getModuleId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(lesson.getLessonId())))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test

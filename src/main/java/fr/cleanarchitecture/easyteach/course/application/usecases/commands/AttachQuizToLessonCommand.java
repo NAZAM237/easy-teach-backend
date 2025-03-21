@@ -1,10 +1,12 @@
 package fr.cleanarchitecture.easyteach.course.application.usecases.commands;
 
 import an.awesome.pipelinr.Command;
+import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
+import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Quiz;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.IdsCourse;
 
-public class AttachQuizToLessonCommand implements Command<Void> {
+public class AttachQuizToLessonCommand implements Command<BaseViewModel<Lesson>> {
     private IdsCourse idsCourse;
     private Quiz quiz;
 

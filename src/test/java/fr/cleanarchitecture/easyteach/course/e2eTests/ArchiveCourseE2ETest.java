@@ -54,8 +54,8 @@ public class ArchiveCourseE2ETest extends EasyTeachIntegrationTests {
         mockMvc
             .perform(MockMvcRequestBuilders.patch("/courses/" + course.getCourseId() + "/archive"))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(jsonPath("$.message").value("Course archived successfully"))
-            .andExpect(jsonPath("$.course.status").value(CourseStatus.ARCHIVED.name()));
+            .andExpect(jsonPath("$.message").value("success"))
+            .andExpect(jsonPath("$.data.status").value(CourseStatus.ARCHIVED.name()));
     }
 
     @Test
