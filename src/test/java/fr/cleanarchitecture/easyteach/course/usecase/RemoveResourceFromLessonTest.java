@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 public class RemoveResourceFromLessonTest {
 
     private static final String UPLOAD_DIR = "/Users/nazam/Desktop/Projects/easy-teach/uploaded-resources";
-    private static final String RESOURCE_URL = UPLOAD_DIR + "/documents/document.txt";
+    private static final String RESOURCE_URL = UPLOAD_DIR + "/documents/file.txt";
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
     private final FileUploadPropertiesConfiguration properties = new FileUploadPropertiesConfiguration();
@@ -61,9 +61,8 @@ public class RemoveResourceFromLessonTest {
 
     @Test
     public void removeResourceFromLessonTest() {
-        var removeResourceFromLessonCommand = new RemoveResourceFromLessonCommand(
-                course.getCourseId(), module.getModuleId(), lesson.getLessonId(), resource.getResourceId());
-        var removeResourceFromLessonCommandHandler = new RemoveResourceFromLessonCommandHandler(courseRepository, fileFunctions);
+        var removeResourceFromLessonCommand = createCommand(resource.getResourceId());
+        var removeResourceFromLessonCommandHandler = createHandler();
 
         removeResourceFromLessonCommandHandler.handle(removeResourceFromLessonCommand);
 
@@ -73,9 +72,8 @@ public class RemoveResourceFromLessonTest {
 
     @Test
     public void removeNotExistResourceFromLesson_shouldThrowException() {
-        var removeResourceFromLessonCommand = new RemoveResourceFromLessonCommand(
-                course.getCourseId(), module.getModuleId(), lesson.getLessonId(), "Garbage");
-        var removeResourceFromLessonCommandHandler = new RemoveResourceFromLessonCommandHandler(courseRepository, fileFunctions);
+        var removeResourceFromLessonCommand = createCommand( "Garbage");
+        var removeResourceFromLessonCommandHandler = createHandler();
 
         var assertResult = Assert.assertThrows(
                 NotFoundException.class,
@@ -86,14 +84,22 @@ public class RemoveResourceFromLessonTest {
 
     @Test
     public void removeResourceWithInValidFileUrlFromLesson_shouldThrowException() {
-        var removeResourceFromLessonCommand = new RemoveResourceFromLessonCommand(
-                course.getCourseId(), module.getModuleId(), lesson.getLessonId(), resource.getResourceId());
-        var removeResourceFromLessonCommandHandler = new RemoveResourceFromLessonCommandHandler(courseRepository, fileFunctions);
+        var removeResourceFromLessonCommand = createCommand(resource.getResourceId());
+        var removeResourceFromLessonCommandHandler = createHandler();
 
         var assertResult = Assert.assertThrows(
                 BadRequestException.class,
                 () -> removeResourceFromLessonCommandHandler.handle(removeResourceFromLessonCommand)
         );
         Assert.assertEquals("Unable to delete file " + RESOURCE_URL, assertResult.getMessage());
+    }
+
+    private RemoveResourceFromLessonCommand createCommand(String resourceId) {
+        return new RemoveResourceFromLessonCommand(
+                course.getCourseId(), module.getModuleId(), lesson.getLessonId(), resourceId);
+    }
+
+    private RemoveResourceFromLessonCommandHandler createHandler() {
+        return new RemoveResourceFromLessonCommandHandler(courseRepository, fileFunctions);
     }
 }
