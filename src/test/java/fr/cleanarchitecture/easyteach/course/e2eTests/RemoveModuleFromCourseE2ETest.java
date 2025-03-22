@@ -6,7 +6,6 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.RemoveModuleFromCourseDto;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,11 +47,11 @@ public class RemoveModuleFromCourseE2ETest extends EasyTeachIntegrationTests {
 
     @Test
     public void removeModuleFromCourseE2ETest() throws Exception {
-        var dto = new RemoveModuleFromCourseDto(module.getModuleId());
         mockMvc
                 .perform(
-                        MockMvcRequestBuilders.delete("/courses/" +course.getCourseId()+ "/modules")
-                                .content(objectMapper.writeValueAsBytes(dto))
+                        MockMvcRequestBuilders.delete(
+                                "/courses/{courseId}/modules/{moduleId}",
+                                        course.getCourseId(), module.getModuleId())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
 
@@ -64,11 +63,9 @@ public class RemoveModuleFromCourseE2ETest extends EasyTeachIntegrationTests {
 
     @Test
     public void removeModuleFromNotExistCourseE2ETest_shouldThrowException() throws Exception {
-        var dto = new RemoveModuleFromCourseDto("moduleId");
         mockMvc
                 .perform(
-                        MockMvcRequestBuilders.patch("/courses/Garbage/remove-module-from-course")
-                                .content(objectMapper.writeValueAsBytes(dto))
+                        MockMvcRequestBuilders.delete("/courses/Garbage/modules/{moduleId}", module.getModuleId())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }

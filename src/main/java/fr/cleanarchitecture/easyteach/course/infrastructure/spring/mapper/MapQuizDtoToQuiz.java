@@ -25,7 +25,7 @@ public class MapQuizDtoToQuiz {
 
         return new Quiz(
                 quizDto.getQuizTitle(),
-                quizDto.getDescription(),
+                quizDto.getQuizDescription(),
                 questions,
                 quizDto.getPassingScore()
         );

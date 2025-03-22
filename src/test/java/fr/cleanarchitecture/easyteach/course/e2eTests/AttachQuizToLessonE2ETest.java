@@ -85,7 +85,7 @@ public class AttachQuizToLessonE2ETest extends EasyTeachIntegrationTests {
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         Assert.assertEquals(quizDto.getQuizTitle(), lesson.getQuiz().getQuizTitle());
-        Assert.assertEquals(quizDto.getDescription(), lesson.getQuiz().getDescription());
+        Assert.assertEquals(quizDto.getQuizDescription(), lesson.getQuiz().getDescription());
         Assert.assertEquals(quizDto.getPassingScore(), lesson.getQuiz().getPassingScore());
     }
 

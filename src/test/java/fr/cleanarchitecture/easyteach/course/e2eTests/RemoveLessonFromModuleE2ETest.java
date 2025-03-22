@@ -47,21 +47,19 @@ public class RemoveLessonFromModuleE2ETest extends EasyTeachIntegrationTests {
     public void shouldRemoveLessonFromModuleE2ETest() throws Exception {
         courseRepository.save(course);
         mockMvc
-                .perform(MockMvcRequestBuilders.delete("/courses/{courseId}/modules/{moduleId}/lessons", course.getCourseId(), module.getModuleId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(lesson.getLessonId())))
+                .perform(MockMvcRequestBuilders.delete("/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}",
+                                course.getCourseId(), module.getModuleId(), lesson.getLessonId())
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
     public void removeLessonFromNotExistModuleE2ETest_shouldThrowException() throws Exception {
         mockMvc
-                .perform(MockMvcRequestBuilders.patch(
-                        "/courses/{courseId}/modules/{moduleId}/remove-lesson-from-module",
-                                course.getCourseId(),
-                                "Garbage")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(lesson.getLessonId())))
+                .perform(MockMvcRequestBuilders.delete(
+                        "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}",
+                                course.getCourseId(), "Garbage", lesson.getLessonId())
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }

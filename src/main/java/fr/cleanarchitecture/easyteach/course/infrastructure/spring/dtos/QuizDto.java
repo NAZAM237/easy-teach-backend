@@ -11,7 +11,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class QuizDto {
     private String quizTitle;
-    private String description;
+    private String quizDescription;
     private Set<QuestionDto> questions;
     private int passingScore;
 }

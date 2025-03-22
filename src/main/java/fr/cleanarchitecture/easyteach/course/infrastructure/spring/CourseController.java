@@ -95,12 +95,9 @@ public class CourseController {
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("/{courseId}/modules")
-    public ResponseEntity<Void> removeModuleFromCourse(@PathVariable String courseId, @RequestBody RemoveModuleFromCourseDto module) {
-        this.pipeline.send(
-                new RemoveModuleFromCourseCommand(
-                        courseId,
-                        module.getModuleId()));
+    @DeleteMapping("/{courseId}/modules/{moduleId}")
+    public ResponseEntity<Void> removeModuleFromCourse(@PathVariable String courseId, @PathVariable String moduleId) {
+        this.pipeline.send(new RemoveModuleFromCourseCommand(courseId, moduleId));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -114,9 +111,9 @@ public class CourseController {
     public ResponseEntity<BaseViewModel<Course>> reorderLessonsFromModule(
             @PathVariable String courseId,
             @PathVariable String moduleId,
-            @RequestBody ReorderLessonToModuleDto reOrderLessonToModuleDto) {
+            @RequestBody List<Lesson> lessons) {
         var result = this.pipeline.send(
-                new ReorderLessonFromModuleCommand(courseId, moduleId, reOrderLessonToModuleDto.getLessons())
+                new ReorderLessonFromModuleCommand(courseId, moduleId, lessons)
         );
         return ResponseEntity.ok(result);
     }
@@ -141,16 +138,12 @@ public class CourseController {
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("{courseId}/modules/{moduleId}/lessons")
+    @DeleteMapping("{courseId}/modules/{moduleId}/lessons/{lessonId}")
     public ResponseEntity<Void> removeLessonFromModule(
             @PathVariable String courseId,
             @PathVariable String moduleId,
-            @RequestBody RemoveLessonFromModuleDto removeLessonFromModuleDto) {
-        this.pipeline.send(
-                new RemoveLessonFromModuleCommand(
-                        courseId,
-                        moduleId,
-                        removeLessonFromModuleDto.getLessonId()));
+            @PathVariable String lessonId) {
+        this.pipeline.send(new RemoveLessonFromModuleCommand(courseId, moduleId, lessonId));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -212,7 +205,9 @@ public class CourseController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PostMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/content")
+    @PostMapping(
+            value = "/{courseId}/modules/{moduleId}/lessons/{lessonId}/content",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BaseViewModel<FileUploadResponse>> addContentFileToLesson(
             @PathVariable String courseId,
             @PathVariable String moduleId,
@@ -245,4 +240,14 @@ public class CourseController {
                         MapQuizDtoToQuiz.execute(quizDto)));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    // 1 - removeLessonContentFile
+    // 2 - addQuestionToQuiz
+    // 3 - removeQuestionFromQuiz
+    // 4 - updateQuestionToQuiz
+    // 5 - addAnswerToQuestion
+    // 6 - updateAnswerToQuestion
+    // 7 - removeAnswerFromQuestion
+    // 8 - updateQuiz
+    // 9 - detachQuizFromLesson
 }

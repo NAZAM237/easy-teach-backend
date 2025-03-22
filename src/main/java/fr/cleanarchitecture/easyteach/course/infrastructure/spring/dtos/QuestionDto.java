@@ -17,6 +17,6 @@ public class QuestionDto {
     public QuestionDto(String questionText, String questionType, List<AnswerDto> answers) {
         this.questionText = questionText;
         this.questionType = QuestionType.getQuestionType(questionType);
-        answers = answers;
+        this.answers = answers;
     }
 }
