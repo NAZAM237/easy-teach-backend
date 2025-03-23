@@ -45,18 +45,6 @@ public class Module {
         return lessons;
     }
 
-    public void setModuleTitle(String moduleTitle) {
-        this.moduleTitle = moduleTitle;
-    }
-
-    public void setModuleDescription(String moduleDescription) {
-        this.moduleDescription = moduleDescription;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
-    }
-
     public void updateData(String moduleTitle, String moduleDescription) {
         this.moduleTitle = moduleTitle;
         this.moduleDescription = moduleDescription;
@@ -100,5 +88,18 @@ public class Module {
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("The lesson not found"));
         lessonToUpdate.updateDate(lesson);
+    }
+
+    public void addQuestionToQuiz(String lessonId, Question question) {
+        var lesson = this.lessons.stream().filter(lesson1 -> lesson1.getLessonId().equals(lessonId)).findFirst().orElseThrow();
+        lesson.getQuiz().addQuestion(question);
+    }
+
+    public void attachQuizToLesson(String lessonId, Quiz quiz) {
+        var lesson = this.lessons.stream()
+                .filter(lesson1 -> lesson1.getLessonId().equals(lessonId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Lesson not found"));
+        lesson.attachQuiz(quiz);
     }
 }

@@ -113,4 +113,9 @@ public class CourseCommandHandlerConfiguration {
     public AttachQuizToLessonCommandHandler attachQuizToLessonCommandHandler(CourseRepository courseRepository) {
         return new AttachQuizToLessonCommandHandler(courseRepository);
     }
+
+    @Bean
+    public AddQuestionToQuizCommandHandler addQuestionToQuizCommandHandler(CourseRepository courseRepository) {
+        return new AddQuestionToQuizCommandHandler(courseRepository);
+    }
 }

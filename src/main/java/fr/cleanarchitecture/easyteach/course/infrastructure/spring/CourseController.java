@@ -3,17 +3,15 @@ package fr.cleanarchitecture.easyteach.course.infrastructure.spring;
 import an.awesome.pipelinr.Pipeline;
 import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.*;
-import fr.cleanarchitecture.easyteach.course.domain.model.Course;
-import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
-import fr.cleanarchitecture.easyteach.course.domain.model.Resource;
+import fr.cleanarchitecture.easyteach.course.domain.model.*;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.FileUploadResponse;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.IdsCourse;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.ModuleFromCourseViewModel;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.*;
-import fr.cleanarchitecture.easyteach.course.infrastructure.spring.mapper.MapQuizDtoToQuiz;
+import fr.cleanarchitecture.easyteach.course.infrastructure.spring.mapper.FromQuestionDtoToQuestion;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -237,11 +235,29 @@ public class CourseController {
         var result = this.pipeline.send(
                 new AttachQuizToLessonCommand(
                         new IdsCourse(courseId, moduleId, lessonId),
-                        MapQuizDtoToQuiz.execute(quizDto)));
+                        new Quiz(
+                                quizDto.getQuizTitle(),
+                                quizDto.getQuizDescription(),
+                                quizDto.getPassingScore())
+                )
+        );
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    // 1 - removeLessonContentFile
+    @PostMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions")
+    public ResponseEntity<BaseViewModel<Quiz>> addQuestionToQuiz(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @PathVariable String lessonId,
+            @RequestBody QuestionDto questionDto) {
+        var result = this.pipeline.send(
+                new AddQuestionToQuizCommand(
+                        new IdsCourse(courseId, moduleId, lessonId),
+                        FromQuestionDtoToQuestion.execute(questionDto))
+        );
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     // 2 - addQuestionToQuiz
     // 3 - removeQuestionFromQuiz
     // 4 - updateQuestionToQuiz

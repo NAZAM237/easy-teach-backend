@@ -8,8 +8,6 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.AnswerDto;
-import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.QuestionDto;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.QuizDto;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,8 +20,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Set;
 
 @RunWith(SpringRunner.class)
 public class AttachQuizToLessonE2ETest extends EasyTeachIntegrationTests {
@@ -34,9 +30,6 @@ public class AttachQuizToLessonE2ETest extends EasyTeachIntegrationTests {
     private Course course;
     private Lesson lesson;
     private Module module;
-    private QuestionDto question1;
-    private QuestionDto question2;
-    private QuestionDto question3;
 
     @Before
     public void setUp() {
@@ -48,34 +41,9 @@ public class AttachQuizToLessonE2ETest extends EasyTeachIntegrationTests {
         courseRepository.save(course);
     }
 
-    @Before
-    public void setupQuestion() {
-        question1 = new QuestionDto(
-                "Qu'est ce qu'une classe en POO",
-                "SINGLE_CHOICE",
-                List.of(new AnswerDto("Un plan de conception pour créer des objets", true),
-                        new AnswerDto("Un fichier contenant du code", false),
-                        new AnswerDto("Une fonction spécifique", false))
-        );
-        question2 = new QuestionDto(
-                "Quels sont les principes fondamentaux de la POO",
-                "MULTIPLE_CHOICE",
-                List.of(new AnswerDto("Encapsulation", true),
-                        new AnswerDto("Héritage", true),
-                        new AnswerDto("Compilation", false),
-                        new AnswerDto("Polymorphisme", true))
-        );
-        question3 = new QuestionDto(
-                "Expliquer l'encapsulation en POO",
-                "TEXT",
-                List.of(new AnswerDto("Explication Encapsulation", true))
-        );
-    }
-
     @Test
     public void shouldAttachQuizToLessonTest() throws Exception {
-        var questions = Set.of(question1, question2, question3);
-        var quizDto = new QuizDto("QuizTitle", "QuizDescription", questions, 70);
+        var quizDto = new QuizDto("QuizTitle", "QuizDescription", 70);
 
         mockMvc.perform(MockMvcRequestBuilders.post(
                 "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/quiz",
@@ -91,8 +59,7 @@ public class AttachQuizToLessonE2ETest extends EasyTeachIntegrationTests {
 
     @Test
     public void shouldAttachQuizToLessonFromNotExistCourse_shouldThrowException() throws Exception {
-        var questions = Set.of(question1, question2, question3);
-        var quizDto = new QuizDto("QuizTitle", "QuizDescription", questions, 70);
+        var quizDto = new QuizDto("QuizTitle", "QuizDescription", 70);
 
         mockMvc.perform(MockMvcRequestBuilders.post(
                 "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/quiz",
@@ -104,8 +71,7 @@ public class AttachQuizToLessonE2ETest extends EasyTeachIntegrationTests {
 
     @Test
     public void shouldAttachQuizToLessonFromNotExistModule_shouldThrowException() throws Exception {
-        var questions = Set.of(question1, question2, question3);
-        var quizDto = new QuizDto("QuizTitle", "QuizDescription", questions, 70);
+        var quizDto = new QuizDto("QuizTitle", "QuizDescription", 70);
 
         mockMvc.perform(MockMvcRequestBuilders.post(
                                 "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/quiz",
@@ -117,8 +83,7 @@ public class AttachQuizToLessonE2ETest extends EasyTeachIntegrationTests {
 
     @Test
     public void shouldAttachQuizToNotExistLesson_shouldThrowException() throws Exception {
-        var questions = Set.of(question1, question2, question3);
-        var quizDto = new QuizDto("QuizTitle", "QuizDescription", questions, 70);
+        var quizDto = new QuizDto("QuizTitle", "QuizDescription", 70);
 
         mockMvc.perform(MockMvcRequestBuilders.post(
                                 "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/quiz",

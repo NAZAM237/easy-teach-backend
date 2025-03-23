@@ -177,4 +177,17 @@ public class Course {
 
         this.modules = new HashSet<>(modules);
     }
+
+    public void addQuestionToQuiz(String moduleId, String lessonId, Question question) {
+        var module = this.modules.stream().filter(module1 -> module1.getModuleId().equals(moduleId)).findFirst().orElseThrow();
+        module.addQuestionToQuiz(lessonId, question);
+    }
+
+    public void attachQuizToLesson(String moduleId, String lessonId, Quiz quiz) {
+        var module = this.modules.stream()
+                .filter(module1 -> module1.getModuleId().equals(moduleId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Module not found"));
+        module.attachQuizToLesson(lessonId, quiz);
+    }
 }

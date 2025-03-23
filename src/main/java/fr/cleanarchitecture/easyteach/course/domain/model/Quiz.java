@@ -1,5 +1,8 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
+
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -7,16 +10,15 @@ public class Quiz {
     private String quizId;
     private String quizTitle;
     private String description;
-    private Set<Question> questions;
+    private Set<Question> questions = new HashSet<>();
     private int passingScore;
 
     public Quiz() {}
 
-    public Quiz(String quizTitle, String description, Set<Question> questions, int passingScore) {
+    public Quiz(String quizTitle, String description, int passingScore) {
         this.quizId = UUID.randomUUID().toString();
         this.quizTitle = quizTitle;
         this.description = description;
-        this.questions = questions;
         this.passingScore = passingScore;
     }
 
@@ -38,5 +40,13 @@ public class Quiz {
 
     public int getPassingScore() {
         return passingScore;
+    }
+
+    public void addQuestion(Question question) {
+        var isExist = questions.stream().noneMatch(question1 -> question1.getQuestionText().equals(question.getQuestionText()));
+        if (!isExist) {
+            throw new BadRequestException("This question already exists in this quiz");
+        }
+        this.questions.add(question);
     }
 }

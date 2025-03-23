@@ -4,7 +4,6 @@ import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AttachQuizToLessonCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.AttachQuizToLessonCommandHandler;
-import fr.cleanarchitecture.easyteach.course.domain.enums.QuestionType;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.*;
@@ -16,8 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Set;
 
 public class AttachQuizToLessonTest {
 
@@ -28,9 +25,6 @@ public class AttachQuizToLessonTest {
     private Module module;
     private Quiz quiz;
     private IdsCourse idsCourse;
-    private Question question1;
-    private Question question2;
-    private Question question3;
 
     @Before
     public void setUp() {
@@ -44,34 +38,11 @@ public class AttachQuizToLessonTest {
 
     @Before
     public void setupQuestion() {
-        question1 = new Question(
-                "Qu'est ce qu'une classe en POO",
-                QuestionType.SINGLE_CHOICE,
-                List.of(new Answer("Un plan de conception pour créer des objets", true),
-                        new Answer("Un fichier contenant du code", false),
-                        new Answer("Une fonction spécifique", false))
-        );
-        question2 = new Question(
-                "Quels sont les principes fondamentaux de la POO",
-                QuestionType.MULTIPLE_CHOICE,
-                List.of(new Answer("Encapsulation", true),
-                        new Answer("Héritage", true),
-                        new Answer("Compilation", false),
-                        new Answer("Polymorphisme", true))
-        );
-        question3 = new Question(
-                "Expliquer l'encapsulation en POO",
-                QuestionType.TEXT,
-                List.of(new Answer("Explication Encapsulation", true))
-        );
-
         idsCourse = new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId());
         quiz = new Quiz(
                 "Quiz sur le POO",
                 "Ce quiz teste vos connaissances de base sur la POO",
-                Set.of(question1, question2, question3),
-                70
-        );
+                70);
     }
 
     @Test
