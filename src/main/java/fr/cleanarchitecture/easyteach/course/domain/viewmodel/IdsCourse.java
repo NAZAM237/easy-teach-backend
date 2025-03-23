@@ -4,7 +4,7 @@ public class IdsCourse {
     private String courseId;
     private String moduleId;
     private String lessonId;
-    private String quizId;
+    private String questionId;
 
     public IdsCourse(String courseId, String moduleId, String lessonId) {
         this.courseId = courseId;
@@ -12,11 +12,11 @@ public class IdsCourse {
         this.lessonId = lessonId;
     }
 
-    public IdsCourse(String courseId, String moduleId, String lessonId, String quizId) {
+    public IdsCourse(String courseId, String moduleId, String lessonId, String questionId) {
         this.courseId = courseId;
         this.moduleId = moduleId;
         this.lessonId = lessonId;
-        this.quizId = quizId;
+        this.questionId = questionId;
     }
 
     public String getCourseId() {
@@ -31,7 +31,7 @@ public class IdsCourse {
         return lessonId;
     }
 
-    public String getQuizId() {
-        return quizId;
+    public String getQuestionId() {
+        return questionId;
     }
 }

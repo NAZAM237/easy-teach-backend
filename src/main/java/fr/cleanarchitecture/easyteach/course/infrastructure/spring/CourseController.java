@@ -245,7 +245,7 @@ public class CourseController {
     }
 
     @PostMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions")
-    public ResponseEntity<BaseViewModel<Quiz>> addQuestionToQuiz(
+    public ResponseEntity<BaseViewModel<Question>> addQuestionToQuiz(
             @PathVariable String courseId,
             @PathVariable String moduleId,
             @PathVariable String lessonId,
@@ -258,7 +258,19 @@ public class CourseController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    // 2 - addQuestionToQuiz
+    @DeleteMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions/{questionId}")
+    public ResponseEntity<BaseViewModel<Void>> removeQuestionFromQuiz(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @PathVariable String lessonId,
+            @PathVariable String questionId) {
+        this.pipeline.send(
+                new RemoveQuestionFromQuizCommand(
+                        new IdsCourse(courseId, moduleId, lessonId, questionId))
+        );
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     // 3 - removeQuestionFromQuiz
     // 4 - updateQuestionToQuiz
     // 5 - addAnswerToQuestion

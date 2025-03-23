@@ -118,4 +118,9 @@ public class CourseCommandHandlerConfiguration {
     public AddQuestionToQuizCommandHandler addQuestionToQuizCommandHandler(CourseRepository courseRepository) {
         return new AddQuestionToQuizCommandHandler(courseRepository);
     }
+
+    @Bean
+    public RemoveQuestionFromQuizCommandHandler removeQuestionFromQuizCommandHandler(CourseRepository courseRepository) {
+        return new RemoveQuestionFromQuizCommandHandler(courseRepository);
+    }
 }

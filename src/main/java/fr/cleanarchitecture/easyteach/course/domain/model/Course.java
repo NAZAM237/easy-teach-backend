@@ -190,4 +190,12 @@ public class Course {
                 .orElseThrow(() -> new NotFoundException("Module not found"));
         module.attachQuizToLesson(lessonId, quiz);
     }
+
+    public void removeQuestionFromQuiz(String moduleId, String lessonId, String questionId) {
+        var module = this.modules.stream()
+                .filter(module1 -> module1.getModuleId().equals(moduleId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Module not found"));
+        module.removeQuestionFromQuiz(lessonId, questionId);
+    }
 }

@@ -2,8 +2,8 @@ package fr.cleanarchitecture.easyteach.course.usecase;
 
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
-import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AddQuestionToQuizCommand;
-import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.AddQuestionToQuizCommandHandler;
+import fr.cleanarchitecture.easyteach.course.application.usecases.commands.RemoveQuestionFromQuizCommand;
+import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.RemoveQuestionFromQuizCommandHandler;
 import fr.cleanarchitecture.easyteach.course.domain.enums.QuestionType;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
@@ -18,7 +18,7 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class AddQuestionToQuizTest {
+public class RemoveQuestionFromQuizTest {
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
 
@@ -49,40 +49,31 @@ public class AddQuestionToQuizTest {
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson);
         course.attachQuizToLesson(module.getModuleId(), lesson.getLessonId(), quiz);
+        course.addQuestionToQuiz(module.getModuleId(), lesson.getLessonId(), question1);
         courseRepository.save(course);
     }
 
     @Test
-    public void addQuestionToQuizTest() {
-        var newQuestion = new Question(
-                "Expliquer le polymorphisme en POO",
-                QuestionType.TEXT,
-                List.of(new Answer("Explication Polymlorphisme", true)));
-        var idsCourse = getIdsCourse();
-        var addQuestionToQuizCommand = new AddQuestionToQuizCommand(idsCourse, newQuestion);
-        var addQuestionToQuizCommandHandler = new AddQuestionToQuizCommandHandler(courseRepository);
-        var result = addQuestionToQuizCommandHandler.handle(addQuestionToQuizCommand);
-        Assert.assertEquals(1, quiz.getQuestions().size());
-        Assert.assertEquals(newQuestion.getQuestionText(), result.getData().getQuestionText());
-        Assert.assertEquals(newQuestion.getQuestionType(), result.getData().getQuestionType());
+    public void removeQuestionFromQuizTest() {
+        var idsCourse = new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId(), question1.getQuestionId());
+        var removeQuestionFromCourseCommand = new RemoveQuestionFromQuizCommand(idsCourse);
+        var removeQuestionFromCourseCommandHandler = new RemoveQuestionFromQuizCommandHandler(courseRepository);
+
+        removeQuestionFromCourseCommandHandler.handle(removeQuestionFromCourseCommand);
+
+        Assert.assertTrue(quiz.getQuestions().isEmpty());
     }
 
     @Test
-    public void addAlreadyExistQuestionToQuizTest_shouldThrowException() {
-        course.addQuestionToQuiz(module.getModuleId(), lesson.getLessonId(), question1);
-        var idsCourse = getIdsCourse();
-        var addQuestionToQuizCommand = new AddQuestionToQuizCommand(idsCourse, question1);
-        var addQuestionToQuizCommandHandler = new AddQuestionToQuizCommandHandler(courseRepository);
+    public void removeNotExistingQuestionFromQuiz_shouldThrowException() {
+        var idsCourse = new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId(), "Garbage");
+        var removeQuestionFromCourseCommand = new RemoveQuestionFromQuizCommand(idsCourse);
+        var removeQuestionFromCourseCommandHandler = new RemoveQuestionFromQuizCommandHandler(courseRepository);
+
         var resultThrow = Assert.assertThrows(
-            BadRequestException.class,
-            () -> addQuestionToQuizCommandHandler.handle(addQuestionToQuizCommand)
+                BadRequestException.class,
+                () -> removeQuestionFromCourseCommandHandler.handle(removeQuestionFromCourseCommand)
         );
-        Assert.assertEquals("This question already exists in this quiz", resultThrow.getMessage());
+        Assert.assertEquals("This question does not exist in this quiz", resultThrow.getMessage());
     }
-
-    private IdsCourse getIdsCourse() {
-        return new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId(), quiz.getQuizId());
-    }
-
-
 }

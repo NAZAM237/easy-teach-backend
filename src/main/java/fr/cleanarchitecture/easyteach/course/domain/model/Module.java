@@ -102,4 +102,12 @@ public class Module {
                 .orElseThrow(() -> new NotFoundException("Lesson not found"));
         lesson.attachQuiz(quiz);
     }
+
+    public void removeQuestionFromQuiz(String lessonId, String questionId) {
+        var lesson = this.lessons.stream()
+                .filter(lesson1 -> lesson1.getLessonId().equals(lessonId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Lesson not found"));
+        lesson.getQuiz().removeQuestion(questionId);
+    }
 }

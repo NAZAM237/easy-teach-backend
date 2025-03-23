@@ -6,9 +6,9 @@ import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AddQuestionToQuizCommand;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
-import fr.cleanarchitecture.easyteach.course.domain.model.Quiz;
+import fr.cleanarchitecture.easyteach.course.domain.model.Question;
 
-public class AddQuestionToQuizCommandHandler implements Command.Handler<AddQuestionToQuizCommand, BaseViewModel<Quiz>> {
+public class AddQuestionToQuizCommandHandler implements Command.Handler<AddQuestionToQuizCommand, BaseViewModel<Question>> {
 
     private CourseRepository courseRepository;
 
@@ -17,7 +17,7 @@ public class AddQuestionToQuizCommandHandler implements Command.Handler<AddQuest
     }
 
     @Override
-    public BaseViewModel<Quiz> handle(AddQuestionToQuizCommand addQuestionToQuizCommand) {
+    public BaseViewModel<Question> handle(AddQuestionToQuizCommand addQuestionToQuizCommand) {
         var course = courseRepository.findByCourseId(addQuestionToQuizCommand.getIdsCourse().getCourseId())
                 .orElseThrow(() -> new NotFoundException("Course not found"));
         course.addQuestionToQuiz(
@@ -25,23 +25,25 @@ public class AddQuestionToQuizCommandHandler implements Command.Handler<AddQuest
                 addQuestionToQuizCommand.getIdsCourse().getLessonId(),
                 addQuestionToQuizCommand.getQuestion());
         courseRepository.save(course);
-        var quiz = getQuiz(
+        var question = getQuestion(
                 course,
                 addQuestionToQuizCommand.getIdsCourse().getModuleId(),
-                addQuestionToQuizCommand.getIdsCourse().getLessonId());
-        return new BaseViewModel<>(quiz);
+                addQuestionToQuizCommand.getIdsCourse().getLessonId(),
+                addQuestionToQuizCommand.getQuestion().getQuestionId());
+        return new BaseViewModel<>(question);
     }
 
-    private Quiz getQuiz(Course course, String moduleId, String lessonId) {
-        return course.getModules()
+    private Question getQuestion(Course course, String moduleId, String lessonId, String questionId) {
+        var module =  course.getModules()
                 .stream()
-                .filter(module -> module.getModuleId().equals(moduleId))
-                .findFirst().orElseThrow(() -> new NotFoundException("Module not found"))
-                .getLessons()
-                .stream()
+                .filter(module1 -> module1.getModuleId().equals(moduleId))
+                .findFirst().orElseThrow(() -> new NotFoundException("Module not found"));
+        var quiz = module.getLessons().stream()
                 .filter(lesson -> lesson.getLessonId().equals(lessonId))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("Lesson not found"))
                 .getQuiz();
+        return quiz.getQuestions().stream().filter(question -> question.getQuestionId().equals(questionId))
+                .findFirst().orElse(null);
     }
 }

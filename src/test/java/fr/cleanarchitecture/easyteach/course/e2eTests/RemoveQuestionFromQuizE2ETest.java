@@ -7,13 +7,10 @@ import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.*;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.AnswerDto;
-import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.QuestionDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -22,7 +19,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-public class AddQuestionToQuizE2ETest extends EasyTeachIntegrationTests {
+public class RemoveQuestionFromQuizE2ETest extends EasyTeachIntegrationTests {
 
     @Autowired
     private CourseRepository courseRepository;
@@ -54,38 +51,25 @@ public class AddQuestionToQuizE2ETest extends EasyTeachIntegrationTests {
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson);
         course.attachQuizToLesson(module.getModuleId(), lesson.getLessonId(), quiz);
-        courseRepository.save(course);
-    }
-
-    @Test
-    public void shouldAddQuestionToQuiz() throws Exception {
-        var questionDto = new QuestionDto(
-                "Explain polymorphism in POO",
-                "TEXT",
-                List.of(new AnswerDto("Polymorphism explanation", true)));
-        mockMvc.perform(MockMvcRequestBuilders.post(
-                "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions",
-                course.getCourseId(), module.getModuleId(), lesson.getLessonId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsBytes(questionDto)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("success"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.questionText").value("Explain polymorphism in POO"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.questionType").value("TEXT"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.answers").isArray())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.answers[0].answerText").value("Polymorphism explanation"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.answers[0].correct").value(true));
-    }
-
-    @Test
-    public void addAlreadyExistingQuestionToQuiz_shouldThrowException() throws Exception {
         course.addQuestionToQuiz(module.getModuleId(), lesson.getLessonId(), question1);
         courseRepository.save(course);
-        mockMvc.perform(MockMvcRequestBuilders.post(
-                                "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions",
-                                course.getCourseId(), module.getModuleId(), lesson.getLessonId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(question1)))
+    }
+
+    @Test
+    public void shouldRemoveQuestionFromQuiz() throws Exception {
+        mockMvc.perform(
+                    MockMvcRequestBuilders.delete(
+                    "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions/{questionId}",
+                    course.getCourseId(), module.getModuleId(), lesson.getLessonId(), question1.getQuestionId()))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    public void removeNotExistingQuestionFromQuiz_shouldThrowException() throws Exception {
+        mockMvc.perform(
+                        MockMvcRequestBuilders.delete(
+                                "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions/{questionId}",
+                                course.getCourseId(), module.getModuleId(), lesson.getLessonId(), "Garbage"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }

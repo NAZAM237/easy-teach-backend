@@ -49,4 +49,13 @@ public class Quiz {
         }
         this.questions.add(question);
     }
+
+    public void removeQuestion(String questionId) {
+        var question = this.questions.stream()
+                .filter(question1 -> question1.getQuestionId().equals(questionId))
+                .findFirst()
+                .orElseThrow(() -> new BadRequestException("This question does not exist in this quiz"));
+
+        this.questions.remove(question);
+    }
 }
