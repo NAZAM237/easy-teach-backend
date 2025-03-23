@@ -110,4 +110,10 @@ public class Module {
                 .orElseThrow(() -> new NotFoundException("Lesson not found"));
         lesson.getQuiz().removeQuestion(questionId);
     }
+
+    public void updateQuestionFromQuiz(String lessonId, String questionId, Question question) {
+        var lesson = this.lessons.stream().filter(lesson1 -> lesson1.getLessonId().equals(lessonId))
+                .findFirst().orElseThrow(() -> new NotFoundException("Lesson not found"));
+        lesson.getQuiz().updateQuestionFromQuiz(questionId, question);
+    }
 }

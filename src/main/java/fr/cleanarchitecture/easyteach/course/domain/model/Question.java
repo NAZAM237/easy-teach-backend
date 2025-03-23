@@ -34,4 +34,10 @@ public class Question {
     public List<Answer> getAnswers() {
         return answers;
     }
+
+    public void updateData(Question newQuestion) {
+        this.questionText = newQuestion.getQuestionText();
+        this.questionType = newQuestion.getQuestionType();
+        this.answers = newQuestion.getAnswers();
+    }
 }

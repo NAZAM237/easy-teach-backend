@@ -123,4 +123,9 @@ public class CourseCommandHandlerConfiguration {
     public RemoveQuestionFromQuizCommandHandler removeQuestionFromQuizCommandHandler(CourseRepository courseRepository) {
         return new RemoveQuestionFromQuizCommandHandler(courseRepository);
     }
+
+    @Bean
+    public UpdateQuestionFromQuizCommandHandler updateQuestionFromQuizCommandHandler(CourseRepository courseRepository) {
+        return new UpdateQuestionFromQuizCommandHandler(courseRepository);
+    }
 }

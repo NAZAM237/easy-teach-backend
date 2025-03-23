@@ -198,4 +198,11 @@ public class Course {
                 .orElseThrow(() -> new NotFoundException("Module not found"));
         module.removeQuestionFromQuiz(lessonId, questionId);
     }
+
+    public void updateQuestionFromQuiz(String moduleId, String lessonId, String questionId, Question question) {
+        var module = this.modules.stream().filter(module1 -> module1.getModuleId().equals(moduleId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Module not found"));
+        module.updateQuestionFromQuiz(lessonId, questionId, question);
+    }
 }

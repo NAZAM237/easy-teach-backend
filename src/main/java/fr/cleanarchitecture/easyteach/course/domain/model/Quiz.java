@@ -1,6 +1,7 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -57,5 +58,13 @@ public class Quiz {
                 .orElseThrow(() -> new BadRequestException("This question does not exist in this quiz"));
 
         this.questions.remove(question);
+    }
+
+    public void updateQuestionFromQuiz(String questionId, Question newQuestion) {
+        var question = this.questions.stream()
+                .filter(q -> q.getQuestionId().equals(questionId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Question not found"));
+        question.updateData(newQuestion);
     }
 }

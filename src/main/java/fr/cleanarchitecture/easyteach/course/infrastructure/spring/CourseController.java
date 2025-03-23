@@ -271,8 +271,22 @@ public class CourseController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // 3 - removeQuestionFromQuiz
-    // 4 - updateQuestionToQuiz
+    @PatchMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions/{questionId}")
+    public ResponseEntity<BaseViewModel<Question>> updateQuestionFromQuiz(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @PathVariable String lessonId,
+            @PathVariable String questionId,
+            @RequestBody QuestionDto questionDto) {
+        var result = this.pipeline.send(
+                new UpdateQuestionFromQuizCommand(
+                        new IdsCourse(courseId, moduleId, lessonId, questionId),
+                        FromQuestionDtoToQuestion.execute(questionDto)));
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
+
     // 5 - addAnswerToQuestion
     // 6 - updateAnswerToQuestion
     // 7 - removeAnswerFromQuestion
