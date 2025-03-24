@@ -224,4 +224,10 @@ public class Course {
                 .findFirst().orElseThrow(() -> new NotFoundException("Module not found"));
         module.removeAnswerFromQuestion(lessonId, questionId, answerId);
     }
+
+    public void updateQuizFromLesson(String moduleId, String lessonId, Quiz quiz) {
+        var module = this.modules.stream().filter(module1 -> module1.getModuleId().equals(moduleId))
+                .findFirst().orElseThrow(() -> new NotFoundException("Module not found"));
+        module.updateQuizFromLesson(lessonId, quiz);
+    }
 }

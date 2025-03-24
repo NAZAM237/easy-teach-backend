@@ -327,7 +327,19 @@ public class CourseController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PatchMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/quiz")
+    public ResponseEntity<BaseViewModel<Quiz>> updateQuizFromLesson(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @PathVariable String lessonId,
+            @RequestBody QuizDto newQuiz) {
+        var result = this.pipeline.send(
+                new UpdateQuizFromLessonCommand(
+                        new IdsCourse(courseId, moduleId, lessonId),
+                        new Quiz(newQuiz.getQuizTitle(), newQuiz.getQuizDescription(), newQuiz.getPassingScore())));
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
-    // 8 - updateQuiz
+
     // 9 - detachQuizFromLesson
 }

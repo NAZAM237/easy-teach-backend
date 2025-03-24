@@ -134,4 +134,13 @@ public class Module {
                 .findFirst().orElseThrow(() -> new NotFoundException("Lesson not found"));
         lesson.getQuiz().removeAnswerFromQuestion(questionId, answerId);
     }
+
+    public void updateQuizFromLesson(String lessonId, Quiz quiz) {
+        var lesson = this.lessons.stream().filter(lesson1 -> lesson1.getLessonId().equals(lessonId))
+                .findFirst().orElseThrow(() -> new NotFoundException("Lesson not found"));
+        if (lesson.getQuiz() == null) {
+            throw new BadRequestException("Lesson has not attached quiz");
+        }
+        lesson.getQuiz().updateData(quiz);
+    }
 }

@@ -86,4 +86,10 @@ public class Quiz {
                 .findFirst().orElseThrow(() -> new NotFoundException("Question not found"));
         question.removeAnswer(answerId);
     }
+
+    public void updateData(Quiz quiz) {
+        this.quizTitle = quiz.getQuizTitle();
+        this.description = quiz.getDescription();
+        this.passingScore = quiz.getPassingScore();
+    }
 }
