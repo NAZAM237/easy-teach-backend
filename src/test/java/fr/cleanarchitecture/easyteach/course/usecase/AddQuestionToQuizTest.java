@@ -54,14 +54,13 @@ public class AddQuestionToQuizTest {
 
     @Test
     public void addQuestionToQuizTest() {
-        var newQuestion = new Question(
-                "Expliquer le polymorphisme en POO",
-                QuestionType.TEXT,
-                List.of(new Answer("Explication Polymlorphisme", true)));
+        var newQuestion = new Question("Expliquer le polymorphisme en POO", QuestionType.TEXT);
         var idsCourse = getIdsCourse();
         var addQuestionToQuizCommand = new AddQuestionToQuizCommand(idsCourse, newQuestion);
         var addQuestionToQuizCommandHandler = new AddQuestionToQuizCommandHandler(courseRepository);
+
         var result = addQuestionToQuizCommandHandler.handle(addQuestionToQuizCommand);
+
         Assert.assertEquals(1, quiz.getQuestions().size());
         Assert.assertEquals(newQuestion.getQuestionText(), result.getData().getQuestionText());
         Assert.assertEquals(newQuestion.getQuestionType(), result.getData().getQuestionType());
@@ -73,6 +72,7 @@ public class AddQuestionToQuizTest {
         var idsCourse = getIdsCourse();
         var addQuestionToQuizCommand = new AddQuestionToQuizCommand(idsCourse, question1);
         var addQuestionToQuizCommandHandler = new AddQuestionToQuizCommandHandler(courseRepository);
+
         var resultThrow = Assert.assertThrows(
             BadRequestException.class,
             () -> addQuestionToQuizCommandHandler.handle(addQuestionToQuizCommand)
@@ -81,7 +81,7 @@ public class AddQuestionToQuizTest {
     }
 
     private IdsCourse getIdsCourse() {
-        return new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId(), quiz.getQuizId());
+        return new IdsCourse(course.getCourseId(), module.getModuleId(), lesson.getLessonId());
     }
 
 

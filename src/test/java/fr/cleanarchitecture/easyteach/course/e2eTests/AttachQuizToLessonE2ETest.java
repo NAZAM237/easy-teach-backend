@@ -50,7 +50,7 @@ public class AttachQuizToLessonE2ETest extends EasyTeachIntegrationTests {
                                 course.getCourseId(), module.getModuleId(), lesson.getLessonId())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsBytes(quizDto)))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isCreated());
 
         Assert.assertEquals(quizDto.getQuizTitle(), lesson.getQuiz().getQuizTitle());
         Assert.assertEquals(quizDto.getQuizDescription(), lesson.getQuiz().getDescription());

@@ -42,7 +42,7 @@ public class AddLessonToModuleE2ETest extends EasyTeachIntegrationTests {
                             course.getCourseId(), module.getModuleId())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsBytes(dto)))
-            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.status().isCreated())
             .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("success"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.data.lessonTitle").value("title"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.data.contentType").value("IMAGES"))

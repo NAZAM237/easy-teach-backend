@@ -57,7 +57,7 @@ public class AddResourceToLessonE2ETest extends EasyTeachIntegrationTests {
                     course.getCourseId(), module.getModuleId(), lesson.getLessonId())
                         .file(pdfFile)
                         .param("type", "DOCUMENTS"))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value("success"))
                 .andExpect(jsonPath("$.data.resourceUrl").value(UPLOAD_DIR + "/documents/file.pdf"));
     }

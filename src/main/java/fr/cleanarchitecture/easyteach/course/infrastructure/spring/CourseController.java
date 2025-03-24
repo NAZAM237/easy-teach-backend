@@ -90,7 +90,7 @@ public class CourseController {
                         module.getModuleTitle(),
                         module.getModuleDescription(),
                         module.getModuleOrder()));
-        return ResponseEntity.ok(result);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{courseId}/modules/{moduleId}")
@@ -120,8 +120,7 @@ public class CourseController {
     public ResponseEntity<BaseViewModel<Lesson>> addLessonToModule(
             @PathVariable String courseId,
             @PathVariable String moduleId,
-            @RequestBody AddLessonToModuleDto addLessonToModuleDto,
-            @RequestParam(required = false) List<MultipartFile> files) {
+            @RequestBody AddLessonToModuleDto addLessonToModuleDto) {
         var result = this.pipeline.send(
                 new AddLessonToModuleCommand(
                         courseId,
@@ -133,7 +132,7 @@ public class CourseController {
                                 addLessonToModuleDto.getTextContent(),
                                 addLessonToModuleDto.getOrder()))
         );
-        return ResponseEntity.ok(result);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @DeleteMapping("{courseId}/modules/{moduleId}/lessons/{lessonId}")
@@ -200,7 +199,7 @@ public class CourseController {
             @RequestParam("file") MultipartFile file,
             @RequestParam("type") String resourceType) {
         var result = this.pipeline.send(new AddResourceToLessonCommand(new IdsCourse(courseId, moduleId, lessonId), file, resourceType));
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @PostMapping(
@@ -213,7 +212,7 @@ public class CourseController {
             @RequestParam("file") MultipartFile file,
             @RequestParam("type") String lessonContentType) {
         var result = this.pipeline.send(new AddContentFileToLessonCommand(new IdsCourse(courseId, moduleId, lessonId), file, lessonContentType));
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/resources/{resourceId}")
@@ -241,7 +240,7 @@ public class CourseController {
                                 quizDto.getPassingScore())
                 )
         );
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @PostMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions")
@@ -255,7 +254,7 @@ public class CourseController {
                         new IdsCourse(courseId, moduleId, lessonId),
                         FromQuestionDtoToQuestion.execute(questionDto))
         );
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions/{questionId}")
@@ -285,9 +284,21 @@ public class CourseController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @PostMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions/{questionId}")
+    public ResponseEntity<BaseViewModel<Question>> addAnswerToQuestion(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @PathVariable String lessonId,
+            @PathVariable String questionId,
+            @RequestBody AnswerDto newAnswer) {
+        var result = this.pipeline.send(
+                new AddAnswerToQuestionCommand(
+                        new IdsCourse(courseId, moduleId, lessonId, questionId),
+                        new Answer(newAnswer.getAnswerText(), newAnswer.isCorrect())));
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    }
 
 
-    // 5 - addAnswerToQuestion
     // 6 - updateAnswerToQuestion
     // 7 - removeAnswerFromQuestion
     // 8 - updateQuiz

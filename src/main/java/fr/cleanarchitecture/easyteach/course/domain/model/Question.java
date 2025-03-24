@@ -1,5 +1,6 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.QuestionType;
 
 import java.util.ArrayList;
@@ -11,6 +12,12 @@ public class Question {
     private String questionText;
     private QuestionType questionType;
     private List<Answer> answers = new ArrayList<>();
+
+    public Question(String questionText, QuestionType questionType) {
+        this.questionId = UUID.randomUUID().toString();
+        this.questionText = questionText;
+        this.questionType = questionType;
+    }
 
     public Question(String questionText, QuestionType questionType, List<Answer> answers) {
         this.questionId = UUID.randomUUID().toString();
@@ -39,5 +46,13 @@ public class Question {
         this.questionText = newQuestion.getQuestionText();
         this.questionType = newQuestion.getQuestionType();
         this.answers = newQuestion.getAnswers();
+    }
+
+    public void addAnswer(Answer answer) {
+        var noPresent = this.answers.stream().noneMatch(a -> a.getAnswerText().equals(answer.getAnswerText()));
+        if (!noPresent) {
+            throw new BadRequestException("Answer already exists in this question");
+        }
+        this.answers.add(answer);
     }
 }

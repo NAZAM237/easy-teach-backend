@@ -48,7 +48,7 @@ public class AddModuleToCourseE2ETest extends EasyTeachIntegrationTests {
                     MockMvcRequestBuilders.post("/courses/" +course.getCourseId()+ "/modules")
                             .content(objectMapper.writeValueAsBytes(dto))
                             .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("success"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.moduleTitle").value(dto.getModuleTitle()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.moduleDescription").value(dto.getModuleDescription()));

@@ -7,7 +7,7 @@ import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.*;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
-import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.QuestionDto;
+import fr.cleanarchitecture.easyteach.course.infrastructure.spring.dtos.AnswerDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,10 +18,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
-public class AddQuestionToQuizE2ETest extends EasyTeachIntegrationTests {
+public class AddAnswerToQuestionE2ETest extends EasyTeachIntegrationTests {
 
     @Autowired
     private CourseRepository courseRepository;
@@ -30,18 +29,11 @@ public class AddQuestionToQuizE2ETest extends EasyTeachIntegrationTests {
     private Lesson lesson;
     private Module module;
     private Quiz quiz;
-    private Question question1;
+    private Question question;
 
     @Before
     public void setUp() {
-        question1 = new Question(
-                "Qu'est ce qu'une classe en POO",
-                QuestionType.SINGLE_CHOICE,
-                List.of(new Answer("Un plan de conception pour créer des objets", true),
-                        new Answer("Un fichier contenant du code", false),
-                        new Answer("Une fonction spécifique", false))
-        );
-
+        question = new Question("Qu'est ce qu'une classe en POO", QuestionType.SINGLE_CHOICE);
         course = new Course("Apprenez à programmer en Java", "Description...", new Teacher(), new Price(BigDecimal.ZERO, "FCFA"));
         module = new Module("Introduction à Java", "Description module...", 1);
         lesson = new Lesson("Introduction", ResourceType.DOCUMENTS, null, "TextContent", 1);
@@ -53,33 +45,33 @@ public class AddQuestionToQuizE2ETest extends EasyTeachIntegrationTests {
         course.addModule(module);
         course.addLessonToModule(module.getModuleId(), lesson);
         course.attachQuizToLesson(module.getModuleId(), lesson.getLessonId(), quiz);
+        course.addQuestionToQuiz(module.getModuleId(), lesson.getLessonId(), question);
         courseRepository.save(course);
     }
 
     @Test
-    public void shouldAddQuestionToQuiz() throws Exception {
-        var questionDto = new QuestionDto("Explain polymorphism in POO", "TEXT");
+    public void shouldAddAnswerToQuestionTest() throws Exception {
+        var answer = new AnswerDto("C'est une structure de données", false);
         mockMvc.perform(MockMvcRequestBuilders.post(
-                "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions",
-                course.getCourseId(), module.getModuleId(), lesson.getLessonId())
+                        "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions/{questionId}",
+                        course.getCourseId(), module.getModuleId(), lesson.getLessonId(), question.getQuestionId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsBytes(questionDto)))
+                    .content(objectMapper.writeValueAsBytes(answer)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("success"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.questionText").value("Explain polymorphism in POO"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.questionType").value("TEXT"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.answers").isArray());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.answers").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.answers").isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.answers[0].answerText").value("C'est une structure de données"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.answers[0].correct").value(false));
     }
 
     @Test
-    public void addAlreadyExistingQuestionToQuiz_shouldThrowException() throws Exception {
-        course.addQuestionToQuiz(module.getModuleId(), lesson.getLessonId(), question1);
-        courseRepository.save(course);
+    public void shouldAddAnswerToNotExistsQuestion_shouldThrowException() throws Exception {
+        var answer = new AnswerDto("C'est une structure de données", false);
         mockMvc.perform(MockMvcRequestBuilders.post(
-                                "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions",
-                                course.getCourseId(), module.getModuleId(), lesson.getLessonId())
+                                "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions/{questionId}",
+                                course.getCourseId(), module.getModuleId(), lesson.getLessonId(), "Garbage")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(question1)))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                        .content(objectMapper.writeValueAsBytes(answer)))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }

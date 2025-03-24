@@ -61,7 +61,7 @@ public class AddContentFileToLessonE2ETest extends EasyTeachIntegrationTests {
                     course.getCourseId(), module.getModuleId(), lesson.getLessonId())
                     .file(pdfFile)
                     .param("type", "DOCUMENTS"))
-            .andExpect(status().isOk())
+            .andExpect(status().isCreated())
             .andExpect(jsonPath("$.data.fileName").value("file.pdf"))
             .andExpect(jsonPath("$.data.fileType").value("application/pdf"))
             .andExpect(jsonPath("$.data.fileSize").value(11))

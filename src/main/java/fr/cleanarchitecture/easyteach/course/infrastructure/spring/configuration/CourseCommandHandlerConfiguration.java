@@ -128,4 +128,9 @@ public class CourseCommandHandlerConfiguration {
     public UpdateQuestionFromQuizCommandHandler updateQuestionFromQuizCommandHandler(CourseRepository courseRepository) {
         return new UpdateQuestionFromQuizCommandHandler(courseRepository);
     }
+
+    @Bean
+    public AddAnswerToQuestionCommandHandler addAnswerToQuestionCommandHandler(CourseRepository courseRepository) {
+        return new AddAnswerToQuestionCommandHandler(courseRepository);
+    }
 }

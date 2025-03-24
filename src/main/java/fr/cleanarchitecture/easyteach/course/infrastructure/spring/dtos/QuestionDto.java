@@ -14,6 +14,11 @@ public class QuestionDto {
     private QuestionType questionType;
     private List<AnswerDto> answers = new ArrayList<>();
 
+    public QuestionDto(String questionText, String questionType) {
+        this.questionText = questionText;
+        this.questionType = QuestionType.getQuestionType(questionType);
+    }
+
     public QuestionDto(String questionText, String questionType, List<AnswerDto> answers) {
         this.questionText = questionText;
         this.questionType = QuestionType.getQuestionType(questionType);

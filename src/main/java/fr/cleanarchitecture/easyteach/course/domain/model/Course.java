@@ -205,4 +205,11 @@ public class Course {
                 .orElseThrow(() -> new NotFoundException("Module not found"));
         module.updateQuestionFromQuiz(lessonId, questionId, question);
     }
+
+    public void addAnswerToQuestion(String moduleId, String lessonId, String questionId, Answer answer) {
+        var module = this.modules.stream().filter(module1 -> module1.getModuleId().equals(moduleId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Module not found"));
+        module.addAnswerToQuestion(lessonId, questionId, answer);
+    }
 }
