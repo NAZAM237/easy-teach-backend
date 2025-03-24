@@ -1,6 +1,7 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
 import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
+import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.QuestionType;
 
 import java.util.ArrayList;
@@ -54,5 +55,11 @@ public class Question {
             throw new BadRequestException("Answer already exists in this question");
         }
         this.answers.add(answer);
+    }
+
+    public void updateAnswer(String answerId, Answer newAnswer) {
+        var answer = this.answers.stream().filter(a -> a.getAnswerId().equals(answerId))
+                .findFirst().orElseThrow(() -> new NotFoundException("Answer not found for this question"));
+        answer.updateData(newAnswer);
     }
 }

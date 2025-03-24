@@ -133,4 +133,9 @@ public class CourseCommandHandlerConfiguration {
     public AddAnswerToQuestionCommandHandler addAnswerToQuestionCommandHandler(CourseRepository courseRepository) {
         return new AddAnswerToQuestionCommandHandler(courseRepository);
     }
+
+    @Bean
+    public UpdateAnswerFromQuestionCommandHandler updateAnswerFromQuestionCommandHandler(CourseRepository courseRepository) {
+        return new UpdateAnswerFromQuestionCommandHandler(courseRepository);
+    }
 }

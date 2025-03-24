@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.math.BigDecimal;
 
 @RunWith(SpringRunner.class)
-public class AddAnswerToQuestionE2ETest extends EasyTeachIntegrationTests {
+public class UpdateAnswerFromQuestionE2ETest extends EasyTeachIntegrationTests {
 
     @Autowired
     private CourseRepository courseRepository;
@@ -30,10 +30,13 @@ public class AddAnswerToQuestionE2ETest extends EasyTeachIntegrationTests {
     private Module module;
     private Quiz quiz;
     private Question question;
+    private Answer answer;
 
     @Before
     public void setUp() {
         question = new Question("Qu'est ce qu'une classe en POO", QuestionType.SINGLE_CHOICE);
+        answer = new Answer("Un plan de conception pour créer des objets", true);
+
         course = new Course("Apprenez à programmer en Java", "Description...", new Teacher(), new Price(BigDecimal.ZERO, "FCFA"));
         module = new Module("Introduction à Java", "Description module...", 1);
         lesson = new Lesson("Introduction", ResourceType.DOCUMENTS, null, "TextContent", 1);
@@ -46,32 +49,32 @@ public class AddAnswerToQuestionE2ETest extends EasyTeachIntegrationTests {
         course.addLessonToModule(module.getModuleId(), lesson);
         course.attachQuizToLesson(module.getModuleId(), lesson.getLessonId(), quiz);
         course.addQuestionToQuiz(module.getModuleId(), lesson.getLessonId(), question);
+        course.addAnswerToQuestion(module.getModuleId(), lesson.getLessonId(), question.getQuestionId(), answer);
         courseRepository.save(course);
     }
 
     @Test
-    public void shouldAddAnswerToQuestionTest() throws Exception {
-        var answer = new AnswerDto("C'est une structure de données", false);
-        mockMvc.perform(MockMvcRequestBuilders.post(
-                        "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions/{questionId}/answers",
-                        course.getCourseId(), module.getModuleId(), lesson.getLessonId(), question.getQuestionId())
+    public void shouldUpdateAnswerFromQuestionTest() throws Exception {
+        var answerDto = new AnswerDto("Représentation d'un concept de la vie réelle", true);
+        mockMvc.perform(MockMvcRequestBuilders.patch(
+                        "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions/{questionId}/answers/{answerId}",
+                        course.getCourseId(), module.getModuleId(), lesson.getLessonId(), question.getQuestionId(), answer.getAnswerId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsBytes(answer)))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.answers").isArray())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.answers").isNotEmpty())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.answers[0].answerText").value("C'est une structure de données"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.answers[0].correct").value(false));
+                    .content(objectMapper.writeValueAsBytes(answerDto)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.answerText").value(answerDto.getAnswerText()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.correct").value(answerDto.isCorrect()));
     }
 
     @Test
-    public void shouldAddAnswerToNotExistsQuestion_shouldThrowException() throws Exception {
-        var answer = new AnswerDto("C'est une structure de données", false);
-        mockMvc.perform(MockMvcRequestBuilders.post(
-                                "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions/{questionId}/answers",
-                                course.getCourseId(), module.getModuleId(), lesson.getLessonId(), "Garbage")
+    public void updateAnswerFromNotExistsQuestion_shouldThrowException() throws Exception {
+        var answerDto = new AnswerDto("Représentation d'un concept de la vie réelle", true);
+        mockMvc.perform(MockMvcRequestBuilders.patch(
+                                "/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions/{questionId}/answers/{answerId}",
+                                course.getCourseId(), module.getModuleId(), lesson.getLessonId(), "Garbage", answer.getAnswerId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(answer)))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+                        .content(objectMapper.writeValueAsBytes(answerDto)))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Question not found"));
     }
 }

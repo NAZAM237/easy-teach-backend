@@ -212,4 +212,10 @@ public class Course {
                 .orElseThrow(() -> new NotFoundException("Module not found"));
         module.addAnswerToQuestion(lessonId, questionId, answer);
     }
+
+    public void updateAnswerFromQuestion(String moduleId, String lessonId, String questionId, String answerId, Answer answer) {
+        var module = this.modules.stream().filter(module1 -> module1.getModuleId().equals(moduleId))
+                .findFirst().orElseThrow(() -> new NotFoundException("Module not found"));
+        module.updateAnswerFromQuestion(lessonId, questionId, answerId, answer);
+    }
 }

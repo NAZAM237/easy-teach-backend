@@ -74,4 +74,10 @@ public class Quiz {
                 .orElseThrow(() -> new NotFoundException("Question not found"));
         question.addAnswer(answer);
     }
+
+    public void updateAnswerFromQuestion(String questionId, String answerId, Answer answer) {
+        var question = this.questions.stream().filter(question1 -> question1.getQuestionId().equals(questionId))
+                .findFirst().orElseThrow(() -> new NotFoundException("Question not found"));
+        question.updateAnswer(answerId, answer);
+    }
 }

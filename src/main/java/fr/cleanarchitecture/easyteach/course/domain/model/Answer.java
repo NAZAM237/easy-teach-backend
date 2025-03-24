@@ -24,4 +24,9 @@ public class Answer {
     public boolean isCorrect() {
         return isCorrect;
     }
+
+    public void updateData(Answer newAnswer) {
+        this.answerText = newAnswer.getAnswerText();
+        this.isCorrect = newAnswer.isCorrect();
+    }
 }
