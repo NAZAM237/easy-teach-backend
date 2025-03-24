@@ -143,4 +143,10 @@ public class Module {
         }
         lesson.getQuiz().updateData(quiz);
     }
+
+    public void detachQuizFromLesson(String lessonId) {
+        var lesson = this.lessons.stream().filter(lesson1 -> lesson1.getLessonId().equals(lessonId))
+                .findFirst().orElseThrow(() -> new NotFoundException("Lesson not found"));
+        lesson.detachQuiz();
+    }
 }

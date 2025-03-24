@@ -90,4 +90,11 @@ public class Lesson {
     public void updateContentFileUrl(String filePath) {
         this.contentFileUrl = filePath;
     }
+
+    public void detachQuiz() {
+        if (this.quiz == null) {
+            throw new BadRequestException("Cannot detach quiz. This lesson hasn't attached quiz");
+        }
+        this.quiz = null;
+    }
 }

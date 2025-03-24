@@ -148,4 +148,9 @@ public class CourseCommandHandlerConfiguration {
     public UpdateQuizFromLessonCommandHandler updateQuizFromLessonCommandHandler(CourseRepository courseRepository) {
         return new UpdateQuizFromLessonCommandHandler(courseRepository);
     }
+
+    @Bean
+    public DetachQuizFromLessonCommandHandler detachQuizFromLessonCommandHandler(CourseRepository courseRepository) {
+        return new DetachQuizFromLessonCommandHandler(courseRepository);
+    }
 }

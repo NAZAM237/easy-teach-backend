@@ -340,6 +340,14 @@ public class CourseController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-
-    // 9 - detachQuizFromLesson
+    @DeleteMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/quiz")
+    public ResponseEntity<BaseViewModel<Void>> detachQuizFromLesson(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @PathVariable String lessonId) {
+        this.pipeline.send(
+                new DetachQuizFromLessonCommand(
+                        new IdsCourse(courseId, moduleId, lessonId)));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

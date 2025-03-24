@@ -230,4 +230,10 @@ public class Course {
                 .findFirst().orElseThrow(() -> new NotFoundException("Module not found"));
         module.updateQuizFromLesson(lessonId, quiz);
     }
+
+    public void detachQuizFromLesson(String moduleId, String lessonId) {
+        var module = this.modules.stream().filter(module1 -> module1.getModuleId().equals(moduleId))
+                .findFirst().orElseThrow(() -> new NotFoundException("Module not found"));
+        module.detachQuizFromLesson(lessonId);
+    }
 }
