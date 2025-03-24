@@ -62,4 +62,10 @@ public class Question {
                 .findFirst().orElseThrow(() -> new NotFoundException("Answer not found for this question"));
         answer.updateData(newAnswer);
     }
+
+    public void removeAnswer(String answerId) {
+        var answer = this.answers.stream().filter(a -> a.getAnswerId().equals(answerId))
+                .findFirst().orElseThrow(() -> new NotFoundException("Answer not found for this question"));
+        this.answers.remove(answer);
+    }
 }

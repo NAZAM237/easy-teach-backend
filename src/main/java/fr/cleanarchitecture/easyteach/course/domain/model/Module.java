@@ -128,4 +128,10 @@ public class Module {
                 .findFirst().orElseThrow(() -> new NotFoundException("Lesson not found"));
         lesson.getQuiz().updateAnswerFromQuestion(questionId, answerId, answer);
     }
+
+    public void removeAnswerFromQuestion(String lessonId, String questionId, String answerId) {
+        var lesson = this.lessons.stream().filter(lesson1 -> lesson1.getLessonId().equals(lessonId))
+                .findFirst().orElseThrow(() -> new NotFoundException("Lesson not found"));
+        lesson.getQuiz().removeAnswerFromQuestion(questionId, answerId);
+    }
 }

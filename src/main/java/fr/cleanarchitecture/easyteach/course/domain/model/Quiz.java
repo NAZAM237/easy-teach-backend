@@ -80,4 +80,10 @@ public class Quiz {
                 .findFirst().orElseThrow(() -> new NotFoundException("Question not found"));
         question.updateAnswer(answerId, answer);
     }
+
+    public void removeAnswerFromQuestion(String questionId, String answerId) {
+        var question = this.questions.stream().filter(question1 -> question1.getQuestionId().equals(questionId))
+                .findFirst().orElseThrow(() -> new NotFoundException("Question not found"));
+        question.removeAnswer(answerId);
+    }
 }

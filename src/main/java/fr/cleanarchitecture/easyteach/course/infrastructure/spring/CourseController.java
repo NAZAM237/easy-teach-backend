@@ -314,8 +314,20 @@ public class CourseController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{courseId}/modules/{moduleId}/lessons/{lessonId}/questions/{questionId}/answers/{answerId}")
+    public ResponseEntity<BaseViewModel<Void>> removeAnswerFromQuestion(
+            @PathVariable String courseId,
+            @PathVariable String moduleId,
+            @PathVariable String lessonId,
+            @PathVariable String questionId,
+            @PathVariable String answerId) {
+        this.pipeline.send(
+                new RemoveAnswerFromQuestionCommand(
+                        new IdsCourse(courseId, moduleId, lessonId, questionId, answerId)));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
-    // 7 - removeAnswerFromQuestion
+
     // 8 - updateQuiz
     // 9 - detachQuizFromLesson
 }
