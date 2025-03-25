@@ -1,6 +1,6 @@
 package fr.cleanarchitecture.easyteach.course.domain.enums;
 
-import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
+import fr.cleanarchitecture.easyteach.shared.domain.exceptions.BadRequestException;
 
 public enum QuestionType {
     MULTIPLE_CHOICE, SINGLE_CHOICE, TEXT;

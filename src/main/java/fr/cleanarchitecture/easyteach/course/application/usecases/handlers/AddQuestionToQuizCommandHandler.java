@@ -1,12 +1,12 @@
 package fr.cleanarchitecture.easyteach.course.application.usecases.handlers;
 
 import an.awesome.pipelinr.Command;
-import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
-import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AddQuestionToQuizCommand;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Question;
+import fr.cleanarchitecture.easyteach.shared.domain.exceptions.NotFoundException;
+import fr.cleanarchitecture.easyteach.shared.domain.viewmodel.BaseViewModel;
 
 public class AddQuestionToQuizCommandHandler implements Command.Handler<AddQuestionToQuizCommand, BaseViewModel<Question>> {
 

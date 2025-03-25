@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.core.domain.exceptions;
+package fr.cleanarchitecture.easyteach.shared.domain.exceptions;
 
 public class NotFoundException extends RuntimeException{
     public NotFoundException(String message) {

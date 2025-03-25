@@ -1,10 +1,10 @@
 package fr.cleanarchitecture.easyteach.course.application.usecases.handlers;
 
 import an.awesome.pipelinr.Command;
-import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.GetAllCoursesCommand;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
+import fr.cleanarchitecture.easyteach.shared.domain.viewmodel.BaseViewModel;
 
 import java.util.List;
 

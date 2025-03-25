@@ -1,7 +1,5 @@
 package fr.cleanarchitecture.easyteach.course.domain;
 
-import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
-import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.CourseStatus;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
@@ -9,6 +7,8 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Lesson;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
+import fr.cleanarchitecture.easyteach.shared.domain.exceptions.BadRequestException;
+import fr.cleanarchitecture.easyteach.shared.domain.exceptions.NotFoundException;
 import org.junit.Assert;
 import org.junit.Test;
 

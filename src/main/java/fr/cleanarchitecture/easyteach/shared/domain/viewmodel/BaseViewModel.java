@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.core.domain.viewmodel;
+package fr.cleanarchitecture.easyteach.shared.domain.viewmodel;
 
 import java.io.Serializable;
 

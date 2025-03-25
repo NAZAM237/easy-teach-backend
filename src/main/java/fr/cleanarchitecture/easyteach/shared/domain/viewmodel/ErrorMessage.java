@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.core.domain.viewmodel;
+package fr.cleanarchitecture.easyteach.shared.domain.viewmodel;
 
 public class ErrorMessage {
     private String message;

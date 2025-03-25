@@ -1,6 +1,5 @@
 package fr.cleanarchitecture.easyteach.course.usecase;
 
-import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.ReorderLessonFromModuleCommand;
 import fr.cleanarchitecture.easyteach.course.application.usecases.handlers.ReorderLessonFromModuleCommandHandler;
@@ -11,6 +10,7 @@ import fr.cleanarchitecture.easyteach.course.domain.model.Module;
 import fr.cleanarchitecture.easyteach.course.domain.model.Teacher;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.Price;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
+import fr.cleanarchitecture.easyteach.shared.domain.exceptions.NotFoundException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

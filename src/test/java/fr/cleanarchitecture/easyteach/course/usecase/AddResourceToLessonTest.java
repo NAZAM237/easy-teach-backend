@@ -1,6 +1,5 @@
 package fr.cleanarchitecture.easyteach.course.usecase;
 
-import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.FileFunctions;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AddResourceToLessonCommand;
@@ -15,6 +14,7 @@ import fr.cleanarchitecture.easyteach.course.domain.viewmodel.IdsCourse;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryCourseRepository;
 import fr.cleanarchitecture.easyteach.course.infrastructure.persistence.inmemory.InMemoryResourceFile;
 import fr.cleanarchitecture.easyteach.course.infrastructure.spring.configuration.FileUploadPropertiesConfiguration;
+import fr.cleanarchitecture.easyteach.shared.domain.exceptions.BadRequestException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

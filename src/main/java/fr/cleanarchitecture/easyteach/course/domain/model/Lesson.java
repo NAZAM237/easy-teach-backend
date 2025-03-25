@@ -1,8 +1,8 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
-import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.ResourceType;
 import fr.cleanarchitecture.easyteach.course.domain.valueobject.InputLesson;
+import fr.cleanarchitecture.easyteach.shared.domain.exceptions.BadRequestException;
 
 import java.util.ArrayList;
 import java.util.List;

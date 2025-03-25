@@ -1,9 +1,9 @@
 package fr.cleanarchitecture.easyteach.course.application.usecases.handlers;
 
 import an.awesome.pipelinr.Command;
-import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.RemoveAnswerFromQuestionCommand;
+import fr.cleanarchitecture.easyteach.shared.domain.exceptions.NotFoundException;
 
 public class RemoveAnswerFromQuestionCommandHandler implements Command.Handler<RemoveAnswerFromQuestionCommand, Void> {
 

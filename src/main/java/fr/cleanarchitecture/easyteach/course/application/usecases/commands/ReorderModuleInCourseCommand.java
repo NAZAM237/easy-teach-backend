@@ -1,9 +1,9 @@
 package fr.cleanarchitecture.easyteach.course.application.usecases.commands;
 
 import an.awesome.pipelinr.Command;
-import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.domain.model.Course;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
+import fr.cleanarchitecture.easyteach.shared.domain.viewmodel.BaseViewModel;
 
 import java.util.List;
 

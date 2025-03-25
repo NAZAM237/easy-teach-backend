@@ -1,14 +1,14 @@
 package fr.cleanarchitecture.easyteach.course.application.usecases.handlers;
 
 import an.awesome.pipelinr.Command;
-import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
-import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
-import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.ports.FileFunctions;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AddResourceToLessonCommand;
 import fr.cleanarchitecture.easyteach.course.domain.model.Resource;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.FileUploadResponse;
+import fr.cleanarchitecture.easyteach.shared.domain.exceptions.BadRequestException;
+import fr.cleanarchitecture.easyteach.shared.domain.exceptions.NotFoundException;
+import fr.cleanarchitecture.easyteach.shared.domain.viewmodel.BaseViewModel;
 
 import java.io.IOException;
 

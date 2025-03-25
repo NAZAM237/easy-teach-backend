@@ -1,11 +1,11 @@
 package fr.cleanarchitecture.easyteach.course.application.usecases.handlers;
 
 import an.awesome.pipelinr.Command;
-import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
-import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.application.ports.CourseRepository;
 import fr.cleanarchitecture.easyteach.course.application.usecases.commands.AddModuleToCourseCommand;
 import fr.cleanarchitecture.easyteach.course.domain.model.Module;
+import fr.cleanarchitecture.easyteach.shared.domain.exceptions.NotFoundException;
+import fr.cleanarchitecture.easyteach.shared.domain.viewmodel.BaseViewModel;
 
 public class AddModuleToCourseCommandHandler implements Command.Handler<AddModuleToCourseCommand, BaseViewModel<Module>> {
 

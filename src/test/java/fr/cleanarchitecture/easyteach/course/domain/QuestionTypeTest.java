@@ -1,7 +1,7 @@
 package fr.cleanarchitecture.easyteach.course.domain;
 
-import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.QuestionType;
+import fr.cleanarchitecture.easyteach.shared.domain.exceptions.BadRequestException;
 import org.junit.Assert;
 import org.junit.Test;
 

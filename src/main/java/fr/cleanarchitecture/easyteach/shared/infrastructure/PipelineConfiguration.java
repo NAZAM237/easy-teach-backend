@@ -1,4 +1,4 @@
-package fr.cleanarchitecture.easyteach.core.infrastructure;
+package fr.cleanarchitecture.easyteach.shared.infrastructure;
 
 import an.awesome.pipelinr.Command;
 import an.awesome.pipelinr.Notification;

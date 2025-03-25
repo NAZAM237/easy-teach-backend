@@ -1,10 +1,10 @@
 package fr.cleanarchitecture.easyteach.course.application.usecases.commands;
 
 import an.awesome.pipelinr.Command;
-import fr.cleanarchitecture.easyteach.core.domain.viewmodel.BaseViewModel;
 import fr.cleanarchitecture.easyteach.course.domain.model.Answer;
 import fr.cleanarchitecture.easyteach.course.domain.model.Question;
 import fr.cleanarchitecture.easyteach.course.domain.viewmodel.IdsCourse;
+import fr.cleanarchitecture.easyteach.shared.domain.viewmodel.BaseViewModel;
 
 public class AddAnswerToQuestionCommand implements Command<BaseViewModel<Question>> {
     private IdsCourse idsCourse;

@@ -1,8 +1,8 @@
 package fr.cleanarchitecture.easyteach.course.domain.model;
 
-import fr.cleanarchitecture.easyteach.core.domain.exceptions.BadRequestException;
-import fr.cleanarchitecture.easyteach.core.domain.exceptions.NotFoundException;
 import fr.cleanarchitecture.easyteach.course.domain.enums.QuestionType;
+import fr.cleanarchitecture.easyteach.shared.domain.exceptions.BadRequestException;
+import fr.cleanarchitecture.easyteach.shared.domain.exceptions.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
