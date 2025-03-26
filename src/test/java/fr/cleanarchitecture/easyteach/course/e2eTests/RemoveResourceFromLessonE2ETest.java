@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 @RunWith(SpringRunner.class)
 public class RemoveResourceFromLessonE2ETest extends EasyTeachIntegrationTests {
 
-    private static final String UPLOAD_DIR = "/Users/nazam/Desktop/Projects/easy-teach/uploaded-resources";
+    private static final String UPLOAD_DIR = "/Users/nazam/Desktop/Projects/easy-teach-backend/uploaded-resources";
     private static final String RESOURCE_URL = UPLOAD_DIR + "/images/file.png";
 
     @Autowired

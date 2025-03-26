@@ -25,7 +25,7 @@ import java.math.BigDecimal;
 
 public class AddResourceToLessonTest {
 
-    private static final String UPLOAD_DIR = "/Users/nazam/Desktop/Projects/easy-teach/uploaded-resources";
+    private static final String UPLOAD_DIR = "/Users/nazam/Desktop/Projects/easy-teach-backend/uploaded-resources";
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();
     private final FileUploadPropertiesConfiguration properties = new FileUploadPropertiesConfiguration();

@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 
 public class RemoveResourceFromLessonTest {
 
-    private static final String UPLOAD_DIR = "/Users/nazam/Desktop/Projects/easy-teach/uploaded-resources";
+    private static final String UPLOAD_DIR = "/Users/nazam/Desktop/Projects/easy-teach-backend/uploaded-resources";
     private static final String RESOURCE_URL = UPLOAD_DIR + "/documents/file.txt";
 
     private final CourseRepository courseRepository = new InMemoryCourseRepository();

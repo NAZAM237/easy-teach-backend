@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class AddResourceToLessonE2ETest extends EasyTeachIntegrationTests {
 
-    private static final String UPLOAD_DIR = "/Users/nazam/Desktop/Projects/easy-teach/uploaded-resources";
+    private static final String UPLOAD_DIR = "/Users/nazam/Desktop/Projects/easy-teach-backend/uploaded-resources";
 
     @Autowired
     private CourseRepository courseRepository;
